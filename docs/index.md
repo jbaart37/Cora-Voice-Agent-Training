@@ -119,7 +119,7 @@ description: Building an AI-Powered Voice Agent Simulator with Azure AI Foundry
 ## 📚 Workshop Modules
 
 <div class="modules-grid">
-  <div class="module-card">
+  <div class="module-card" onclick="location.href='./modules/module1-overview.html'" style="cursor: pointer;">
     <div class="module-header">
       <span class="module-badge">Module 1</span>
       <span class="module-duration"><i class="fas fa-clock"></i> 30 min</span>
@@ -134,7 +134,7 @@ description: Building an AI-Powered Voice Agent Simulator with Azure AI Foundry
     <a href="./modules/module1-overview.html" class="module-btn">Start Module 1 →</a>
   </div>
 
-  <div class="module-card">
+  <div class="module-card" onclick="location.href='./modules/module1-overview.html'" style="cursor: pointer;">
     <div class="module-header">
       <span class="module-badge">Module 2</span>
       <span class="module-duration"><i class="fas fa-clock"></i> 45 min</span>
@@ -149,7 +149,7 @@ description: Building an AI-Powered Voice Agent Simulator with Azure AI Foundry
     <a href="./modules/module2-infrastructure.html" class="module-btn">Start Module 2 →</a>
   </div>
 
-  <div class="module-card">
+  <div class="module-card" onclick="location.href='./modules/module1-overview.html'" style="cursor: pointer;">
     <div class="module-header">
       <span class="module-badge">Module 3</span>
       <span class="module-duration"><i class="fas fa-clock"></i> 60 min</span>
@@ -164,7 +164,7 @@ description: Building an AI-Powered Voice Agent Simulator with Azure AI Foundry
     <a href="./modules/module3-deployment.html" class="module-btn">Start Module 3 →</a>
   </div>
 
-  <div class="module-card">
+  <div class="module-card" onclick="location.href='./modules/module1-overview.html'" style="cursor: pointer;">
     <div class="module-header">
       <span class="module-badge">Module 4</span>
       <span class="module-duration"><i class="fas fa-clock"></i> 45 min</span>
@@ -179,7 +179,7 @@ description: Building an AI-Powered Voice Agent Simulator with Azure AI Foundry
     <a href="./modules/module4-ai-foundry.html" class="module-btn">Start Module 4 →</a>
   </div>
 
-  <div class="module-card">
+  <div class="module-card" onclick="location.href='./modules/module1-overview.html'" style="cursor: pointer;">
     <div class="module-header">
       <span class="module-badge">Module 5</span>
       <span class="module-duration"><i class="fas fa-clock"></i> 45 min</span>
@@ -194,7 +194,7 @@ description: Building an AI-Powered Voice Agent Simulator with Azure AI Foundry
     <a href="./modules/module5-analytics.html" class="module-btn">Start Module 5 →</a>
   </div>
 
-  <div class="module-card optional">
+  <div class="module-card optional" onclick="location.href='./modules/module6-advanced.html'" style="cursor: pointer;">
     <div class="module-header">
       <span class="module-badge">Module 6</span>
       <span class="module-duration"><i class="fas fa-clock"></i> 45 min</span>

@@ -426,7 +426,7 @@ body {
     border-radius: 12px;
     padding: 2rem;
     box-shadow: var(--shadow-sm);
-    transition: var(--transition);
+    transition: var(--transition); cursor: pointer;
     border: 2px solid transparent;
 }
 
