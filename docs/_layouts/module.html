@@ -1,0 +1,80 @@
+---
+layout: default
+---
+
+<div class="module-container">
+    <!-- Module Header -->
+    <div class="module-header">
+        <div class="module-meta">
+            <span class="module-badge">Module {{ page.module_number }}</span>
+            <span class="duration"><i class="far fa-clock"></i> {{ page.duration }}</span>
+        </div>
+        <h1>{{ page.title }}</h1>
+        <p class="module-description">{{ page.description }}</p>
+        
+        <!-- Module Progress Bar -->
+        <div class="module-progress-bar">
+            <div class="progress-bar-fill" id="module-progress-bar" data-module="{{ page.module_id }}">
+                <span class="progress-percentage">0%</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Module Navigation -->
+    <div class="module-nav">
+        {% if page.prev_module %}
+        <a href="{{ page.prev_module }}" class="nav-btn prev">
+            <i class="fas fa-chevron-left"></i> Previous Module
+        </a>
+        {% endif %}
+        
+        <div class="module-steps" id="module-steps"></div>
+        
+        {% if page.next_module %}
+        <a href="{{ page.next_module }}" class="nav-btn next">
+            Next Module <i class="fas fa-chevron-right"></i>
+        </a>
+        {% endif %}
+    </div>
+
+    <!-- Module Content -->
+    <div class="module-content" id="module-content">
+        {{ content }}
+    </div>
+
+    <!-- Section Completion Checkboxes (Auto-injected by JS) -->
+    <!-- Will be added after each major section -->
+
+    <!-- Module Footer Navigation -->
+    <div class="module-footer-nav">
+        {% if page.prev_module %}
+        <a href="{{ page.prev_module }}" class="footer-nav-btn">
+            <i class="fas fa-arrow-left"></i>
+            <span>Previous: {{ page.prev_title }}</span>
+        </a>
+        {% endif %}
+        
+        {% if page.next_module %}
+        <a href="{{ page.next_module }}" class="footer-nav-btn next">
+            <span>Next: {{ page.next_title }}</span>
+            <i class="fas fa-arrow-right"></i>
+        </a>
+        {% endif %}
+    </div>
+
+    <!-- Mark Module Complete Button -->
+    <div class="module-complete-section">
+        <button class="btn-complete-module" onclick="markModuleComplete('{{ page.module_id }}')">
+            <i class="fas fa-check-circle"></i> Mark Module Complete
+        </button>
+    </div>
+</div>
+
+<script>
+    // Initialize module-specific progress tracking
+    document.addEventListener('DOMContentLoaded', function() {
+        initializeModuleProgress('{{ page.module_id }}');
+        injectSectionCheckboxes();
+        updateModuleProgressBar('{{ page.module_id }}');
+    });
+</script>

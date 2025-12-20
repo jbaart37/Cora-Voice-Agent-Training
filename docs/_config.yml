@@ -1,0 +1,35 @@
+title: Cora Voice Agent Workshop
+description: Building an AI-Powered Voice Agent Simulator with Azure AI Foundry
+theme: jekyll-theme-cayman
+show_downloads: false
+
+# Navigation
+navigation:
+  - title: Home
+    url: /
+  - title: Modules
+    url: /modules/
+  - title: Labs
+    url: https://github.com/yourusername/cora-voice-agent-training/tree/main/labs
+  - title: GitHub
+    url: https://github.com/yourusername/cora-voice-agent-training
+
+# Social
+github_username: yourusername
+repository: cora-voice-agent-training
+
+# Build settings
+markdown: kramdown
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+# Exclude from build
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
+  - .sass-cache
+  - .jekyll-cache
