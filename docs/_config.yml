@@ -3,6 +3,12 @@ description: Building an AI-Powered Voice Agent Simulator with Azure AI Foundry
 theme: jekyll-theme-cayman
 show_downloads: false
 
+# Repository Information
+github_username: jbaart37
+repository: jbaart37/Cora-Voice-Agent-Training
+url: https://jbaart37.github.io
+baseurl: /Cora-Voice-Agent-Training
+
 # Navigation
 navigation:
   - title: Home
@@ -10,13 +16,9 @@ navigation:
   - title: Modules
     url: /modules/
   - title: Labs
-    url: https://github.com/yourusername/cora-voice-agent-training/tree/main/labs
+    url: https://github.com/jbaart37/Cora-Voice-Agent-Training/tree/main/labs
   - title: GitHub
-    url: https://github.com/yourusername/cora-voice-agent-training
-
-# Social
-github_username: yourusername
-repository: cora-voice-agent-training
+    url: https://github.com/jbaart37/Cora-Voice-Agent-Training
 
 # Build settings
 markdown: kramdown
