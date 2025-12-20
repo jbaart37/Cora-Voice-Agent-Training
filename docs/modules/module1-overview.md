@@ -15,6 +15,72 @@ description: "Clone the repository, understand the structure, and prepare your A
 
 ---
 
+## 📊 About Your Progress Tracking
+
+As you work through this training, your completion status is tracked automatically:
+
+✅ **How it works:**
+- Checkboxes and progress are saved in your **browser's local storage**
+- No login or account required
+- Your progress persists across browser sessions (as long as you use the same browser)
+
+⚠️ **Important Note:**
+- If you **clear your browser cache/cookies**, your progress will be reset
+- Progress is **browser-specific** (if you switch browsers, you'll start fresh)
+- For persistent tracking, consider bookmarking your progress or taking notes
+
+💡 **Pro Tip:** If you're working across multiple devices, keep a simple checklist in a text file or notebook!
+
+---
+
+## 🤖 Meet CORA: Your AI Training Partner
+
+<div style="text-align: center; margin: 2em 0;">
+  <img src="{{ site.baseurl }}/assets/images/cora-logo.png" alt="CORA Logo" style="width: 200px; height: auto;">
+</div>
+
+**CORA** stands for **C**ustomer-**O**riented **R**esponse **A**gent, but more importantly, she's the name we gave our AI training application! 🤖
+
+**Why "CORA"?**
+- Easy to remember (better than "Voice Agent Simulator v2.3")
+- Friendly and approachable
+- Represents a person (which is what she simulates!)
+- **This is NOT an industry-standard acronym** - it's the unique name for this specific application
+
+**What does CORA do?**
+
+CORA is an AI-powered customer simulator that:
+- **Role-plays as a customer** seeking help
+- **Tests customer service agents** in training
+- **Adapts personality** based on scenarios (happy, frustrated, confused, etc.)
+- **Evaluates performance** with AI-powered scoring
+- **Provides analytics** to track improvement over time
+
+**Think of CORA as:** A digital customer who never gets tired of being asked the same questions, always gives constructive feedback, and never leaves a bad Yelp review. The perfect training partner! 🌟
+
+**Business Value:**
+- Train customer service teams safely without real customers
+- Scale training without hiring actors
+- Get consistent evaluation across all training sessions
+- Track performance improvements with data
+
+---
+
+## 🗺️ What You'll Learn in This Training
+
+This training is organized into modules that walk you through **deploying, testing, and understanding CORA**:
+
+- **Module 1** (this module): Set up your development environment and Azure resources
+- **Module 2**: Deploy CORA to Azure using Infrastructure as Code
+- **Module 3**: Test CORA locally and understand the application architecture
+- **Module 4**: Explore Azure services that power CORA
+- **Module 5**: Monitor and troubleshoot your deployment
+- **Module 6**: Customize and extend CORA for your needs
+
+By the end, you'll have a fully functional AI training application running in Azure, and you'll understand how all the pieces work together!
+
+---
+
 ## 🎯 Learning Objectives
 
 By the end of this module, you will:
@@ -28,9 +94,11 @@ By the end of this module, you will:
 
 ---
 
-## 📥 Step 1: Clone the Repository
+## 📥 Step 1: Get the Repository Code
 
-### Option A: Using Git Command Line
+You have three options to get the code on your local machine:
+
+### Option A: Using Git Command Line (Recommended)
 
 Open a terminal (PowerShell, Command Prompt, or Terminal) and run:
 
@@ -38,6 +106,8 @@ Open a terminal (PowerShell, Command Prompt, or Terminal) and run:
 git clone https://github.com/jbaart37/Cora-Voice-Agent-Training.git
 cd Cora-Voice-Agent-Training
 ```
+
+**Why Git?** You can easily pull updates if we make changes to the training materials!
 
 ### Option B: Using Visual Studio Code
 
@@ -49,6 +119,20 @@ cd Cora-Voice-Agent-Training
 6. Click "Open" when prompted
 
 > 📸 **Screenshot placeholder**: VS Code Git Clone dialog
+
+### Option C: Download as ZIP (No Git Required)
+
+If you don't have Git installed or prefer not to use it:
+
+1. Go to [https://github.com/jbaart37/Cora-Voice-Agent-Training](https://github.com/jbaart37/Cora-Voice-Agent-Training)
+2. Click the green **Code** button
+3. Click **Download ZIP**
+4. Extract the ZIP file to a folder on your computer
+5. Open the extracted folder in VS Code or your preferred editor
+
+**Note:** If you download as ZIP, you won't be able to use Git commands, but all the code will work fine!
+
+> 📸 **Screenshot placeholder**: GitHub showing Code → Download ZIP button
 
 ---
 
@@ -150,9 +234,53 @@ az account show --output table
 
 ---
 
-## 🤖 Step 4: Azure AI Foundry Project Setup
+## 📦 Step 4: Plan Your Resource Group
+
+**Critical Planning Step:** Before creating any Azure resources, let's plan where everything will live.
+
+### Why Resource Groups Matter
+
+Think of a resource group as a **folder for your Azure resources**. Everything for this project should go in the **same resource group**:
+
+✅ **Benefits of keeping everything together:**
+- 🧹 **Easy cleanup**: Delete the resource group = delete everything (no orphaned resources!)
+- 💰 **Cost tracking**: See total cost for the entire project in one place
+- 🔐 **Security management**: Grant access to the whole project with one permission assignment
+- 📊 **Organization**: All related resources grouped logically
+
+### Resource Group Naming
+
+**Recommended naming convention:**
+```
+rg-cora-{environment}
+
+Examples:
+  rg-cora-dev      (for development)
+  rg-cora-test     (for testing)
+  rg-cora-prod     (for production)
+```
+
+**Good news:** When you run `azd up` in Module 2, it will automatically create the resource group for you! But it's important to understand why we use this pattern.
+
+### Resources That Will Live Together
+
+In Module 2, these will all be created in **one resource group**:
+- Container Apps Environment
+- Container App (your web application)
+- Container Registry (stores Docker images)
+- Storage Account (conversation scores)
+- Log Analytics Workspace (logs)
+- Application Insights (monitoring)
+
+**💡 Pro Tip:** Some organizations have policies requiring separate resource groups for different resource types (compute vs storage vs networking). If your organization has such policies, discuss with your cloud governance team before deploying!
+
+---
+
+## 🤖 Step 5: Azure AI Foundry Project Setup
 
 You need an **Azure AI Foundry project** with a deployed GPT model.
+
+**Important:** When creating your AI Foundry project, use the **same resource group** you planned in Step 4, or be ready to specify an existing one.
 
 ### Option A: You Already Have a Project
 
@@ -178,7 +306,7 @@ If you need to create your own AI Foundry project:
 3. Fill in:
    - Project name: `cora-voice-agent`
    - Subscription: Your Azure subscription
-   - Resource group: Create new or use existing
+   - Resource group: **Use the same name pattern** (e.g., `rg-cora-dev`) - all resources go together!
    - Location: Choose a region (e.g., East US)
 4. Click **Create**
 5. Once created, go to **Deployments** → **+ Create deployment**
@@ -238,10 +366,11 @@ AZURE_ENV_NAME=cora-dev
 
 Before moving to Module 2 (deployment), confirm you have:
 
-- [ ] ✅ Repository cloned to your local machine
+- [ ] ✅ Repository code on your local machine (Git clone or ZIP download)
 - [ ] ✅ Azure CLI installed and logged in (`az login` successful)
 - [ ] ✅ Subscription ID identified
-- [ ] ✅ Azure AI Foundry project created with GPT model deployed
+- [ ] ✅ Resource group naming pattern decided (e.g., `rg-cora-dev`)
+- [ ] ✅ Azure AI Foundry project created with GPT model deployed (in your resource group!)
 - [ ] ✅ AI Foundry endpoint URL copied
 - [ ] ✅ Model deployment name noted
 
@@ -670,23 +799,6 @@ Everyone wins! 🎉
 - **Azure OpenAI** = Just the GPT engine
 - **Azure AI Foundry** = The full development studio + engine + tools
 
-### What is CORA?
-
-**CORA** (Customer-Oriented Response Agent) is an AI-powered customer simulator that:
-- **Role-plays as a customer** seeking help
-- **Tests customer service agents** in training
-- **Adapts personality** based on scenarios (happy, frustrated, confused, etc.)
-- **Evaluates performance** with AI-powered scoring
-- **Provides analytics** to track improvement over time
-
-**Business Value:**
-- Train customer service teams safely without real customers
-- Scale training without hiring actors
-- Get consistent evaluation across all training sessions
-- Track performance improvements with data
-
----
-
 ## 🎯 Real-World Use Cases
 
 ### 1. Customer Service Training
@@ -809,7 +921,7 @@ Before moving to Module 2, test your understanding:
 4. **What does CORA stand for?**
    <details>
    <summary>Click to reveal answer</summary>
-   Customer-Oriented Response Agent
+   Customer-Oriented Response Agent - and it's the name of OUR application, not an industry acronym!
    </details>
 
 ---

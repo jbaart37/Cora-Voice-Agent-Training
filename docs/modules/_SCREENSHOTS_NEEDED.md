@@ -6,7 +6,13 @@ This file tracks where screenshots need to be added to enhance the training cont
 
 ### Screenshot Locations
 
-1. **VS Code Git Clone Dialog**
+1. **GitHub ZIP Download**
+   - **Location:** After "Option C: Download as ZIP" section
+   - **Content:** GitHub repository page showing Code → Download ZIP button
+   - **File to save as:** `docs/assets/images/module1-github-zip-download.png`
+   - **Callouts needed:** Highlight the green "Code" button and "Download ZIP" option
+
+2. **VS Code Git Clone Dialog**
    - **Location:** After "Option B: Using Visual Studio Code" section
    - **Content:** VS Code Git Clone command palette with repository URL
    - **File to save as:** `docs/assets/images/module1-vscode-clone.png`
