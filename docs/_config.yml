@@ -13,6 +13,14 @@ markdown: kramdown
 plugins:
   - jekyll-seo-tag
 
+# Explicitly include assets
+include:
+  - assets
+
+# Keep these directories
+keep_files:
+  - assets
+
 # Exclude from build
 exclude:
   - Gemfile
