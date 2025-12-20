@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cora - Customer Service Training Simulator</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='Cora.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="header-title">
+                    <div class="brand-container">
+                        <div class="brand-logo">
+                            <img src="{{ url_for('static', filename='Cora.png') }}" alt="Cora Logo" class="cora-logo-img">
+                        </div>
+                        <div class="brand-text">
+                            <h1>CORA <span class="brand-badge">AI-Powered</span></h1>
+                            <p class="subtitle">Customer Omnichannel Response Agent</p>
+                        </div>
+                    </div>
+                    <div class="tech-indicators">
+                        <span class="tech-badge" title="Azure AI Foundry"><span class="badge-icon">☁️</span> Azure AI</span>
+                        <span class="tech-badge" title="GPT-4o Model"><span class="badge-icon">🧠</span> GPT-4o</span>
+                        <span class="tech-badge" title="Real-time Voice"><span class="badge-icon">🎙️</span> Voice AI</span>
+                        <span class="tech-badge" id="connection-status" title="Connection Status"><span class="badge-icon status-pulse">●</span> Connected</span>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <div class="actions-primary">
+                        <button id="performance-analytics-btn" class="btn btn-icon">📈 My Analytics</button>
+                        <div id="user-identity" class="user-identity">
+                            <span class="identity-icon">👤</span>
+                            <span id="identity-text">Loading...</span>
+                        </div>
+                    </div>
+                    <div class="actions-secondary">
+                        <button id="getting-started-btn" class="btn btn-icon">🚀 Getting Started</button>
+                        <button id="about-cora-btn" class="btn btn-secondary btn-icon">ℹ️ About Cora</button>
+                        <button id="theme-toggle" class="btn btn-icon">🌙 Dark</button>
+                    </div>
+                </div>
+            </div>
+            <div id="agent-status" class="agent-status">
+                <span class="status-indicator"></span>
+                <span id="agent-name">Loading agent...</span>
+                <span class="session-info" id="session-info">Session initialized</span>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Control Panel -->
+            <aside class="control-panel">
+                <div class="panel-section">
+                    <h3>Session Controls</h3>
+                    <button id="new-conversation" class="btn btn-primary">
+                        🆕 New Conversation
+                    </button>
+                    <button id="analyze-conversation" class="btn btn-secondary" disabled>
+                        📊 Analyze Conversation
+                    </button>
+                </div>
+
+                <div class="panel-section">
+                    <h3>Customer Mood</h3>
+                    <select id="customer-mood" class="mood-select">
+                        <option value="neutral">😐 Neutral</option>
+                        <option value="happy">😊 Happy & Satisfied</option>
+                        <option value="curious">🤔 Curious & Inquisitive</option>
+                        <option value="frustrated">😤 Frustrated & Upset</option>
+                        <option value="confused">😕 Confused & Unsure</option>
+                        <option value="impatient">⏰ Impatient & Urgent</option>
+                    </select>
+                    <p class="info-text">Set the customer's emotional state for training scenarios</p>
+                </div>
+
+                <div class="panel-section">
+                    <h3>Voice Mode</h3>
+                    <div class="voice-controls">
+                        <button id="toggle-voice" class="btn btn-voice" disabled>
+                            🎤 Enable Voice Chat
+                        </button>
+                        <div id="voice-status" class="voice-status" style="display:none;">
+                            <div class="voice-indicator">
+                                <span class="pulse-dot"></span>
+                                <span id="voice-state-text">Listening...</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="voice-settings">
+                        <label>
+                            <input type="checkbox" id="auto-speak" checked>
+                            Auto-play Cora's responses
+                        </label>
+                        <label style="margin-top: 8px;">
+                            Voice Selection:
+                            <select id="voice-gender" class="voice-gender-select">
+                                <option value="random">🎲 Random Voice</option>
+                                <option value="female">👩 Female (Any)</option>
+                                <option value="male">👨 Male (Any)</option>
+                                <option disabled>── Specific Voices ──</option>
+                            </select>
+                        </label>
+                        <label style="margin-top: 8px;">
+                            Voice Quality:
+                            <select id="voice-quality" class="voice-gender-select">
+                                <option value="premium" selected>⭐ Premium (Neural)</option>
+                                <option value="enhanced">🔊 Enhanced (HD)</option>
+                                <option value="standard">🔉 Standard</option>
+                            </select>
+                        </label>
+                    </div>
+                    <p class="info-text"><strong>Powered by:</strong> Web Speech API with intelligent voice selection</p>
+                </div>
+
+                <div class="panel-section">
+                    <h3>Agent Info</h3>
+                    <div id="agent-info" class="agent-info">
+                        <p><strong>Model:</strong> <span id="model-name">-</span></p>
+                        <p><strong>Status:</strong> <span id="status">-</span></p>
+                    </div>
+                </div>
+
+                <div class="panel-section">
+                    <h3>Quick Scenarios</h3>
+                    <p class="info-text">Start a training scenario - Cora will act as a customer with this need</p>
+                    <div class="scenario-buttons">
+                        <button class="btn btn-scenario" data-scenario="product">Product Inquiry</button>
+                        <button class="btn btn-scenario" data-scenario="complaint">Complaint Issue</button>
+                        <button class="btn btn-scenario" data-scenario="return">Return Request</button>
+                        <button class="btn btn-scenario" data-scenario="technical">Technical Problem</button>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Chat Interface -->
+            <main class="chat-container">
+                <div class="conversation-header">
+                    <h2>Conversation</h2>
+                    <span id="conversation-id" class="conversation-id">No active conversation</span>
+                </div>
+
+                <div id="chat-messages" class="chat-messages">
+                    <div class="welcome-message">
+                        <div class="welcome-header">
+                            <div class="welcome-icon">🎓</div>
+                            <h3>Welcome to Cora Training Platform</h3>
+                        </div>
+                        <div class="welcome-content">
+                            <div class="role-banner">
+                                <span class="role-badge agent-badge">👤 You: Customer Service Agent</span>
+                                <span class="role-badge customer-badge">🤖 Cora: Digital Customer</span>
+                            </div>
+                            <div class="instructions-section">
+                                <h4>🚀 Getting Started</h4>
+                                <ol class="welcome-steps">
+                                    <li><span class="step-icon">🎭</span> <strong>Select a mood</strong> - Choose how Cora should behave (happy, frustrated, etc.)</li>
+                                    <li><span class="step-icon">▶️</span> <strong>Start conversation</strong> - Click "New Conversation" button</li>
+                                    <li><span class="step-icon">💬</span> <strong>Cora initiates</strong> - The digital customer will present their issue</li>
+                                    <li><span class="step-icon">🎯</span> <strong>Provide support</strong> - Help via text or voice chat</li>
+                                </ol>
+                            </div>
+                            <div class="benefits-section">
+                                <h4>🌟 Training Benefits</h4>
+                                <ul class="welcome-benefits">
+                                    <li>✅ Practice handling diverse customer emotions and scenarios</li>
+                                    <li>✅ Enhance communication and active problem-solving skills</li>
+                                    <li>✅ Review and analyze conversations for continuous improvement</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-input-container">
+                    <textarea 
+                        id="user-input" 
+                        class="chat-input" 
+                        placeholder="Type your message here..." 
+                        rows="3"
+                        disabled
+                    ></textarea>
+                    <button id="send-message" class="btn btn-send" disabled>Send</button>
+                    <div class="conversation-controls">
+                        <button id="pause-conversation" class="btn btn-warning btn-control" disabled>⏸️ Pause</button>
+                        <button id="end-conversation" class="btn btn-danger btn-control" disabled>🛑 End Conversation</button>
+                    </div>
+                </div>
+            </main>
+
+            <!-- Analysis Panel -->
+            <aside class="analysis-panel">
+                <h3>Conversation Analysis</h3>
+                <div id="analysis-content" class="analysis-content">
+                    <p class="placeholder-text">Complete a conversation and click "Analyze" to see insights</p>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="spinner"></div>
+        <p>Processing...</p>
+    </div>
+
+    <!-- Getting Started Modal -->
+    <div id="getting-started-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🚀 Getting Started with Voice Agent Simulator</h2>
+                <button class="modal-close" id="close-getting-started">&times;</button>
+            </div>
+            <div class="modal-body">
+                <h3>📋 Purpose</h3>
+                <p>This simulator helps train customer service agents by providing realistic conversations with an AI-powered digital customer named "Cora". Practice handling various customer scenarios in a safe, controlled environment.</p>
+
+                <h3>🎯 Quick Start Guide</h3>
+                <div class="getting-started-steps">
+                    <div class="step-card">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h4>Start a New Conversation</h4>
+                            <p>Click the <strong>"🆕 New Conversation"</strong> button in the left panel to begin.</p>
+                        </div>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h4>Choose Customer Mood</h4>
+                            <p>Select a mood from the dropdown (Neutral, Happy, Frustrated, etc.) to set Cora's personality for this session.</p>
+                        </div>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h4>Select Communication Mode</h4>
+                            <p>Choose between <strong>Text Chat</strong> (type messages) or <strong>Voice Chat</strong> (speak naturally).</p>
+                        </div>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h4>Engage with Cora</h4>
+                            <p>Respond to Cora's questions and concerns as you would with a real customer.</p>
+                        </div>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">5</div>
+                        <div class="step-content">
+                            <h4>Control the Conversation</h4>
+                            <p>Use <strong>⏸️ Pause</strong> if you need a break, or <strong>🛑 End Conversation</strong> when finished.</p>
+                        </div>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">6</div>
+                        <div class="step-content">
+                            <h4>Review Performance</h4>
+                            <p>Click <strong>"📊 Analyze Conversation"</strong> to get AI-powered insights on your performance.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>🎙️ Voice Chat vs 💬 Text Chat</h3>
+                <div class="comparison-table">
+                    <div class="comparison-row">
+                        <div class="comparison-cell header"><strong>Feature</strong></div>
+                        <div class="comparison-cell header"><strong>Voice Chat</strong></div>
+                        <div class="comparison-cell header"><strong>Text Chat</strong></div>
+                    </div>
+                    <div class="comparison-row">
+                        <div class="comparison-cell">Interaction</div>
+                        <div class="comparison-cell">Speak naturally, Cora responds with voice</div>
+                        <div class="comparison-cell">Type messages, Cora responds with text</div>
+                    </div>
+                    <div class="comparison-row">
+                        <div class="comparison-cell">Best For</div>
+                        <div class="comparison-cell">Realistic phone support training</div>
+                        <div class="comparison-cell">Chat/email support training</div>
+                    </div>
+                    <div class="comparison-row">
+                        <div class="comparison-cell">Voice Selection</div>
+                        <div class="comparison-cell">Choose voice quality and gender</div>
+                        <div class="comparison-cell">N/A</div>
+                    </div>
+                    <div class="comparison-row">
+                        <div class="comparison-cell">Auto-play</div>
+                        <div class="comparison-cell">Enable checkbox for automatic responses</div>
+                        <div class="comparison-cell">N/A</div>
+                    </div>
+                </div>
+
+                <h3>🎛️ Key Controls</h3>
+                <div class="controls-grid">
+                    <div class="control-item">
+                        <div class="control-icon">🆕</div>
+                        <div class="control-desc">
+                            <strong>New Conversation</strong>
+                            <p>Starts a fresh conversation with Cora. Previous conversation must be ended first.</p>
+                        </div>
+                    </div>
+                    <div class="control-item">
+                        <div class="control-icon">📊</div>
+                        <div class="control-desc">
+                            <strong>Analyze Conversation</strong>
+                            <p>Get AI insights on tone, professionalism, and areas for improvement.</p>
+                        </div>
+                    </div>
+                    <div class="control-item">
+                        <div class="control-icon">🎤</div>
+                        <div class="control-desc">
+                            <strong>Enable Voice Chat</strong>
+                            <p>Activates microphone for voice conversations. Ensure browser permissions are granted.</p>
+                        </div>
+                    </div>
+                    <div class="control-item">
+                        <div class="control-icon">⏸️</div>
+                        <div class="control-desc">
+                            <strong>Pause Conversation</strong>
+                            <p>Temporarily stops the conversation. Click again to resume.</p>
+                        </div>
+                    </div>
+                    <div class="control-item">
+                        <div class="control-icon">🛑</div>
+                        <div class="control-desc">
+                            <strong>End Conversation</strong>
+                            <p>Terminates the current conversation. You can then analyze or start a new one.</p>
+                        </div>
+                    </div>
+                    <div class="control-item">
+                        <div class="control-icon">📤</div>
+                        <div class="control-desc">
+                            <strong>Send Message</strong>
+                            <p>Sends your typed message to Cora (text chat mode).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>💡 Tips for Success</h3>
+                <ul class="tips-list">
+                    <li>🎯 <strong>Start Simple:</strong> Begin with "Neutral" mood to get comfortable with the interface.</li>
+                    <li>🎙️ <strong>Voice Quality:</strong> Use "Premium (Neural)" voices for the most natural experience.</li>
+                    <li>⏱️ <strong>Take Your Time:</strong> Use the Pause button if you need to think or look up information.</li>
+                    <li>📝 <strong>Review Analysis:</strong> Always analyze conversations to identify improvement areas.</li>
+                    <li>🔄 <strong>Practice Variety:</strong> Try different moods and scenarios to build versatile skills.</li>
+                    <li>🎧 <strong>Use Headphones:</strong> Prevents voice feedback loops when using voice chat.</li>
+                </ul>
+
+                <div class="help-footer">
+                    <p><strong>Need Help?</strong> Check the "ℹ️ About Cora" button for technical details or contact your training administrator.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Cora Modal -->
+    <div id="about-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🤖 About Cora</h2>
+                <button class="modal-close" id="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <h3>Technology Stack</h3>
+                <div class="tech-stack">
+                    <div class="tech-category">
+                        <h4>🎨 Frontend</h4>
+                        <ul>
+                            <li>HTML5/CSS3</li>
+                            <li>JavaScript (ES6+)</li>
+                            <li>Socket.IO Client</li>
+                            <li>Web Speech API</li>
+                        </ul>
+                    </div>
+                    <div class="tech-category">
+                        <h4>⚙️ Backend</h4>
+                        <ul>
+                            <li>Python 3.11+</li>
+                            <li>Flask 3.1</li>
+                            <li>Flask-SocketIO 5.4</li>
+                            <li>Flask-Login</li>
+                        </ul>
+                    </div>
+                    <div class="tech-category">
+                        <h4>🤖 AI Integration</h4>
+                        <ul>
+                            <li>Azure AI Foundry</li>
+                            <li>Azure OpenAI Service</li>
+                            <li>GPT-4o Model</li>
+                            <li>Stored Completions API</li>
+                            <li>OpenAI Telemetry Metrics</li>
+                        </ul>
+                    </div>
+                    <div class="tech-category">
+                        <h4>☁️ Azure Services</h4>
+                        <ul>
+                            <li>Container Apps</li>
+                            <li>Application Insights</li>
+                            <li>Log Analytics Workspace</li>
+                            <li>Container Registry</li>
+                            <li>Azure Entra ID (Optional)</li>
+                            <li>Managed Identity</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>Key APIs</h3>
+                <div class="api-list">
+                    <div class="api-item">
+                        <strong>Azure AI Foundry Chat Completions</strong>
+                        <p>GPT-4o model with stored completions for data protection and compliance</p>
+                    </div>
+                    <div class="api-item">
+                        <strong>OpenAI Telemetry & Monitoring</strong>
+                        <p>Real-time metrics via Application Insights and Log Analytics integration</p>
+                    </div>
+                    <div class="api-item">
+                        <strong>Web Speech API</strong>
+                        <p>Browser-based speech recognition and synthesis for voice interactions</p>
+                    </div>
+                    <div class="api-item">
+                        <strong>Socket.IO WebSocket</strong>
+                        <p>Real-time bidirectional communication between client and server</p>
+                    </div>
+                    <div class="api-item">
+                        <strong>Azure Identity SDK</strong>
+                        <p>Secure authentication with managed identities and Azure CLI</p>
+                    </div>
+                </div>
+
+                <h3>What Cora Can Do</h3>
+                <ul class="features-list">
+                    <li>✅ Simulate realistic customer interactions</li>
+                    <li>✅ Adapt to 6 different customer moods</li>
+                    <li>✅ Support text and voice conversations</li>
+                    <li>✅ Provide quick-start training scenarios</li>
+                    <li>✅ Maintain character throughout conversations</li>
+                    <li>✅ Give authentic responses based on agent performance</li>
+                </ul>
+
+                <p class="modal-footer-text">
+                    <strong>Cora</strong> (Customer Response Agent) is powered by Azure OpenAI GPT-4o<br>
+                    Version 1.0 | December 2025
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Performance Analytics Modal -->
+    <div id="analytics-modal" class="modal">
+        <div class="modal-content analytics-modal">
+            <div class="modal-header">
+                <h2>📊 My Performance Analytics</h2>
+                <button class="modal-close" onclick="document.getElementById('analytics-modal').style.display='none'">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="analytics-loading" class="loading-state">
+                    <div class="spinner"></div>
+                    <p>Loading your performance data...</p>
+                </div>
+                <div id="analytics-content" style="display:none;">
+                    <div class="analytics-summary">
+                        <div class="stat-card">
+                            <div class="stat-value" id="total-conversations">0</div>
+                            <div class="stat-label">Total Conversations</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="avg-score">0</div>
+                            <div class="stat-label">Average Score</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="best-score">0</div>
+                            <div class="stat-label">Best Score</div>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="performance-chart"></canvas>
+                    </div>
+                    <div id="no-data-message" style="display:none; text-align:center; padding:2rem;">
+                        <p>📊 No conversation data available yet.</p>
+                        <p style="color:#666;">Complete and analyze conversations to see your performance metrics here.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

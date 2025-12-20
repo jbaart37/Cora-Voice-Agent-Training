@@ -1,0 +1,100 @@
+# ============================================================================
+# CORE DEPENDENCIES
+# ============================================================================
+
+# Flask Web Framework - Modern Python web framework
+Flask==3.1.0
+
+# Flask-SocketIO - WebSocket support for real-time bidirectional communication
+# Enables live conversation updates between client and server
+Flask-SocketIO==5.4.1
+python-socketio==5.12.0
+
+# Flask-CORS - Cross-Origin Resource Sharing support
+# Required if frontend served from different domain
+flask-cors==5.0.0
+
+# Flask-Login - User session management
+Flask-Login==0.6.3
+
+# ============================================================================
+# AZURE SDKs
+# ============================================================================
+
+# Azure Identity - Unified authentication across Azure services
+# Supports: Managed Identity, Azure CLI, Environment Variables, and more
+azure-identity==1.19.0
+
+# Azure AI Inference - Azure AI Foundry SDK for calling deployed models
+azure-ai-inference==1.0.0b6
+
+# Azure Data Tables - NoSQL key-value storage for conversation scores
+# Cost-effective alternative to Cosmos DB for simple data
+azure-data-tables==12.5.0
+
+# ============================================================================
+# AI & AGENT FRAMEWORK
+# ============================================================================
+
+# Microsoft Agent Framework for Azure AI - Simplifies agentic app development
+# IMPORTANT: Use --pre flag during installation: pip install --pre agent-framework-azure-ai
+agent-framework-azure-ai
+
+# MSAL - Microsoft Authentication Library for Python
+# Used for Azure AD/Entra ID authentication if implementing custom auth
+msal==1.31.1
+
+# ============================================================================
+# AUDIO PROCESSING (Future Enhancement)
+# ============================================================================
+
+# PyDub - Audio manipulation library
+pydub==0.25.1
+
+# SpeechRecognition - Speech-to-text conversion
+# Can integrate with Azure Speech Services or other providers
+speechrecognition==3.11.0
+
+# ============================================================================
+# WEBSOCKET & ASYNC SUPPORT
+# ============================================================================
+
+# Eventlet - Async networking library for SocketIO
+# Handles concurrent WebSocket connections efficiently
+eventlet==0.37.0
+
+# ============================================================================
+# MONITORING & TELEMETRY
+# ============================================================================
+
+# Azure Monitor OpenTelemetry - Automatic instrumentation for Application Insights
+# Captures: HTTP requests, dependencies, exceptions, custom events
+# LEARNING: Provides production-grade observability with minimal code changes
+azure-monitor-opentelemetry==1.6.4
+
+# ============================================================================
+# UTILITIES
+# ============================================================================
+
+# Python-dotenv - Load environment variables from .env file
+# Essential for local development (production uses Azure Container Apps env vars)
+python-dotenv==1.0.1
+
+# Requests - HTTP library for API calls
+requests==2.32.3
+
+# ============================================================================
+# INSTALLATION NOTES
+# ============================================================================
+#
+# Standard installation:
+#   pip install -r requirements.txt --pre
+#
+# The --pre flag is required for agent-framework-azure-ai (preview package)
+#
+# For local development, also create a .env file with:
+#   AZURE_AI_FOUNDRY_ENDPOINT=https://your-project.cognitiveservices.azure.com/
+#   AZURE_AI_FOUNDRY_API_KEY=your-api-key-or-leave-empty-for-az-cli-auth
+#   AZURE_AI_MODEL_NAME=gpt-4o
+#   FLASK_SECRET_KEY=generate-random-string
+#   AZURE_STORAGE_CONNECTION_STRING=DefaultEndpointsProtocol=https;AccountName=...

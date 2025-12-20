@@ -1,0 +1,13 @@
+# Azure Developer CLI Configuration
+name: voice-agent-simulator
+metadata:
+  template: voice-agent-simulator@1.1.0
+
+services:
+  web:
+    language: python
+    project: .
+    host: containerapp
+    docker:
+      path: ./Dockerfile
+      context: .

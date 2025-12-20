@@ -1,0 +1,72 @@
+# .dockerignore - Exclude files from Docker image
+# ============================================
+# This file tells Docker which files to EXCLUDE when copying to the image
+# Benefits: Smaller images, faster builds, better security
+
+# Environment files - NEVER include secrets in images!
+.env
+.env.*
+*.env
+
+# Python cache and compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Git files - not needed in container
+.git/
+.gitignore
+.gitattributes
+
+# Testing and coverage
+.pytest_cache/
+.coverage
+htmlcov/
+*.cover
+
+# Documentation - can exclude if not needed at runtime
+*.md
+docs/
+README.md
+
+# Azure and deployment files - not needed inside container
+azure.yaml
+infra/
+.azure/
+
+# Docker files themselves
+Dockerfile
+.dockerignore
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+tmp/
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+
+# Node modules (if any frontend build tools used)
+node_modules/

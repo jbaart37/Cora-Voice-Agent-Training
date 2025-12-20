@@ -1,0 +1,19 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "resourceGroupName": {
+      "value": "rg-voice-agent-simulator"
+    },
+    "azureOpenAIEndpoint": {
+      "value": "https://voice-agent-openai.openai.azure.com/"
+    },
+    "modelName": {
+      "value": "gpt-4o-deployment"
+    },
+    "azureOpenAIApiKey": {
+      "value": ""
+    }
+  }
+}
+
