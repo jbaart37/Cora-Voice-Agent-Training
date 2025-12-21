@@ -497,13 +497,13 @@ AvgTokens: 450
 **Method 2: AI Foundry Portal**
 
 1. Go to AI Foundry → your project
-2. Click **"Metrics"** (left sidebar)
-3. View:
+2. Click **"Monitoring"** (left sidebar)
+3. View application analytics and resource usage:
    - Total requests (conversations)
    - Token usage over time
    - Estimated costs
 
-> 📸 **Screenshot placeholder**: AI Foundry metrics dashboard
+> 📸 **Screenshot placeholder**: AI Foundry monitoring dashboard showing application analytics and resource usage
 
 <div class="screenshot-container" onclick="openImageModal('{{ site.baseurl }}/assets/images/module6-metrics.png')" style="cursor: zoom-in;">
   <img src="{{ site.baseurl }}/assets/images/module6-metrics.png" alt="AI Foundry Metrics" class="screenshot-image">
