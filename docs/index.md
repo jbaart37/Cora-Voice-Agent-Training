@@ -119,10 +119,11 @@ description: Building an AI-Powered Voice Agent Simulator with Azure AI Foundry
 ## 📚 Workshop Modules
 
 <div class="modules-grid">
-  <div class="module-card" onclick="location.href='./modules/module1-overview.html'" style="cursor: pointer;">
+  <div class="module-card" onclick="location.href='./modules/module1-overview.html'" style="cursor: pointer;" data-module="module1">
     <div class="module-header">
       <span class="module-badge">Module 1</span>
       <span class="module-duration"><i class="fas fa-clock"></i> 30 min</span>
+      <span class="module-status-badge" data-status="not-started">Not Started</span>
     </div>
     <h3><i class="fas fa-lightbulb"></i> Solution Overview</h3>
     <p>Understand the architecture, use cases, and components of the voice agent simulator. Learn how Azure AI Foundry integrates with other Azure services.</p>
@@ -134,10 +135,11 @@ description: Building an AI-Powered Voice Agent Simulator with Azure AI Foundry
     <a href="./modules/module1-overview.html" class="module-btn">Start Module 1 →</a>
   </div>
 
-  <div class="module-card" onclick="location.href='./modules/module1-overview.html'" style="cursor: pointer;">
+  <div class="module-card" onclick="location.href='./modules/module2-infrastructure.html'" style="cursor: pointer;" data-module="module2">
     <div class="module-header">
       <span class="module-badge">Module 2</span>
       <span class="module-duration"><i class="fas fa-clock"></i> 45 min</span>
+      <span class="module-status-badge" data-status="not-started">Not Started</span>
     </div>
     <h3><i class="fas fa-cloud"></i> Infrastructure Setup</h3>
     <p>Deploy Azure infrastructure using Azure Developer CLI (azd). Set up Container Apps, Storage Account, and authentication with a single command.</p>
@@ -149,10 +151,11 @@ description: Building an AI-Powered Voice Agent Simulator with Azure AI Foundry
     <a href="./modules/module2-infrastructure.html" class="module-btn">Start Module 2 →</a>
   </div>
 
-  <div class="module-card" onclick="location.href='./modules/module1-overview.html'" style="cursor: pointer;">
+  <div class="module-card" onclick="location.href='./modules/module3-deployment.html'" style="cursor: pointer;" data-module="module3">
     <div class="module-header">
       <span class="module-badge">Module 3</span>
       <span class="module-duration"><i class="fas fa-clock"></i> 60 min</span>
+      <span class="module-status-badge" data-status="not-started">Not Started</span>
     </div>
     <h3><i class="fas fa-rocket"></i> Application Deployment</h3>
     <p>Deploy the Flask application to Azure Container Apps. Understand the code structure, frontend design, and Docker containerization process.</p>
@@ -164,10 +167,11 @@ description: Building an AI-Powered Voice Agent Simulator with Azure AI Foundry
     <a href="./modules/module3-deployment.html" class="module-btn">Start Module 3 →</a>
   </div>
 
-  <div class="module-card" onclick="location.href='./modules/module1-overview.html'" style="cursor: pointer;">
+  <div class="module-card" onclick="location.href='./modules/module4-ai-foundry.html'" style="cursor: pointer;" data-module="module4">
     <div class="module-header">
       <span class="module-badge">Module 4</span>
       <span class="module-duration"><i class="fas fa-clock"></i> 45 min</span>
+      <span class="module-status-badge" data-status="not-started">Not Started</span>
     </div>
     <h3><i class="fas fa-brain"></i> Azure OpenAI & AI Foundry</h3>
     <p>Configure AI Foundry project, deploy GPT-4 model, and implement intelligent conversation analysis with scoring capabilities.</p>
@@ -179,10 +183,11 @@ description: Building an AI-Powered Voice Agent Simulator with Azure AI Foundry
     <a href="./modules/module4-ai-foundry.html" class="module-btn">Start Module 4 →</a>
   </div>
 
-  <div class="module-card" onclick="location.href='./modules/module1-overview.html'" style="cursor: pointer;">
+  <div class="module-card" onclick="location.href='./modules/module5-analytics.html'" style="cursor: pointer;" data-module="module5">
     <div class="module-header">
       <span class="module-badge">Module 5</span>
       <span class="module-duration"><i class="fas fa-clock"></i> 45 min</span>
+      <span class="module-status-badge" data-status="not-started">Not Started</span>
     </div>
     <h3><i class="fas fa-chart-line"></i> Analytics Dashboard</h3>
     <p>Implement performance tracking with Chart.js visualizations and Azure Table Storage integration for historical data analysis.</p>
@@ -194,10 +199,12 @@ description: Building an AI-Powered Voice Agent Simulator with Azure AI Foundry
     <a href="./modules/module5-analytics.html" class="module-btn">Start Module 5 →</a>
   </div>
 
-  <div class="module-card optional" onclick="location.href='./modules/module6-advanced.html'" style="cursor: pointer;">
+  <div class="module-card optional" onclick="location.href='./modules/module6-advanced.html'" style="cursor: pointer;" data-module="module6">
     <div class="module-header">
       <span class="module-badge">Module 6</span>
       <span class="module-duration"><i class="fas fa-clock"></i> 45 min</span>
+      <span class="module-status-badge" data-status="not-started">Not Started</span>
+      <span class="module-status-badge" data-status="not-started">Not Started</span>
     </div>
     <h3><i class="fas fa-graduation-cap"></i> Advanced Topics <span class="optional-badge">Optional</span></h3>
     <p>Explore application monitoring, AI Foundry evaluation tools, and production optimization strategies for enterprise deployments.</p>

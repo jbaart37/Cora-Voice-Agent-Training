@@ -301,23 +301,103 @@ If your organization provided a project, you need to get:
 
 If you need to create your own AI Foundry project:
 
-1. Go to [Azure AI Foundry Studio](https://ai.azure.com/)
-2. Click **+ New project**
-3. Fill in:
-   - Project name: `cora-voice-agent`
-   - Subscription: Your Azure subscription
-   - Resource group: **Use the same name pattern** (e.g., `rg-cora-dev`) - all resources go together!
-   - Location: Choose a region (e.g., East US)
-4. Click **Create**
-5. Once created, go to **Deployments** → **+ Create deployment**
-6. Select:
-   - Model: `gpt-4o` or `gpt-4o-mini`
-   - Deployment name: `gpt-4o-deployment`
-7. Click **Deploy**
+#### Portal Experience Note 🔄
+
+Azure AI Foundry has two portal experiences:
+- **New Experience** (default): Modern UI with updated navigation
+- **Legacy Experience**: Classic UI with familiar layout
+
+**For this training:** Our screenshots use the **legacy experience** for consistency. You can toggle between experiences using the switcher at the top of the portal.
+
+**💡 Pro Tip:** Both experiences work identically - it's just different layouts for the same functionality!
+
+#### Step-by-Step Setup
+
+1. **Navigate to Azure AI Foundry**
+   - Go to [Azure AI Foundry Studio](https://ai.azure.com/)
+   - Log in with your Azure credentials
+
+2. **Create a New Project**
+   - Click **+ New project** (or **+ Create new project** in new experience)
+   - You'll see the project creation form
+
+3. **Fill in Project Details:**
+
+   | Field | What to Enter | Why This Matters |
+   |-------|---------------|------------------|
+   | **Project name** | `cora-voice-agent` | Identifies your project in the portal |
+   | **Subscription** | Select your Azure subscription | Where costs will be billed |
+   | **Resource group** | Select or create `rg-cora-dev` | **CRITICAL:** Use the same resource group for everything! |
+   | **Location** | `East US` or `East US 2` | Must support both AI and Container Apps |
+   | **AI Services** | Create new or use existing | Creates the underlying OpenAI resource |
+
+   **🔍 Location tip:** Stick with East US/East US 2 for best service availability!
+
+4. **Configure Application Insights**
+   - When prompted about Application Insights, **select "Enable"**
+   - This sets up telemetry collection for monitoring
+   - **Why?** In Module 6, we'll use this for advanced observability and tracing
+   - Default settings are fine for now
+
+5. **Click Create**
+   - Azure provisions your AI Foundry project (~2-3 minutes)
+   - Wait for "Deployment succeeded" notification
+
+6. **Copy Your Endpoint** 📋
+   
+   **Critical step - you'll need this for Module 2!**
+   
+   After project creation:
+   - Go to project **Overview** page
+   - Find the **Endpoint** field (format: `https://your-project.openai.azure.com/`)
+   - **Copy this URL** and save it in a text file or note
+   
+   > 📸 **Screenshot placeholder**: Azure AI Foundry project Overview page with endpoint highlighted
+
+7. **Deploy a GPT Model**
+   
+   - Navigate to **Deployments** (left sidebar)
+   - Click **+ Create deployment** or **+ Deploy model**
+   - Configure deployment:
+     
+     | Setting | Value | Notes |
+     |---------|-------|-------|
+     | **Model** | `gpt-4o` or `gpt-4o-mini` | gpt-4o-mini is cheaper for testing |
+     | **Deployment name** | `gpt-4o` | Keep it simple - use model name |
+     | **Model version** | Latest | Auto-updates to newest version |
+     | **Deployment type** | Standard | Default option |
+   
+   - Click **Deploy**
+   - Wait for deployment to complete (~1-2 minutes)
+   - **Save the deployment name** - you'll need it in Module 2!
+
+   > 📸 **Screenshot placeholder**: Deployments page showing deployed GPT model
+
+#### About API Keys 🔑
+
+You'll notice Azure AI Foundry provides API keys after deployment. **You won't need them for this training!**
+
+**Why?**
+- We're using **Managed Identity** for authentication (more secure)
+- No keys to rotate, manage, or accidentally commit to Git
+- Azure handles authentication automatically between services
+
+**When you would use API keys:**
+- Accessing the model from outside Azure (e.g., local development)
+- Quick testing with REST API clients
+- Legacy applications not using managed identity
+
+**For CORA:** Managed Identity handles everything automatically in Module 2! 🎉
 
 **Cost Note:** GPT-4o charges per token. Budget approximately:
 - Development/Testing: ~$5-20/month
 - Production: Varies by usage
+
+**Token Cost Reference:**
+- gpt-4o: ~$5 per 1M input tokens, ~$15 per 1M output tokens
+- gpt-4o-mini: ~$0.15 per 1M input tokens, ~$0.60 per 1M output tokens
+
+💡 **Cost Tip:** Start with gpt-4o-mini for training - it's 97% cheaper!
 
 ---
 

@@ -139,32 +139,12 @@ function updateAllProgressDisplays() {
             }
         }
     }
-}
 
-// Update progress panel
-function updateProgressPanel(progress) {
-    // Update circle
-    const progressText = document.getElementById('progress-text');
-    const progressCircleFill = document.getElementById('progress-circle-fill');
-    
-    if (progressText && progressCircleFill) {
-        progressText.textContent = `${progress.overall}%`;
-        
-        // SVG circle animation
-        const circumference = 339.292; // 2 * PI * radius (54)
-        const offset = circumference - (progress.overall / 100) * circumference;
-        progressCircleFill.style.strokeDashoffset = offset;
-    }
-    
-    // Update module list
-    MODULES.forEach((moduleId, index) => {
-        const moduleItem = document.querySelector(`.module-item[data-module="${moduleId}"]`);
-        if (moduleItem && progress.modules[moduleId]) {
-            const percentage = progress.modules[moduleId].percentage;
-            const completed = progress.modules[moduleId].completed;
-            
-            // Update percentage
-            const percentSpan = moduleItem.querySelector('.module-percent');
+    // Update module status badges on homepage
+    updateModuleStatusBadges(progress);
+
+    // Update Continue Learning button
+    updateContinueLearningButton(progress);
             if (percentSpan) {
                 percentSpan.textContent = `${percentage}%`;
             }
@@ -345,6 +325,111 @@ document.addEventListener('DOMContentLoaded', function() {
     updateAllProgressDisplays();
 });
 
+// Update module status badges on homepage
+function updateModuleStatusBadges(progress) {
+    MODULES.forEach(moduleId => {
+        const moduleCard = document.querySelector(`.module-card[data-module="${moduleId}"]`);
+        if (moduleCard) {
+            const statusBadge = moduleCard.querySelector('.module-status-badge');
+            if (statusBadge && progress.modules[moduleId]) {
+                const percentage = progress.modules[moduleId].percentage;
+                const completed = progress.modules[moduleId].completed;
+
+                let status = 'not-started';
+                let statusText = 'Not Started';
+
+                if (completed || percentage === 100) {
+                    status = 'complete';
+                    statusText = '✓ Complete';
+                } else if (percentage > 0) {
+                    status = 'in-progress';
+                    statusText = `${percentage}% In Progress`;
+                }
+
+                statusBadge.setAttribute('data-status', status);
+                statusBadge.textContent = statusText;
+            }
+        }
+    });
+}
+
+// Update Continue Learning button visibility and link
+function updateContinueLearningButton(progress) {
+    const continueBtn = document.getElementById('continue-btn');
+    if (!continueBtn) return;
+
+    // Find the last module with progress
+    let lastModuleWithProgress = null;
+    let lastModuleIndex = -1;
+
+    MODULES.forEach((moduleId, index) => {
+        if (progress.modules[moduleId] && progress.modules[moduleId].percentage > 0) {
+            lastModuleIndex = index;
+            lastModuleWithProgress = moduleId;
+        }
+    });
+
+    // Show button if there's any progress
+    if (lastModuleWithProgress) {
+        continueBtn.style.display = 'flex';
+
+        // Store the module to continue to
+        continueBtn.dataset.continueModule = lastModuleWithProgress;
+        continueBtn.dataset.continueIndex = lastModuleIndex;
+    } else {
+        continueBtn.style.display = 'none';
+    }
+}
+
+// Continue to last section function
+function continueToLastSection() {
+    const continueBtn = document.getElementById('continue-btn');
+    if (!continueBtn) return;
+
+    const moduleId = continueBtn.dataset.continueModule;
+    const moduleIndex = parseInt(continueBtn.dataset.continueIndex);
+
+    if (!moduleId) {
+        // No progress yet, go to module 1
+        window.location.href = getModuleUrl('module1');
+        return;
+    }
+
+    const progress = getProgress();
+    const moduleProgress = progress.modules[moduleId];
+
+    // If module is complete, go to next module
+    if (moduleProgress.completed || moduleProgress.percentage === 100) {
+        const nextModuleIndex = moduleIndex + 1;
+        if (nextModuleIndex < MODULES.length) {
+            const nextModule = MODULES[nextModuleIndex];
+            window.location.href = getModuleUrl(nextModule);
+        } else {
+            // All modules complete, go to first module
+            window.location.href = getModuleUrl('module1');
+        }
+    } else {
+        // Module in progress, go to that module
+        window.location.href = getModuleUrl(moduleId);
+    }
+}
+
+// Get module URL helper
+function getModuleUrl(moduleId) {
+    const moduleNumber = moduleId.replace('module', '');
+    const moduleFiles = {
+        'module1': 'module1-overview.html',
+        'module2': 'module2-infrastructure.html',
+        'module3': 'module3-deployment.html',
+        'module4': 'module4-ai-foundry.html',
+        'module5': 'module5-analytics.html',
+        'module6': 'module6-advanced.html'
+    };
+
+    const baseUrl = window.location.origin + window.location.pathname.split('/').slice(0, -1).join('/');
+    return `${baseUrl}/modules/${moduleFiles[moduleId]}`;
+}
+
 // Export functions for inline use
 window.toggleProgressPanel = toggleProgressPanel;
 window.resetProgress = resetProgress;
@@ -353,3 +438,4 @@ window.handleCheckpointChange = handleCheckpointChange;
 window.initializeModuleProgress = initializeModuleProgress;
 window.injectSectionCheckboxes = injectSectionCheckboxes;
 window.updateModuleProgressBar = updateModuleProgressBar;
+window.continueToLastSection = continueToLastSection;
