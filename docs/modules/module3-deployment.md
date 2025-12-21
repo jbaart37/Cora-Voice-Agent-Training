@@ -447,7 +447,7 @@ Service: web
 Copy the endpoint URL and open it in your browser.
 
 **Expected:** CORA landing page with:
-- **Customer Omnichannel Response Agent** title with CORA logo (not a microphone emoji)
+- <img src="{{ site.baseurl }}/assets/images/cora-logo.png" alt="CORA" style="height: 24px; vertical-align: middle;"> **Customer Omnichannel Response Agent** title
 - **About Cora** button
 - **Getting Started** button
 - **New Conversation** button
