@@ -921,6 +921,7 @@ body {
 }
 
 .score-bar {
+    display: block;
     height: 20px;
     background: var(--border-color);
     border-radius: 10px;
