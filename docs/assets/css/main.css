@@ -1885,12 +1885,30 @@ body.dark-theme .cost-box {
     background: var(--bg-secondary);
     transition: all 0.3s ease;
     max-width: 100%;
+    cursor: pointer;
+}
+
+.screenshot-container img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: contain;
 }
 
 .screenshot-container:hover {
     border-color: var(--primary-color);
     box-shadow: 0 4px 12px rgba(0, 120, 212, 0.15);
     transform: translateY(-2px);
+}
+
+.screenshot-caption {
+    text-align: center;
+    padding: 0.75rem;
+    margin: 0;
+    background: rgba(0, 120, 212, 0.05);
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    font-style: italic;
 }
 
 .screenshot-image {
