@@ -134,7 +134,10 @@ If you don't have Git installed or prefer not to use it:
 
 > 📸 **Screenshot placeholder**: GitHub showing Code → Download ZIP button
 
-![GitHub Download ZIP]({{ site.baseurl }}/assets/images/module1-github-zip-download.png)
+<div class="screenshot-container" onclick="openImageModal('{{ site.baseurl }}/assets/images/module1-github-zip-download.png')" style="cursor: zoom-in;">
+  <img src="{{ site.baseurl }}/assets/images/module1-github-zip-download.png" alt="GitHub Download ZIP" class="screenshot-image">
+  <p class="zoom-hint"><i class="fas fa-search-plus"></i> Click to enlarge</p>
+</div>
 
 ---
 
@@ -219,7 +222,10 @@ This will:
 
 > 📸 **Screenshot placeholder**: Azure CLI login success message
 
-![Azure CLI Login Success]({{ site.baseurl }}/assets/images/module1-az-login.png)
+<div class="screenshot-container" onclick="openImageModal('{{ site.baseurl }}/assets/images/module1-az-login.png')" style="cursor: zoom-in;">
+  <img src="{{ site.baseurl }}/assets/images/module1-az-login.png" alt="Azure CLI Login Success" class="screenshot-image">
+  <p class="zoom-hint"><i class="fas fa-search-plus"></i> Click to enlarge</p>
+</div>
 
 ### Verify Your Subscription
 
@@ -300,11 +306,17 @@ If your organization provided a project, you need to get:
 
 > 📸 **Screenshot placeholder**: Azure Portal showing AI Foundry endpoint
 
-![Azure AI Foundry Endpoint]({{ site.baseurl }}/assets/images/module1-ai-foundry-endpoint.png)
+<div class="screenshot-container" onclick="openImageModal('{{ site.baseurl }}/assets/images/module1-ai-foundry-endpoint.png')" style="cursor: zoom-in;">
+  <img src="{{ site.baseurl }}/assets/images/module1-ai-foundry-endpoint.png" alt="Azure AI Foundry Endpoint" class="screenshot-image">
+  <p class="zoom-hint"><i class="fas fa-search-plus"></i> Click to enlarge</p>
+</div>
 
 > 📸 **Screenshot placeholder**: AI Foundry Studio showing deployment name
 
-![AI Foundry Model Deployment]({{ site.baseurl }}/assets/images/module1-model-deployment.png)
+<div class="screenshot-container" onclick="openImageModal('{{ site.baseurl }}/assets/images/module1-model-deployment.png')" style="cursor: zoom-in;">
+  <img src="{{ site.baseurl }}/assets/images/module1-model-deployment.png" alt="AI Foundry Model Deployment" class="screenshot-image">
+  <p class="zoom-hint"><i class="fas fa-search-plus"></i> Click to enlarge</p>
+</div>
 
 ### Option B: Create a New Project
 
@@ -363,7 +375,10 @@ Azure AI Foundry has two portal experiences:
    
    > 📸 **Screenshot placeholder**: Azure AI Foundry project Overview page with endpoint highlighted
 
-   ![Azure AI Foundry Project Overview]({{ site.baseurl }}/assets/images/module1-ai-foundry-endpoint.png)
+   <div class="screenshot-container" onclick="openImageModal('{{ site.baseurl }}/assets/images/module1-ai-foundry-endpoint.png')" style="cursor: zoom-in;">
+     <img src="{{ site.baseurl }}/assets/images/module1-ai-foundry-endpoint.png" alt="Azure AI Foundry Project Overview" class="screenshot-image">
+     <p class="zoom-hint"><i class="fas fa-search-plus"></i> Click to enlarge</p>
+   </div>
 
 7. **Deploy a GPT Model**
    
@@ -384,7 +399,10 @@ Azure AI Foundry has two portal experiences:
 
    > 📸 **Screenshot placeholder**: Deployments page showing deployed GPT model
 
-   ![GPT Model Deployment]({{ site.baseurl }}/assets/images/module1-model-deployment.png)
+   <div class="screenshot-container" onclick="openImageModal('{{ site.baseurl }}/assets/images/module1-model-deployment.png')" style="cursor: zoom-in;">
+     <img src="{{ site.baseurl }}/assets/images/module1-model-deployment.png" alt="GPT Model Deployment" class="screenshot-image">
+     <p class="zoom-hint"><i class="fas fa-search-plus"></i> Click to enlarge</p>
+   </div>
 
 #### About API Keys 🔑
 

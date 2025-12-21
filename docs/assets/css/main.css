@@ -1875,3 +1875,47 @@ body.dark-theme .cost-box {
         padding: 0.75rem;
     }
 }
+
+/* Screenshot Container Styling */
+.screenshot-container {
+    margin: 1.5rem 0;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--bg-secondary);
+    transition: all 0.3s ease;
+    max-width: 100%;
+}
+
+.screenshot-container:hover {
+    border-color: var(--primary-color);
+    box-shadow: 0 4px 12px rgba(0, 120, 212, 0.15);
+    transform: translateY(-2px);
+}
+
+.screenshot-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    max-width: 100%;
+    object-fit: contain;
+}
+
+.zoom-hint {
+    text-align: center;
+    padding: 0.75rem;
+    margin: 0;
+    background: rgba(0, 120, 212, 0.05);
+    color: var(--primary-color);
+    font-size: 0.875rem;
+    font-weight: 500;
+    border-top: 1px solid var(--border-color);
+}
+
+.screenshot-container:hover .zoom-hint {
+    background: rgba(0, 120, 212, 0.1);
+}
+
+.zoom-hint i {
+    margin-right: 0.5rem;
+}
