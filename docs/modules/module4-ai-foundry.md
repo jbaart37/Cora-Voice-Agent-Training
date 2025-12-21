@@ -86,29 +86,28 @@ You should see:
 
 ### Key Components
 
-**1. Hub** 🏢
-- Organizational container for AI projects
-- Shared resources (compute, connections, security)
-- Team access management
-- Think: "Azure subscription for AI"
-
-**2. Project** 📁
+**1. Project** 📁
 - Individual AI application workspace
 - Contains: deployments, data, evaluations, traces
 - Isolated from other projects
 - Think: "Git repository for one app"
+- **This is what you created in Module 1**
 
-**3. Deployments** 🚀
+**2. Deployments** 🚀
 - Running model instances (GPT-4o, embeddings, etc.)
 - Configured with quotas and regions
 - RESTful API endpoints
 - Think: "Running web server"
+- **You deployed gpt-4o in Module 1**
 
-**4. Connections** 🔗
+**3. Connections** 🔗
 - Links to external resources (Storage, Search, DBs)
 - Secure credential management
 - Reusable across projects
 - Think: "Connection strings vault"
+- *We don't use external connections in this training*
+
+**Note about Hubs:** Azure AI Foundry has organizational containers called "Hubs" that can group multiple projects together for enterprise scenarios. For this training, we're focused on a single Project - which is all you need for most applications!
 
 ---
 
@@ -120,7 +119,23 @@ You should see:
 2. Sign in with your Azure account
 3. Select your project (created in Module 1)
 
-**Note:** You may see the **legacy portal** (oai.azure.com) or **new portal** (ai.azure.com). Both work! The new portal has more features.
+#### Portal Experience Toggle 🔄
+
+**Important:** Azure AI Foundry has two portal experiences, and you can switch between them:
+
+- **Legacy Portal** (oai.azure.com): Classic UI with familiar layout
+- **New Portal** (ai.azure.com): Modern UI with updated navigation
+
+**Look for the toggle at the top of the screen:**
+
+> 📸 **Screenshot placeholder**: Portal toggle showing Legacy/New experience switcher
+
+<div class="screenshot-container" onclick="openImageModal('{{ site.baseurl }}/assets/images/module4-portal-toggle.png')" style="cursor: zoom-in;">
+  <img src="{{ site.baseurl }}/assets/images/module4-portal-toggle.png" alt="Foundry Portal Toggle" class="screenshot-image">
+  <p class="zoom-hint"><i class="fas fa-search-plus"></i> Click to enlarge</p>
+</div>
+
+**For this training:** Our screenshots use the **legacy experience** for consistency, but both work identically!
 
 ---
 
@@ -154,6 +169,13 @@ Tokens per minute: 150,000
 Status: Running ✅
 ```
 
+> 📸 **Screenshot placeholder**: Foundry Deployments page showing gpt-4o deployment
+
+<div class="screenshot-container" onclick="openImageModal('{{ site.baseurl }}/assets/images/module4-deployments.png')" style="cursor: zoom-in;">
+  <img src="{{ site.baseurl }}/assets/images/module4-deployments.png" alt="Foundry Deployments" class="screenshot-image">
+  <p class="zoom-hint"><i class="fas fa-search-plus"></i> Click to enlarge</p>
+</div>
+
 4. Click deployment name to see:
    - **Endpoint URL** (already saved in Module 1)
    - **API Version**
@@ -172,6 +194,13 @@ Status: Running ✅
    - **System message** (left) - Instructions for the AI
    - **Chat session** (center) - Conversation area
    - **Configuration** (right) - Parameters
+
+> 📸 **Screenshot placeholder**: Playground interface showing three-panel layout
+
+<div class="screenshot-container" onclick="openImageModal('{{ site.baseurl }}/assets/images/module4-playground.png')" style="cursor: zoom-in;">
+  <img src="{{ site.baseurl }}/assets/images/module4-playground.png" alt="Foundry Playground" class="screenshot-image">
+  <p class="zoom-hint"><i class="fas fa-search-plus"></i> Click to enlarge</p>
+</div>
 
 ---
 
@@ -235,6 +264,38 @@ The AI should respond as an upset customer, expressing frustration while seeking
 ---
 
 ## 🤔 Why GPT-4o? Model Selection Explained
+
+### Why Chat Completion Models?
+
+Before we dive into specific models, let's understand **why we need chat completion models** for CORA:
+
+**What are Chat Completion Models?**
+- Models designed for **conversational AI** (back-and-forth dialogue)
+- Maintain context across multiple messages
+- Understand roles: system (instructions), user (customer), assistant (CORA)
+- Generate human-like responses in conversation format
+
+**Why Perfect for Customer Service Simulation:**
+
+✅ **Multi-turn conversations** - Customers rarely resolve issues in one message
+✅ **Context awareness** - Remember what was said earlier ("As I mentioned before...")
+✅ **Role-playing capability** - Can embody different personalities (frustrated, polite, confused)
+✅ **Natural dialogue flow** - Feels like talking to a real person, not a search engine
+✅ **Emotional intelligence** - Detect and respond to customer sentiment
+
+**Alternatives (and why they don't work for CORA):**
+
+| Model Type | Good For | Why NOT for CORA |
+|------------|----------|------------------|
+| **Text Completion** (legacy) | Code generation, text continuation | No conversation structure, no roles |
+| **Embeddings** | Semantic search, similarity | Doesn't generate responses |
+| **Fine-tuned Classification** | Sentiment analysis, categorization | Can't create natural dialogue |
+| **Instruct Models** | Single Q&A, tasks | Limited multi-turn context |
+| **Chat Completion** ✅ | Conversational AI | **Perfect for customer service!** |
+
+**Bottom Line:** Chat completion models like GPT-4o are specifically engineered for the kind of natural, multi-turn, context-aware conversations that customer service requires. Using anything else would be like using a hammer to paint a wall! 🎨🔨
+
+---
 
 ### The Model Landscape
 
@@ -597,6 +658,100 @@ Customer: Finally, someone who cares!
 
 ---
 
+### Why Do We Need OpenTelemetry?
+
+**Without telemetry, you're flying blind:**
+
+❌ **Problem Scenarios:**
+- "Why is CORA responding slowly for frustrated customers?" → *No data to investigate*
+- "Which mood uses the most tokens?" → *Can't compare*
+- "Did the conversation actually reach the AI model?" → *No visibility*
+- "How much is each conversation costing us?" → *Pure guesswork*
+
+✅ **With OpenTelemetry:**
+- See **exact duration** of each API call ("AI response took 1.2 seconds")
+- Track **token usage** per conversation ("Frustrated mood averages 450 tokens")
+- Trace **request flow** through your app ("Request failed at authentication")
+- Calculate **real costs** ("Today's conversations cost $2.37")
+- **Debug production issues** ("Error spike at 2pm coincided with new deployment")
+
+---
+
+### Low-Code (Studio) vs Code-First (Foundry)
+
+**Azure AI Studio (Low-Code Approach):**
+
+| Feature | How It Works | Limitations |
+|---------|-------------|-------------|
+| **Tracing** | Automatic via Prompt Flow UI | Only for flows created in Studio |
+| **Metrics** | Built-in dashboard | Can't customize what's tracked |
+| **Logs** | Pre-configured views | Limited filtering options |
+| **Custom Spans** | ❌ Not available | Can't track business logic |
+| **Cost Tracking** | Basic token counts | No per-conversation attribution |
+
+**Azure AI Foundry (Code-First Approach):**
+
+| Feature | How It Works | Advantages |
+|---------|-------------|------------|
+| **Tracing** | OpenTelemetry SDK in Python | Works with **any** Python app |
+| **Metrics** | Custom spans + attributes | Track **anything** you want |
+| **Logs** | Full Application Insights | Advanced queries, correlations |
+| **Custom Spans** | ✅ Full control | Track moods, scores, errors |
+| **Cost Tracking** | Per-conversation attribution | Exact cost per customer type |
+
+**Why CORA Uses Foundry + OpenTelemetry:**
+
+✅ **Flexibility** - We're building a custom Python Flask app, not a Studio flow
+✅ **Standards-based** - OpenTelemetry works with any observability platform (Azure Monitor, Datadog, Prometheus)
+✅ **Granular control** - Track business metrics (mood, score, tokens) alongside technical metrics (duration, errors)
+✅ **Production-ready** - Industry standard used by companies like Microsoft, Google, AWS
+✅ **SDK Integration** - Python Azure OpenAI SDK automatically integrates with OpenTelemetry
+
+**Think of it this way:**
+- **Studio = iPhone**: Easy, works great out of the box, but limited customization
+- **Foundry + OpenTelemetry = Android**: More setup, but ultimate flexibility and control
+
+For CORA's needs (custom scoring, mood tracking, cost analysis), the flexibility of Foundry + OpenTelemetry is essential!
+
+---
+
+### Python SDK + OpenTelemetry: Made for Each Other
+
+**Good news:** The Azure OpenAI Python SDK is designed to work seamlessly with OpenTelemetry standards!
+
+**What this means:**
+
+```python
+# When you make an Azure OpenAI call:
+response = client.chat.completions.create(
+    model="gpt-4o",
+    messages=[{"role": "user", "content": "Hello"}]
+)
+
+# OpenTelemetry AUTOMATICALLY captures:
+# ✅ Request duration
+# ✅ Model name
+# ✅ Token counts (prompt + completion)
+# ✅ HTTP status codes
+# ✅ Error messages (if any)
+# ✅ API endpoint called
+```
+
+**No extra code needed for basic telemetry!** The SDK instruments itself when OpenTelemetry is configured.
+
+**We add custom spans for CORA-specific data:**
+- Customer mood
+- Conversation scores
+- Response quality metrics
+- Business logic errors
+
+**This combination gives us:**
+- **SDK auto-telemetry**: Technical metrics (latency, tokens, errors)
+- **Custom spans**: Business metrics (mood, scores, costs)
+- **Full picture**: Both "how the system works" and "what the business sees"
+
+---
+
 ### Why Azure Monitor OpenTelemetry?
 
 CORA uses **Azure Monitor OpenTelemetry** for automatic instrumentation:
@@ -666,6 +821,13 @@ async def process_message(self, user_message, mood):
 1. Go to [Azure Portal](https://portal.azure.com)
 2. Navigate to your Application Insights resource
 3. Click **"Transaction search"** or **"Performance"**
+
+> 📸 **Screenshot placeholder**: Application Insights showing CORA traces with custom attributes
+
+<div class="screenshot-container" onclick="openImageModal('{{ site.baseurl }}/assets/images/module4-app-insights-traces.png')" style="cursor: zoom-in;">
+  <img src="{{ site.baseurl }}/assets/images/module4-app-insights-traces.png" alt="Application Insights Traces" class="screenshot-image">
+  <p class="zoom-hint"><i class="fas fa-search-plus"></i> Click to enlarge</p>
+</div>
 
 **What you'll see:**
 
