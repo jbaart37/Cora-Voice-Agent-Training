@@ -134,6 +134,8 @@ If you don't have Git installed or prefer not to use it:
 
 > 📸 **Screenshot placeholder**: GitHub showing Code → Download ZIP button
 
+![GitHub Download ZIP]({{ site.baseurl }}/assets/images/module1-github-zip-download.png)
+
 ---
 
 ## 📂 Step 2: Understanding the Repository Structure
@@ -217,6 +219,8 @@ This will:
 
 > 📸 **Screenshot placeholder**: Azure CLI login success message
 
+![Azure CLI Login Success]({{ site.baseurl }}/assets/images/module1-az-login.png)
+
 ### Verify Your Subscription
 
 ```bash
@@ -295,7 +299,12 @@ If your organization provided a project, you need to get:
    - Found in: AI Foundry Studio → Deployments
 
 > 📸 **Screenshot placeholder**: Azure Portal showing AI Foundry endpoint
+
+![Azure AI Foundry Endpoint]({{ site.baseurl }}/assets/images/module1-ai-foundry-endpoint.png)
+
 > 📸 **Screenshot placeholder**: AI Foundry Studio showing deployment name
+
+![AI Foundry Model Deployment]({{ site.baseurl }}/assets/images/module1-model-deployment.png)
 
 ### Option B: Create a New Project
 
@@ -354,6 +363,8 @@ Azure AI Foundry has two portal experiences:
    
    > 📸 **Screenshot placeholder**: Azure AI Foundry project Overview page with endpoint highlighted
 
+   ![Azure AI Foundry Project Overview]({{ site.baseurl }}/assets/images/module1-ai-foundry-endpoint.png)
+
 7. **Deploy a GPT Model**
    
    - Navigate to **Deployments** (left sidebar)
@@ -372,6 +383,8 @@ Azure AI Foundry has two portal experiences:
    - **Save the deployment name** - you'll need it in Module 2!
 
    > 📸 **Screenshot placeholder**: Deployments page showing deployed GPT model
+
+   ![GPT Model Deployment]({{ site.baseurl }}/assets/images/module1-model-deployment.png)
 
 #### About API Keys 🔑
 
