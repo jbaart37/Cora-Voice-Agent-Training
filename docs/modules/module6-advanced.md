@@ -584,15 +584,38 @@ AvgTokens: 450
 
 ---
 
+<div class="module-complete-section" style="text-align: center; margin: 3rem 0;">
+  <button class="btn-complete-module" onclick="markModuleComplete('module-6')" style="background: #107c10; color: white; border: none; padding: 1rem 2rem; font-size: 1.1rem; border-radius: 8px; cursor: pointer; font-weight: 600; box-shadow: 0 4px 8px rgba(0,0,0,0.2); transition: all 0.3s ease;">
+    <i class="fas fa-check-circle"></i> Mark Module Complete
+  </button>
+</div>
+
+---
+
 ## 🏆 Congratulations! Claim Your Certificate
 
 You've completed all 6 modules of the CORA Voice Agent Workshop! It's time to celebrate your achievement!
 
 <div style="text-align: center; margin: 3rem 0;">
-  <button id="claim-certificate-btn" class="btn btn-primary" style="font-size: 1.25rem; padding: 1rem 2rem; background: linear-gradient(135deg, #0078d4, #50b7f5); border: none; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
+  <button id="claim-certificate-btn" class="btn btn-primary" style="font-size: 1.25rem; padding: 1rem 2rem; background: linear-gradient(135deg, #0078d4, #50b7f5); border: none; cursor: pointer; color: white; font-weight: 600; box-shadow: 0 4px 8px rgba(0,0,0,0.2), 0 0 20px rgba(0,120,212,0.5); transition: all 0.3s ease;">
     🎉 Claim Your Certificate! 🏆
   </button>
 </div>
+
+<style>
+  #claim-certificate-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.3), 0 0 30px rgba(0,120,212,0.7);
+  }
+  #claim-certificate-btn:active {
+    transform: translateY(0);
+  }
+  .btn-complete-module:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+    background: #0e6b0e;
+  }
+</style>
 
 <script>
 document.getElementById('claim-certificate-btn').addEventListener('click', function() {
