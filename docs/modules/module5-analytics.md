@@ -8,6 +8,10 @@ description: "Implement performance tracking with Chart.js and Table Storage"
 
 # Module 5: Analytics Dashboard
 
+<div class="celebration-banner">
+  📊 <strong>Almost there, champion!</strong> Your AI is smart, your app is deployed, and now it's time to make those numbers look pretty. Because if it's not in a chart, did it even happen? 📈
+</div>
+
 <div class="module-intro">
   <p><strong>Duration:</strong> 45 minutes</p>
   <p><strong>Objective:</strong> Build an interactive analytics dashboard using Chart.js and Azure Table Storage for historical performance tracking.</p>

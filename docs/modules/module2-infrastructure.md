@@ -8,6 +8,10 @@ description: "Deploy Azure infrastructure using Azure Developer CLI (azd)"
 
 # Module 2: Infrastructure Setup
 
+<div class="celebration-banner">
+  🎉 <strong>Nice work!</strong> You've conquered Module 1 and you're well on your way! Now let's deploy some actual Azure infrastructure. Spoiler alert: It's way easier than you think. ☁️
+</div>
+
 <div class="module-intro">
   <p><strong>Duration:</strong> 45 minutes</p>
   <p><strong>Objective:</strong> Deploy all required Azure infrastructure with a single command using Azure Developer CLI (azd).</p>

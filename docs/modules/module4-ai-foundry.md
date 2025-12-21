@@ -8,6 +8,10 @@ description: "Configure AI Foundry project and deploy GPT-4 model"
 
 # Module 4: Azure OpenAI & AI Foundry
 
+<div class="celebration-banner">
+  🧠 <strong>You're crushing it!</strong> Infrastructure? ✓ Application? ✓ Now let's add the secret sauce: AI-powered intelligence. This is where CORA gets her smarts! 🤖✨
+</div>
+
 <div class="module-intro">
   <p><strong>Duration:</strong> 45 minutes</p>
   <p><strong>Objective:</strong> Set up Azure AI Foundry project, deploy GPT-4 model, and implement intelligent conversation analysis.</p>

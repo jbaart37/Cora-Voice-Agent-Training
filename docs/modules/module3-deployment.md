@@ -8,6 +8,10 @@ description: "Deploy the Flask application to Azure Container Apps"
 
 # Module 3: Application Deployment
 
+<div class="celebration-banner">
+  🚀 <strong>Look at you go!</strong> Two modules down, and you've already got Azure infrastructure running. Time to put some actual application code on those fancy resources you just created! 💪
+</div>
+
 <div class="module-intro">
   <p><strong>Duration:</strong> 60 minutes</p>
   <p><strong>Objective:</strong> Understand the Flask application code, containerization process, and deployment to Azure Container Apps.</p>
