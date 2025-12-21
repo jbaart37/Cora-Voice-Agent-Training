@@ -469,15 +469,15 @@ Copy the endpoint URL and open it in your browser.
 5. Speak: **"How can I help you today?"**
 6. **Expected:** 
    - Your speech is transcribed to text
-   - CORA responds with a helpful message
+   - CORA responds as a customer with the selected mood
    - Response is spoken aloud automatically
-   - Response is spoken aloud
 
 **Test Scenario 3: Analytics Dashboard**
 
 1. Have a few conversations (3-5 messages)
-2. Click the "Analytics" tab
-3. **Expected:**
+2. Click **"End Conversation"** button
+3. Click the **"Analytics"** tab
+4. **Expected:**
    - Score chart showing conversation ratings (1-5)
    - Volume chart showing message count over time
    - Recent conversations list
