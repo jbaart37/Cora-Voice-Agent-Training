@@ -446,28 +446,73 @@ When you run `azd up` in Module 2, it will prompt you for:
 
 **No file creation needed** - just have your AI Foundry endpoint ready!
 
-### Option B: Pre-configure with .env File
+### Option B: Pre-configure with .env File (Recommended!)
 
-If you want to prepare values in advance, create a file named `.env` in the root folder:
+**Why use a .env file?**
+- 📝 **Documentation** - Keep all your endpoints and IDs in one place
+- 🔄 **Reusability** - Easily redeploy if something goes wrong
+- 👥 **Team sharing** - Template for others (without secrets!)
+- 🧪 **Local testing** - Run the app locally during development
+
+**What to capture:** As you complete the steps above, document these values in `.env`:
+
+Create a file named `.env` in the project root folder (`c:\Local Dev\Cora-Voice-Agent-Training\.env`):
 
 ```env
-# Azure AI Foundry Configuration
-AZURE_AI_FOUNDRY_ENDPOINT=https://your-project.cognitiveservices.azure.com/
-AZURE_AI_MODEL_NAME=gpt-4o-deployment
+# =================================================================
+# CORA Voice Agent - Configuration Template
+# =================================================================
+# Copy this template and fill in YOUR values from the steps above
+# This file is used for local development and as reference
+# =================================================================
 
-# Optional: API Key (if not using managed identity)
+# ─────────────────────────────────────────────────────────────────
+# Step 4: Azure AI Foundry Configuration
+# ─────────────────────────────────────────────────────────────────
+# Paste your Foundry endpoint URL here (from Step 4.3)
+AZURE_AI_FOUNDRY_ENDPOINT=https://your-project-name.cognitiveservices.azure.com/
+
+# Your GPT model deployment name (from Step 4.5)
+AZURE_AI_MODEL_NAME=gpt-4o
+
+# Optional: API Key (only needed for local development)
+# If deploying to Azure, Managed Identity is used automatically
 # AZURE_AI_FOUNDRY_API_KEY=your-api-key-here
 
-# Azure Deployment Configuration
-AZURE_SUBSCRIPTION_ID=your-subscription-id
+# ─────────────────────────────────────────────────────────────────
+# Step 2 & 3: Azure Deployment Configuration
+# ─────────────────────────────────────────────────────────────────
+# Your Azure subscription ID (from Step 2)
+AZURE_SUBSCRIPTION_ID=12345678-1234-1234-1234-123456789012
+
+# Your preferred Azure region (from Step 3)
 AZURE_LOCATION=eastus
+
+# Your environment name (e.g., dev, test, prod)
 AZURE_ENV_NAME=cora-dev
+
+# Your resource group name pattern (from Step 3)
+# Example: rg-cora-dev
+RESOURCE_GROUP=rg-cora-dev
+
+# ─────────────────────────────────────────────────────────────────
+# Optional: Application Insights (added automatically by azd)
+# ─────────────────────────────────────────────────────────────────
+# APPLICATIONINSIGHTS_CONNECTION_STRING=InstrumentationKey=...;
 ```
 
+**📋 How to Use This Template:**
+
+1. **Copy the template above** into a new file named `.env`
+2. **Fill in your values** as you complete Steps 2-5
+3. **Leave API key commented** unless testing locally
+4. **Keep this file safe** - it's your deployment reference!
+
 **⚠️ Security Warning:** 
-- Never commit `.env` files to Git!
-- The repository includes `.gitignore` to prevent this
-- In production, use Azure Key Vault for secrets
+- ✅ `.env` is already in `.gitignore` (won't be committed to Git)
+- ❌ Never share API keys in screenshots or documentation
+- 🔒 In production, Azure uses Managed Identity (no API keys stored!)
+- 💡 For team sharing, remove API key line before sharing template
 
 > 📸 **Screenshot placeholder**: VS Code showing .env file example
 
@@ -484,6 +529,34 @@ Before moving to Module 2 (deployment), confirm you have:
 - [ ] ✅ Azure AI Foundry project created with GPT model deployed (in your resource group!)
 - [ ] ✅ AI Foundry endpoint URL copied
 - [ ] ✅ Model deployment name noted
+- [ ] ✅ (Optional but recommended) .env file created with your configuration values
+
+---
+
+### 🔮 What's Next: Validation Across Modules
+
+**Don't worry if you're not 100% sure everything is correct!** We'll validate and explore your setup in detail throughout the training:
+
+**📦 Module 2: Infrastructure Validation**
+- Verify all Azure resources deployed correctly
+- Check Container Apps, Storage, Registry, Log Analytics
+- Confirm resource group organization
+- Test endpoint URLs
+
+**🚀 Module 3: Application Validation**
+- Test the deployed web application
+- Verify conversation functionality
+- Confirm voice features work
+- Check analytics dashboard
+
+**🧠 Module 4: AI Foundry & Model Validation**
+- Deep dive into your Foundry project
+- Test model responses in Playground
+- Verify conversation scoring
+- Explore OpenTelemetry traces
+- Confirm cost and performance metrics
+
+**💡 Bottom Line:** If something isn't quite right in Module 1, we'll catch it and fix it in the upcoming modules. Each module builds on and validates the previous work!
 
 ---
 
