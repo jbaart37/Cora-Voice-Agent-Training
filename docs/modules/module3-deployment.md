@@ -453,24 +453,44 @@ Copy the endpoint URL and open it in your browser.
 
 ### 3. Test the Voice Agent
 
+**Before You Start:** Configure CORA's personality and voice!
+
+**Mood Selection:**
+- Choose from: Neutral, Happy, Frustrated, Confused, Angry, Helpful
+- Each mood changes how CORA responds as a customer
+- Try different moods to see varied conversation styles
+
+**Voice Selection:**
+- Default: **Random** (CORA picks a different voice each time)
+- Have fun! Try other voices from the dropdown
+- Each voice has unique characteristics
+
+**Voice Quality Settings:**
+- Adjust speech rate, pitch, and volume
+- Experiment to find your preferred settings
+
+---
+
 **Test Scenario 1: Text Chat**
 
-1. Click in the text input box
-2. Type: "Hello CORA, how are you today?"
-3. Click Send
-4. **Expected:** CORA responds with a friendly greeting
+1. Select a **Mood** (try "Frustrated" for interesting responses!)
+2. Click in the text input box
+3. Type: "Hello CORA, how are you today?"
+4. Click Send
+5. **Expected:** CORA responds as a customer with the selected mood
 
 **Test Scenario 2: Voice Input (Desktop only)**
 
-1. Ensure **"Auto-Play Cora's responses"** checkbox is checked (bottom right)
-2. Click **"New Conversation"** button
-3. Click **"Enable Voice Chat"** button
-4. Allow microphone access when browser prompts
-5. Speak: **"How can I help you today?"**
-6. **Expected:** 
+1. Select a **Mood** and **Voice** (or leave Random selected)
+2. Ensure **"Auto-Play Cora's responses"** checkbox is checked (bottom right)
+3. Click **"New Conversation"** button
+4. Click **"Enable Voice Chat"** button
+5. Allow microphone access when browser prompts
+6. Speak: **"How can I help you today?"**
+7. **Expected:** 
    - Your speech is transcribed to text
    - CORA responds as a customer with the selected mood
-   - Response is spoken aloud automatically
+   - Response is spoken aloud automatically in the selected voice
 
 **Test Scenario 3: Analytics Dashboard**
 
@@ -520,7 +540,7 @@ azd deploy
 
 ### Issue 2: Voice Recognition Not Working
 
-**Symptoms:** Microphone button does nothing
+**Symptoms:** "Enable Voice Chat" button does nothing or microphone not activating
 
 **Diagnosis:** Check browser console (F12 → Console tab)
 
