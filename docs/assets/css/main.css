@@ -1478,6 +1478,35 @@ body.dark-theme .context-section {
     margin-top: 2rem;
     text-align: center;
     font-size: 1.05rem;
+}
+
+body.dark-theme .context-summary {
+    background: rgba(0,0,0,0.3);
+}
+
+/* CORA Requirements Section - Dark Mode Compatible */
+.cora-requirements-section {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: var(--bg-primary);
+    border-left: 4px solid #0078d4;
+    border-radius: 4px;
+    box-shadow: var(--shadow-sm);
+}
+
+.cora-requirements-section .section-heading {
+    margin-top: 0;
+    color: #0078d4;
+}
+
+body.dark-theme .cora-requirements-section {
+    background: var(--bg-secondary);
+    border-left-color: var(--primary-light);
+}
+
+body.dark-theme .cora-requirements-section .section-heading {
+    color: var(--primary-light);
+}
     line-height: 1.8;
 }
 
@@ -2044,9 +2073,19 @@ body.dark-theme .cost-box {
     animation: slideInFromTop 0.5s ease-out;
 }
 
+body.dark-theme .celebration-banner {
+    background: linear-gradient(135deg, #1a3a52 0%, #2d4a5f 100%);
+    border-left-color: var(--primary-light);
+    box-shadow: 0 2px 8px rgba(80, 183, 245, 0.2);
+}
+
 .celebration-banner strong {
     color: #0078d4;
     font-weight: 700;
+}
+
+body.dark-theme .celebration-banner strong {
+    color: var(--primary-light);
 }
 
 @keyframes slideInFromTop {

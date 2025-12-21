@@ -22,7 +22,7 @@ description: Building an AI-Powered Voice Agent Simulator with Azure AI Foundry
       <h3>🤖 Copilot Studio</h3>
       <p class="best-for">Best for:</p>
       <ul>
-        <li>Quick chatbot deployment</li>
+        <li>Quick Copilot deployment</li>
         <li>Standard conversation flows</li>
         <li>Pre-built connectors</li>
         <li>Citizen developers</li>
@@ -41,10 +41,10 @@ description: Building an AI-Powered Voice Agent Simulator with Azure AI Foundry
     </div>
   </div>
   
-  <div class="cora-requirements-section" style="margin-top: 2rem; padding: 1.5rem; background: #f8f9fa; border-left: 4px solid #0078d4; border-radius: 4px;">
-    <h4 style="margin-top: 0; color: #0078d4;">🎯 Why Studio Couldn't Build CORA</h4>
+  <div class="cora-requirements-section">
+    <h4 class="section-heading">🎯 Why Studio Couldn't Build CORA</h4>
     <p style="margin-bottom: 1rem;">
-      <strong>CORA needs specific capabilities</strong> that go beyond traditional chatbots. Here's what we require and why Studio can't deliver:
+      <strong>CORA needs specific capabilities</strong> that go beyond traditional Copilots. Here's what we require and why Studio can't deliver:
     </p>
     
     <div style="margin-left: 1rem;">
