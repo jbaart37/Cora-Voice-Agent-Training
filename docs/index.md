@@ -41,7 +41,64 @@ description: Building an AI-Powered Voice Agent Simulator with Azure AI Foundry
     </div>
   </div>
   
-  <p class="context-summary">
+  <div class="cora-requirements-section" style="margin-top: 2rem; padding: 1.5rem; background: #f8f9fa; border-left: 4px solid #0078d4; border-radius: 4px;">
+    <h4 style="margin-top: 0; color: #0078d4;">🎯 Why Studio Couldn't Build CORA</h4>
+    <p style="margin-bottom: 1rem;">
+      <strong>CORA needs specific capabilities</strong> that go beyond traditional chatbots. Here's what we require and why Studio can't deliver:
+    </p>
+    
+    <div style="margin-left: 1rem;">
+      <p><strong>🎤 Real-Time Voice Streaming</strong></p>
+      <ul style="margin-top: 0.5rem; margin-bottom: 1rem;">
+        <li><strong>CORA needs:</strong> Interactive voice conversations using Web Speech API with real-time speech recognition and synthesis</li>
+        <li><strong>Studio limitation:</strong> Test pane only supports dictation (record → send recording), not streaming voice interaction</li>
+        <li><strong>M365 Copilot limitation:</strong> Similar dictation-only approach, no real-time speech SDK integration</li>
+        <li><strong>Why it matters:</strong> Customer service training requires natural, flowing conversations - not "speak, wait, submit"</li>
+      </ul>
+      
+      <p><strong>🎨 Highly Customized UX</strong></p>
+      <ul style="margin-top: 0.5rem; margin-bottom: 1rem;">
+        <li><strong>CORA needs:</strong> Custom interface with mood selection (6 personality types), voice selection (multiple voices), quality controls (rate, pitch, volume), and real-time analytics dashboard</li>
+        <li><strong>Studio limitation:</strong> Standard chat interface with limited customization options</li>
+        <li><strong>Why it matters:</strong> Training simulators need controls that don't exist in typical chatbots - learners must experiment with customer personalities and voice characteristics</li>
+      </ul>
+      
+      <p><strong>💾 Flexible Data Storage & Integration</strong></p>
+      <ul style="margin-top: 0.5rem; margin-bottom: 1rem;">
+        <li><strong>CORA needs:</strong> Lightweight Azure Table Storage for conversation analytics, easy Managed Identity integration, simple schema (conversation ID, scores, timestamps)</li>
+        <li><strong>Studio approach:</strong> Pushes toward SharePoint Lists or Dataverse (more complex, enterprise-focused)</li>
+        <li><strong>Why Azure Tables works better:</strong> Simple key-value storage, no schema overhead, native SDK support, perfect for analytics aggregation</li>
+        <li><strong>Managed Identity:</strong> CORA uses Azure managed identity for secure, passwordless authentication to Storage, OpenAI, and Application Insights - simpler than Studio's connection management</li>
+      </ul>
+      
+      <p><strong>📊 Advanced Observability & Telemetry</strong></p>
+      <ul style="margin-top: 0.5rem; margin-bottom: 1rem;">
+        <li><strong>CORA needs:</strong> OpenTelemetry integration with custom spans tracking mood, tokens, scores, duration, and cost per conversation</li>
+        <li><strong>Studio limitation:</strong> Pre-built analytics dashboard, limited custom telemetry</li>
+        <li><strong>Why it matters:</strong> We track business metrics (which moods use most tokens?) alongside technical metrics (API latency)</li>
+      </ul>
+      
+      <p><strong>🧪 Multi-Criteria Scoring System</strong></p>
+      <ul style="margin-top: 0.5rem; margin-bottom: 1rem;">
+        <li><strong>CORA needs:</strong> Custom 5-criteria evaluation (professionalism, clarity, problem resolution, empathy, efficiency) with 25-point scale</li>
+        <li><strong>Studio limitation:</strong> Would require complex Power Automate flows to parse AI responses and calculate scores</li>
+        <li><strong>Why code is better:</strong> Python parses JSON responses directly, calculates scores inline, stores in Azure Tables - all in &lt;50 lines</li>
+      </ul>
+      
+      <p><strong>🚀 Scalable Containerized Deployment</strong></p>
+      <ul style="margin-top: 0.5rem; margin-bottom: 1rem;">
+        <li><strong>CORA needs:</strong> Docker container on Azure Container Apps, scale-to-zero for cost efficiency (~$10-20/month), git-based deployments</li>
+        <li><strong>Studio approach:</strong> Managed service (great for most cases!), but less control over hosting, scaling, and costs</li>
+        <li><strong>Why containers:</strong> Version control, CI/CD pipelines, infrastructure-as-code, portable to other environments</li>
+      </ul>
+    </div>
+    
+    <p style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #dee2e6; font-weight: 600;">
+      🎯 <strong>The Bottom Line:</strong> Studio is fantastic for standard chatbots and conversational flows. But CORA is a <em>specialized training simulator</em> with voice streaming, custom UX, detailed analytics, and production-grade observability. For this level of customization, Foundry + code-first is the right tool for the job!
+    </p>
+  </div>
+  
+  <p class="context-summary" style="margin-top: 1.5rem;">
     <strong>This workshop teaches you:</strong> When to use Copilot Studio vs Azure AI Foundry, how to leverage the power of Azure AI services, and how to build production-ready AI agents with full customization and control.
   </p>
 </div>
