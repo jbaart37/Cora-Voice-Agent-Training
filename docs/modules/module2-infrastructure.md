@@ -27,27 +27,616 @@ By the end of this module, you will:
 
 ---
 
-## 📖 Content Coming Soon
+## � Prerequisites Check
 
-This module will cover:
+Before starting this module, ensure you completed Module 1:
 
-### 1. Introduction to Azure Developer CLI (azd)
-- What is azd and how does it simplify deployment?
-- azd vs Azure CLI: When to use each
-- Template structure overview
+- ✅ Repository cloned or downloaded
+- ✅ Azure CLI installed and logged in
+- ✅ Azure AI Foundry project created with GPT model deployed
+- ✅ Foundry endpoint URL and model deployment name ready
 
-### 2. Infrastructure Components
-- Azure Container Apps Environment
-- Azure Container Registry
-- Azure Storage Account (Table Storage)
-- Azure Log Analytics Workspace
-- Managed Identities and RBAC
+**Quick verification:**
 
-### 3. Deployment Process
-- Running `azd init`
-- Configuring environment variables
-- Executing `azd up`
-- Understanding the Bicep templates
+```bash
+# Verify Azure CLI login
+az account show
+
+# Verify you're in the correct directory
+cd c:\Local Dev\Cora-Voice-Agent-Training
+```
+
+---
+
+## 🚀 What is Azure Developer CLI (azd)?
+
+**Azure Developer CLI (azd)** is a command-line tool that makes deploying applications to Azure ridiculously easy.
+
+### The Old Way vs The azd Way
+
+**❌ The Manual Approach (3-4 hours):**
+1. Log into Azure Portal
+2. Click "Create Resource" → Container App
+3. Fill out 47 fields, hope you don't miss one
+4. Click "Create Resource" → Storage Account  
+5. Configure storage, permissions, networking
+6. Click "Create Resource" → Container Registry
+7. Build Docker image locally
+8. Push to registry with correct tags
+9. Configure environment variables (one at a time)
+10. Set up managed identities
+11. Assign RBAC roles
+12. Configure logging
+13. Debug why something doesn't work
+14. Realize you put resources in different regions
+15. Start over 😭
+
+**✅ The azd Approach (5-10 minutes):**
+```bash
+azd up
+```
+
+That's it. Seriously.
+
+### What Does `azd up` Actually Do?
+
+When you run `azd up`, it orchestrates:
+
+1. **📦 Package**: Builds your Docker container
+2. **🏗️ Provision**: Creates Azure resources from Bicep templates
+3. **🚀 Deploy**: Pushes your container and deploys the app
+4. **🔗 Configure**: Sets up environment variables, managed identities, RBAC
+
+**All in one command.**
+
+### azd vs Azure CLI: What's the Difference?
+
+| Feature | Azure CLI (`az`) | Azure Developer CLI (`azd`) |
+|---------|------------------|----------------------------|
+| **Purpose** | Manage individual Azure resources | Deploy complete applications |
+| **Scope** | Resource-level operations | Full application lifecycle |
+| **Configuration** | Manual commands | Template-driven (Bicep/Terraform) |
+| **Use Case** | "Create a storage account" | "Deploy my entire app to Azure" |
+| **Learning Curve** | Need to know every resource type | Know your app, templates handle resources |
+
+**Think of it this way:**
+- `az` = Buying individual ingredients and cooking from scratch
+- `azd` = Using a meal kit with pre-measured ingredients and recipe
+
+Both are great! But for deploying apps, `azd` saves massive time.
+
+---
+
+## 🏗️ What Will Be Deployed?
+
+Running `azd up` will create these Azure resources in your subscription:
+
+### Core Application Infrastructure
+
+| Resource | Purpose | Estimated Cost |
+|----------|---------|----------------|
+| **Container Apps Environment** | Hosts your containerized application | ~$0/month (consumption-based) |
+| **Container App** | Runs the Flask web application | ~$0-5/month (scale to zero) |
+| **Container Registry** | Stores Docker images | ~$5/month (Basic tier) |
+| **Storage Account** | Stores conversation scores (Table Storage) | ~$1/month |
+
+### Monitoring & Operations
+
+| Resource | Purpose | Estimated Cost |
+|----------|---------|----------------|
+| **Log Analytics Workspace** | Centralized logging | ~$0-5/month (depends on ingestion) |
+| **Application Insights** | Application performance monitoring | Included with Log Analytics |
+
+### Security & Identity
+
+| Resource | Purpose | Cost |
+|----------|---------|------|
+| **Managed Identity** | Secure authentication (no API keys!) | Free |
+| **RBAC Role Assignments** | Grants permissions to managed identity | Free |
+
+**💰 Total Estimated Cost: ~$10-20/month**
+
+**💡 Cost Optimization Tip:** Container Apps scale to zero when idle. During development, your app will cost almost nothing when you're not using it!
+
+---
+
+## 📝 Step 1: Install Azure Developer CLI
+
+### Check if azd is Already Installed
+
+```bash
+azd version
+```
+
+If you see a version number (e.g., `azd version 1.5.0`), you're good! Skip to Step 2.
+
+### Install azd (Windows)
+
+**Option A: Using winget (Recommended)**
+
+```powershell
+winget install microsoft.azd
+```
+
+**Option B: Using PowerShell Script**
+
+```powershell
+powershell -ex AllSigned -c "Invoke-RestMethod 'https://aka.ms/install-azd.ps1' | Invoke-Expression"
+```
+
+### Install azd (macOS)
+
+```bash
+brew tap azure/azd && brew install azd
+```
+
+### Install azd (Linux)
+
+```bash
+curl -fsSL https://aka.ms/install-azd.sh | bash
+```
+
+**Verify Installation:**
+
+```bash
+azd version
+```
+
+> 📸 **Screenshot placeholder**: Terminal showing `azd version` output
+
+---
+
+## ⚙️ Step 2: Initialize azd Environment
+
+Navigate to your project directory:
+
+```bash
+cd c:\Local Dev\Cora-Voice-Agent-Training
+```
+
+Initialize azd (this creates a local environment configuration):
+
+```bash
+azd init
+```
+
+You'll be prompted for:
+
+### 1. Environment Name
+
+```
+Enter a new environment name: cora-dev
+```
+
+**What is this?** A label for this deployment (e.g., `dev`, `test`, `prod`). This keeps multiple deployments separate.
+
+**Recommendation:** Use `cora-dev` for this training.
+
+### 2. Subscription Selection
+
+```
+Select an Azure Subscription to use:
+  1. My Azure Subscription (12345678-1234-1234-1234-123456789012)
+> 2. Another Subscription (87654321-4321-4321-4321-210987654321)
+```
+
+Choose the subscription where you want to deploy CORA.
+
+### 3. Location Selection
+
+```
+Select an Azure location to use:
+  1. (US) East US
+> 2. (US) East US 2
+  3. (Europe) West Europe
+```
+
+**Recommendation:** Choose `East US` or `East US 2` for best Azure OpenAI availability.
+
+**💡 Pro Tip:** Azure AI Foundry and Container Apps must be in regions that support both services. East US/East US 2 are safe bets!
+
+---
+
+## 🔐 Step 3: Configure Environment Variables
+
+azd needs to know about your Azure AI Foundry endpoint and model. You have two options:
+
+### Option A: Set Environment Variables via azd (Recommended)
+
+```bash
+azd env set AZURE_OPENAI_ENDPOINT "https://your-foundry-project.openai.azure.com/"
+azd env set AZURE_OPENAI_DEPLOYMENT_NAME "gpt-4o"
+azd env set AZURE_OPENAI_API_VERSION "2024-08-01-preview"
+```
+
+**Replace:**
+- `https://your-foundry-project.openai.azure.com/` with your actual Foundry endpoint (from Module 1)
+- `gpt-4o` with your model deployment name
+
+### Option B: Create .env File
+
+Create a `.env` file in the project root:
+
+```bash
+# .env file
+AZURE_OPENAI_ENDPOINT=https://your-foundry-project.openai.azure.com/
+AZURE_OPENAI_DEPLOYMENT_NAME=gpt-4o
+AZURE_OPENAI_API_VERSION=2024-08-01-preview
+```
+
+Then load it:
+
+```bash
+azd env refresh
+```
+
+**🔒 Security Note:** The `.env` file is already in `.gitignore`, so your credentials won't be committed to source control.
+
+---
+
+## 🚀 Step 4: Deploy Everything with `azd up`
+
+This is the moment you've been waiting for. One command deploys everything:
+
+```bash
+azd up
+```
+
+### What Happens During `azd up`?
+
+You'll see output like this (this takes 5-10 minutes):
+
+```
+Provisioning Azure resources (azd provision)
+Provisioning Azure resources can take some time
+
+Subscription: My Azure Subscription (12345678-abcd-1234-abcd-123456789012)
+Location: East US
+
+  You can view detailed progress in the Azure Portal:
+  https://portal.azure.com/#view/HubsExtension/DeploymentDetailsBlade/...
+
+  (✓) Done: Resource group: rg-cora-dev
+  (✓) Done: Log Analytics workspace: log-cora-dev
+  (✓) Done: Container Registry: crcora123456
+  (✓) Done: Storage Account: stcoradev123456
+  (✓) Done: Container Apps Environment: cae-cora-dev
+  (✓) Done: Container App: ca-cora-dev
+
+SUCCESS: Your infrastructure has been provisioned!
+
+Packaging services (azd package)
+Building Docker image for service 'web'...
+  => [internal] load build definition from Dockerfile
+  => => transferring dockerfile: 1.2kB
+  => [1/6] FROM docker.io/library/python:3.11-slim
+  => [2/6] WORKDIR /app
+  => [3/6] COPY requirements.txt .
+  => [4/6] RUN pip install --no-cache-dir -r requirements.txt
+  => [5/6] COPY . .
+  => [6/6] RUN pip install --no-cache-dir -e .
+  => exporting to image
+
+SUCCESS: Services packaged!
+
+Deploying services (azd deploy)
+Pushing Docker image to Azure Container Registry...
+Deploying to Container App...
+  
+  (✓) Done: Deploying service 'web'
+
+SUCCESS: Your application has been deployed!
+
+Endpoint: https://ca-cora-dev.happyocean-a1b2c3d4.eastus.azurecontainerapps.io
+
+You can now access your application at the URL above!
+```
+
+**🎉 That's it! Your app is deployed to Azure!**
+
+### Understanding the Output
+
+| Phase | What Happened |
+|-------|---------------|
+| **Provisioning** | Created all Azure resources from `infra/main.bicep` |
+| **Packaging** | Built Docker container from `src/Dockerfile` |
+| **Deploying** | Pushed container to registry and deployed to Container App |
+
+---
+
+## ✅ Step 5: Verify Deployment
+
+### 1. Check Deployment Status
+
+```bash
+azd show
+```
+
+This displays all deployed resources and their endpoints.
+
+### 2. Open Your Application
+
+Copy the endpoint URL from the `azd up` output (it looks like):
+
+```
+https://ca-cora-dev.happyocean-a1b2c3d4.eastus.azurecontainerapps.io
+```
+
+Open it in your browser. You should see the CORA landing page!
+
+> 📸 **Screenshot placeholder**: CORA application running in browser
+
+### 3. Verify Resources in Azure Portal
+
+```bash
+azd show --output json
+```
+
+Or visit the Azure Portal:
+1. Go to [portal.azure.com](https://portal.azure.com)
+2. Search for your resource group (e.g., `rg-cora-dev`)
+3. Confirm all resources are created
+
+Expected resources:
+- ✅ Container App (`ca-cora-dev`)
+- ✅ Container Apps Environment (`cae-cora-dev`)
+- ✅ Container Registry (`crcora...`)
+- ✅ Storage Account (`stcora...`)
+- ✅ Log Analytics Workspace (`log-cora-dev`)
+
+> 📸 **Screenshot placeholder**: Azure Portal showing resource group with all resources
+
+---
+
+## 🐛 Troubleshooting Common Issues
+
+### Issue 1: `azd up` Fails with "Subscription not found"
+
+**Solution:** Make sure you're logged in to Azure CLI:
+
+```bash
+az login
+az account set --subscription "Your Subscription Name"
+```
+
+Then retry `azd up`.
+
+### Issue 2: "Location does not support Container Apps"
+
+**Solution:** Choose a different region during `azd init`:
+
+```bash
+azd env set AZURE_LOCATION eastus
+azd provision
+```
+
+Supported regions: East US, East US 2, West US 2, North Europe, West Europe
+
+### Issue 3: "Failed to build Docker image"
+
+**Solution:** Ensure Docker Desktop is running (if on Windows/Mac):
+
+```bash
+# Check Docker status
+docker --version
+docker ps
+```
+
+If Docker isn't running, start Docker Desktop and retry.
+
+### Issue 4: Container App Deployed but Returns 502/503
+
+**Likely cause:** Environment variables not set correctly.
+
+**Solution:** Check Container App environment variables:
+
+```bash
+az containerapp show --name ca-cora-dev --resource-group rg-cora-dev --query "properties.template.containers[0].env"
+```
+
+Verify these are set:
+- `AZURE_OPENAI_ENDPOINT`
+- `AZURE_OPENAI_DEPLOYMENT_NAME`
+- `AZURE_OPENAI_API_VERSION`
+
+To fix, update via azd:
+
+```bash
+azd env set AZURE_OPENAI_ENDPOINT "https://your-endpoint.com"
+azd deploy
+```
+
+### Issue 5: "Cannot access storage account"
+
+**Likely cause:** Managed identity permissions not yet propagated.
+
+**Solution:** Wait 2-3 minutes for Azure AD role assignments to propagate, then refresh the app.
+
+---
+
+## 🏗️ Understanding What Was Deployed
+
+Let's peek under the hood at what `azd` created for you.
+
+### The azure.yaml File
+
+Open `azure.yaml` in the repository root:
+
+```yaml
+name: cora-voice-agent
+metadata:
+  template: cora-voice-agent@0.0.1-beta
+services:
+  web:
+    project: ./src
+    language: python
+    host: containerapp
+```
+
+**What does this tell azd?**
+- **name**: Project identifier
+- **services.web.project**: Where the application code lives (`./src`)
+- **services.web.language**: Python app (azd knows to look for `requirements.txt`)
+- **services.web.host**: Deploy to Azure Container Apps
+
+### The Bicep Templates (infra/ folder)
+
+The `infra/` directory contains **Infrastructure as Code** templates:
+
+```
+infra/
+├── main.bicep                       # Main template
+├── main.parameters.json             # Parameter values
+├── abbreviations.json               # Resource naming conventions
+└── core/
+    ├── host/
+    │   ├── container-app.bicep            # Container App definition
+    │   ├── container-apps-environment.bicep  # Container environment
+    │   └── container-registry.bicep       # Container registry
+    └── monitor/
+        └── monitoring.bicep               # Log Analytics & App Insights
+```
+
+**Key concepts:**
+
+- **main.bicep**: Orchestrates all resources
+- **Modules**: Reusable templates for specific resources
+- **Parameters**: Values you can customize per environment
+
+**📚 Want to learn more?** Check out `infra/README.md` for a deep dive into the Bicep templates.
+
+---
+
+## 🎨 Customization Options
+
+### Change Resource Names
+
+By default, azd generates names like `ca-cora-dev`. To customize:
+
+```bash
+azd env set RESOURCE_NAME_PREFIX mycompany
+azd provision
+```
+
+### Deploy to a Different Environment
+
+Want separate dev/test/prod environments?
+
+```bash
+# Create new environment
+azd init --environment cora-prod
+
+# Deploy to prod
+azd up
+```
+
+Each environment is isolated with its own Azure resources.
+
+### Scale Up Container App
+
+By default, Container Apps scale 0-10 replicas. To change:
+
+Edit `infra/core/host/container-app.bicep`:
+
+```bicep
+scale: {
+  minReplicas: 1
+  maxReplicas: 20  // Increased from 10
+}
+```
+
+Then redeploy:
+
+```bash
+azd provision
+```
+
+---
+
+## 💾 Step 6: Save Your Deployment Info
+
+After successful deployment, save these for future reference:
+
+```bash
+# Get all outputs
+azd show --output json > deployment-info.json
+```
+
+Key information to note:
+- **Container App URL**: Your application endpoint
+- **Resource Group Name**: Where all resources live
+- **Storage Account Name**: For accessing analytics data
+- **Container Registry Name**: For pushing updated images
+
+---
+
+## ✅ Module 2 Checklist
+
+Before moving to Module 3, verify:
+
+- [ ] ✅ Azure Developer CLI installed (`azd version` works)
+- [ ] ✅ azd initialized (`azd init` completed successfully)
+- [ ] ✅ Environment variables configured (Foundry endpoint, model name)
+- [ ] ✅ Deployment completed successfully (`azd up` finished without errors)
+- [ ] ✅ Application accessible in browser (URL returns CORA landing page)
+- [ ] ✅ All Azure resources visible in Portal (6 resources in resource group)
+
+---
+
+## 📊 Knowledge Check
+
+Test your understanding before moving forward:
+
+1. **What does `azd up` do?**
+   <details>
+   <summary>Click to reveal answer</summary>
+   Provisions Azure infrastructure, builds Docker container, and deploys the application - all in one command.
+   </details>
+
+2. **What's the difference between `azd` and `az` CLI?**
+   <details>
+   <summary>Click to reveal answer</summary>
+   `azd` is for deploying complete applications with templates. `az` is for managing individual Azure resources.
+   </details>
+
+3. **Why does Container Apps cost ~$0 when idle?**
+   <details>
+   <summary>Click to reveal answer</summary>
+   Container Apps can scale to zero replicas when not in use. You only pay for compute when the app is actively handling requests.
+   </details>
+
+4. **Where are the infrastructure templates defined?**
+   <details>
+   <summary>Click to reveal answer</summary>
+   In the `infra/` directory, using Bicep templates (main.bicep and core modules).
+   </details>
+
+5. **How do you deploy updates after changing code?**
+   <details>
+   <summary>Click to reveal answer</summary>
+   Run `azd deploy` to rebuild and redeploy just the application (skips infrastructure provisioning).
+   </details>
+
+---
+
+## 🎉 Congratulations!
+
+You've successfully deployed CORA to Azure using Infrastructure as Code! 🚀
+
+**What you accomplished:**
+- ✅ Deployed a production-ready application to Azure
+- ✅ Created 6+ Azure resources with one command
+- ✅ Configured secure authentication with Managed Identity
+- ✅ Set up monitoring and logging automatically
+
+**Next up:** Module 3 will walk you through testing the application, understanding the architecture, and exploring how the components interact.
+
+---
+
+<div class="module-navigation">
+  <a href="module1-overview.html" class="nav-button prev">← Module 1: Getting Started</a>
+  <a href="module3-deployment.html" class="nav-button next">Module 3: Testing & Architecture →</a>
+</div>
 
 ### 4. Verification & Troubleshooting
 - Checking resource group in Azure Portal
