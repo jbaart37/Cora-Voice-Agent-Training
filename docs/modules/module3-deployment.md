@@ -447,8 +447,10 @@ Service: web
 Copy the endpoint URL and open it in your browser.
 
 **Expected:** CORA landing page with:
-- 🎤 Voice Agent Simulator title
-- Start conversation button
+- **Customer Omnichannel Response Agent** title with CORA logo (not a microphone emoji)
+- **About Cora** button
+- **Getting Started** button
+- **New Conversation** button
 - Clean, modern interface
 
 ### 3. Test the Voice Agent
