@@ -24,7 +24,29 @@
                 </div>
                 <nav class="main-nav">
                     <a href="{{ '/' | relative_url }}" {% if page.url == '/' %}class="active"{% endif %}>Home</a>
-                    <a href="{{ '/modules/module1-overview.html' | relative_url }}">Modules</a>
+                    <div class="dropdown">
+                        <a href="#" class="dropdown-toggle">Modules <i class="fas fa-chevron-down"></i></a>
+                        <div class="dropdown-menu">
+                            <a href="{{ '/modules/module1-overview.html' | relative_url }}" class="dropdown-item">
+                                <span class="module-num">1</span> Getting Started
+                            </a>
+                            <a href="{{ '/modules/module2-infrastructure.html' | relative_url }}" class="dropdown-item">
+                                <span class="module-num">2</span> Infrastructure Setup
+                            </a>
+                            <a href="{{ '/modules/module3-deployment.html' | relative_url }}" class="dropdown-item">
+                                <span class="module-num">3</span> Application Deployment
+                            </a>
+                            <a href="{{ '/modules/module4-ai-foundry.html' | relative_url }}" class="dropdown-item">
+                                <span class="module-num">4</span> Azure OpenAI & AI Foundry
+                            </a>
+                            <a href="{{ '/modules/module5-analytics.html' | relative_url }}" class="dropdown-item">
+                                <span class="module-num">5</span> Analytics Dashboard
+                            </a>
+                            <a href="{{ '/modules/module6-advanced.html' | relative_url }}" class="dropdown-item">
+                                <span class="module-num">6</span> Advanced Topics
+                            </a>
+                        </div>
+                    </div>
                     <a href="https://github.com/jbaart37/Cora-Voice-Agent-Training" target="_blank">
                         <i class="fab fa-github"></i> GitHub
                     </a>
