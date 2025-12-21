@@ -399,17 +399,37 @@ Custom Attributes:
 **For production use:** Set up automated evaluation pipelines
 
 **What you need:**
-- Test dataset (CSV/JSON with sample customer messages)
-- Expected outputs (ideal responses)
+- **Test dataset** (choose one of these options):
+  - Upload CSV/JSON with sample customer messages
+  - **Use stored completions** from your Azure OpenAI deployment (recommended!)
+- Expected outputs (ideal responses) - *optional if using stored completions*
 - Evaluation metrics (groundedness, relevance, etc.)
 
-**How it works:**
-1. Upload test dataset to AI Foundry
-2. Run evaluation job (compares actual vs expected)
-3. Review scores and identify issues
-4. Iterate on system prompts to improve quality
+**💡 Pro Tip: Use Stored Completions!**
 
-**Example test dataset:**
+Azure OpenAI automatically stores your chat completions. Instead of creating test datasets from scratch, you can:
+1. Run CORA in production for a few days
+2. Go to AI Foundry → **"Evaluation"** → **"New evaluation"**
+3. Select **"Imported from Chat Completions"** as your input source
+4. Azure automatically pulls real conversations from your deployment
+5. Evaluate how well your model performed on actual user interactions!
+
+**Benefits:**
+- ✅ No manual test dataset creation needed
+- ✅ Real-world conversations (not synthetic examples)
+- ✅ Reflects actual user patterns and edge cases
+- ✅ Quickly identify quality issues in production
+
+---
+
+**How it works:**
+1. Import stored completions OR upload test dataset to AI Foundry
+2. Select evaluation metrics (groundedness, relevance, coherence, fluency)
+3. Run evaluation job (AI scores each response)
+4. Review scores and identify issues
+5. Iterate on system prompts to improve quality
+
+**Example custom test dataset (if not using stored completions):**
 ```csv
 mood,input,expected_output
 frustrated,"My order is late!","I understand your frustration..."
@@ -542,6 +562,28 @@ AvgTokens: 450
 
 ---
 
+### Next Steps Beyond This Workshop
+
+**🎯 Customize CORA for your needs:**
+- Modify system prompts for your industry
+- Add more customer moods
+- Integrate with real CRM systems
+- Deploy to production
+
+**📚 Learn more about Azure AI:**
+- [Azure AI Foundry Documentation](https://learn.microsoft.com/azure/ai-studio/)
+- [Azure OpenAI Service](https://learn.microsoft.com/azure/ai-services/openai/)
+- [Container Apps Best Practices](https://learn.microsoft.com/azure/container-apps/best-practices)
+- [Azure Well-Architected Framework](https://learn.microsoft.com/azure/well-architected/)
+
+**🤝 Share your success:**
+- Show CORA to your team
+- Present at internal tech talks
+- Contribute improvements to the GitHub repo
+- Help others learn Azure AI!
+
+---
+
 ## 🏆 Congratulations! Claim Your Certificate
 
 You've completed all 6 modules of the CORA Voice Agent Workshop! It's time to celebrate your achievement!
@@ -561,7 +603,7 @@ document.getElementById('claim-certificate-btn').addEventListener('click', funct
   
   // Create certificate content
   const certificateContent = document.createElement('div');
-  certificateContent.style.cssText = 'background: linear-gradient(135deg, #ffffff, #f0f9ff); padding: 3rem; border-radius: 16px; max-width: 800px; width: 90%; box-shadow: 0 20px 60px rgba(0,0,0,0.3); position: relative; animation: slideIn 0.5s;';
+  certificateContent.style.cssText = 'background: linear-gradient(135deg, #ffffff, #f0f9ff); padding: 2rem; border-radius: 16px; max-width: 800px; width: 90%; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.3); position: relative; animation: slideIn 0.5s;';
   
   certificateContent.innerHTML = `
     <style>
@@ -738,7 +780,7 @@ document.getElementById('claim-certificate-btn').addEventListener('click', funct
         
         <div style="text-align: center; margin: 2rem 0; padding: 1rem; background: #fff4e6; border-radius: 8px; border-left: 4px solid #ffaa44;">
           <strong style="font-size: 1.3rem; color: #d83b01;">🚀 Title Earned:</strong><br>
-          <span style="font-size: 1.5rem; font-weight: 700; color: #0078d4; font-family: 'Georgia', serif;">Low-Code to Pro-Code Architect Navigator</span>
+          <span style="font-size: 1.5rem; font-weight: 700; color: #0078d4; font-family: 'Georgia', serif;">AI Architect Navigator: Low-Code to Pro-Code</span>
         </div>
       </div>
       
