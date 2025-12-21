@@ -224,6 +224,90 @@ Each conversation is evaluated on **5 key performance indicators**, rated 1-5 ea
 - Perfect for storing simple structured data (like scores!)
 - No complex schema required
 
+**Where does it live?**
+- 🏢 **Lives inside your Azure Storage Account** (created in Module 1 with `azd up`)
+- 📦 **Storage Account contains:**
+  - Table Storage (conversation scores) ← YOU ARE HERE
+  - Blob Storage (could store files, images)
+  - Queue Storage (could handle background tasks)
+  - File Storage (could mount file shares)
+
+**Think of it this way:**
+- **Storage Account** = The building
+- **Table Storage** = One room in that building where scores are stored
+- **conversationscores table** = The filing cabinet in that room
+
+---
+
+### Security & Access Control
+
+**How does CORA access the Table Storage?**
+
+CORA uses **Azure Managed Identity** with **role-based access control (RBAC)**:
+
+**1. The Container App has a Managed Identity** (assigned during `azd up`)
+- This is like giving your app a "passport" to access Azure resources
+- No passwords, no API keys stored in code! 🔐
+
+**2. The Managed Identity is granted the `Storage Table Data Contributor` role**
+- This role allows:
+  - ✅ Read table data (query conversation scores)
+  - ✅ Write table data (save new scores)
+  - ✅ Update table data (modify existing scores)
+  - ✅ Delete table data (remove old scores)
+- This role was automatically assigned by the Bicep infrastructure code in Module 2
+
+**3. The Python application connects using DefaultAzureCredential**
+```python
+from azure.identity import DefaultAzureCredential
+from azure.data.tables import TableServiceClient
+
+# Automatically uses Container App's Managed Identity
+credential = DefaultAzureCredential()
+table_endpoint = f"https://{storage_account_name}.table.core.windows.net"
+table_service = TableServiceClient(endpoint=table_endpoint, credential=credential)
+```
+
+**No passwords = No security breaches!** 🛡️
+
+---
+
+### Data Privacy & User Isolation
+
+**Important security feature:**
+
+Even though the CORA application has access to the entire `conversationscores` table, **users can only see their own data!**
+
+**How it works:**
+
+1. **You log into CORA** (Azure AD, local dev, or anonymous)
+2. **Your user identity is captured** (email or user ID)
+3. **When you click "My Analytics":**
+   - Python backend queries Table Storage with filter: `PartitionKey eq 'your-email@company.com'`
+   - Only YOUR scores are returned (not other users' data)
+4. **Chart.js displays only your data** in the browser
+
+**Example:**
+```python
+# In storage_service.py
+def get_user_scores(self, user_identity: str):
+    # Query filtered by PartitionKey = user identity
+    entities = self.table_client.query_entities(
+        query_filter=f"PartitionKey eq '{user_identity.lower()}'"
+    )
+    return list(entities)
+```
+
+**This means:**
+- ✅ Sarah can only see Sarah's scores
+- ✅ John can only see John's scores
+- ✅ Training managers would need separate tooling to see aggregated data across all users
+- ✅ The application acts as a "gatekeeper" - it has access, but only exposes what you're allowed to see
+
+**Bottom Line:** Your performance data is private to you. CORA's architecture ensures data isolation even though all scores live in the same table!
+
+---
+
 **How CORA uses it:**
 
 ```
@@ -247,10 +331,11 @@ Data stored:
 
 **Why Table Storage?**
 - ✅ Cheap (~$0.10/GB/month)
-- ✅ Fast queries by user identity
+- ✅ Fast queries by user identity (PartitionKey)
 - ✅ Scales to millions of scores
 - ✅ Managed Identity authentication (no passwords!)
 - ✅ Perfect for analytics aggregation
+- ✅ Built-in data isolation (query by PartitionKey)
 
 ---
 
