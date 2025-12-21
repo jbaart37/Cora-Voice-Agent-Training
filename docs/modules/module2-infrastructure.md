@@ -186,7 +186,10 @@ curl -fsSL https://aka.ms/install-azd.sh | bash
 azd version
 ```
 
-> 📸 **Screenshot placeholder**: Terminal showing `azd version` output
+<div class="screenshot-container" onclick="openModal(this)">
+  <img src="../assets/images/module2-azd-version.png" alt="Terminal showing azd version output" />
+  <p class="screenshot-caption">✅ azd successfully installed and showing version</p>
+</div>
 
 <div class="info-callout">
   💡 <strong>Don't worry, you don't have to be a developer!</strong> The Azure Developer CLI is designed to be simple. Think of it like a smart assistant that handles all the complicated Azure setup for you. Just follow the steps, and azd will make you look like a pro. 🚀
@@ -372,7 +375,10 @@ https://ca-cora-dev.happyocean-a1b2c3d4.eastus.azurecontainerapps.io
 
 Open it in your browser. You should see the CORA landing page!
 
-> 📸 **Screenshot placeholder**: CORA application running in browser
+<div class="screenshot-container" onclick="openModal(this)">
+  <img src="../assets/images/module2-app-running.png" alt="CORA application running in browser" />
+  <p class="screenshot-caption">🎉 CORA live on Azure - your voice agent simulator is up and running!</p>
+</div>
 
 ### 3. Verify Resources in Azure Portal
 
@@ -392,7 +398,10 @@ Expected resources:
 - ✅ Storage Account (`stcora...`)
 - ✅ Log Analytics Workspace (`log-cora-dev`)
 
-> 📸 **Screenshot placeholder**: Azure Portal showing resource group with all resources
+<div class="screenshot-container" onclick="openModal(this)">
+  <img src="../assets/images/module2-azure-resources.png" alt="Azure Portal showing all deployed resources" />
+  <p class="screenshot-caption">☁️ All Azure resources successfully deployed in your resource group</p>
+</div>
 
 ---
 
