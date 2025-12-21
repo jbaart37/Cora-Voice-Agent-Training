@@ -462,12 +462,15 @@ Copy the endpoint URL and open it in your browser.
 
 **Test Scenario 2: Voice Input (Desktop only)**
 
-1. Click the 🎤 microphone button
-2. Allow microphone access when prompted
-3. Speak: "Tell me about Azure Container Apps"
-4. **Expected:** 
+1. Ensure **"Auto-Play Cora's responses"** checkbox is checked (bottom right)
+2. Click **"New Conversation"** button
+3. Click **"Enable Voice Chat"** button
+4. Allow microphone access when browser prompts
+5. Speak: **"How can I help you today?"**
+6. **Expected:** 
    - Your speech is transcribed to text
-   - CORA responds with information
+   - CORA responds with a helpful message
+   - Response is spoken aloud automatically
    - Response is spoken aloud
 
 **Test Scenario 3: Analytics Dashboard**
