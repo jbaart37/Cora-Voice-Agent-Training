@@ -188,6 +188,10 @@ azd version
 
 > 📸 **Screenshot placeholder**: Terminal showing `azd version` output
 
+<div class="info-callout">
+  💡 <strong>Don't worry, you don't have to be a developer!</strong> The Azure Developer CLI is designed to be simple. Think of it like a smart assistant that handles all the complicated Azure setup for you. Just follow the steps, and azd will make you look like a pro. 🚀
+</div>
+
 ---
 
 ## ⚙️ Step 2: Initialize azd Environment
