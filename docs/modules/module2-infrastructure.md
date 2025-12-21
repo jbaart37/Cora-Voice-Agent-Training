@@ -186,9 +186,9 @@ curl -fsSL https://aka.ms/install-azd.sh | bash
 azd version
 ```
 
-<div class="screenshot-container" onclick="openModal(this)">
-  <img src="../assets/images/module2-azd-version.png" alt="Terminal showing azd version output" />
-  <p class="screenshot-caption">✅ azd successfully installed and showing version</p>
+<div class="screenshot-container" onclick="openImageModal('{{ site.baseurl }}/assets/images/module2-azd-version.png')" style="cursor: zoom-in;">
+  <img src="{{ site.baseurl }}/assets/images/module2-azd-version.png" alt="Terminal showing azd version output" class="screenshot-image">
+  <p class="zoom-hint"><i class="fas fa-search-plus"></i> Click to enlarge</p>
 </div>
 
 <div class="info-callout">
@@ -375,9 +375,9 @@ https://ca-cora-dev.happyocean-a1b2c3d4.eastus.azurecontainerapps.io
 
 Open it in your browser. You should see the CORA landing page!
 
-<div class="screenshot-container" onclick="openModal(this)">
-  <img src="../assets/images/module2-app-running.png" alt="CORA application running in browser" />
-  <p class="screenshot-caption">🎉 CORA live on Azure - your voice agent simulator is up and running!</p>
+<div class="screenshot-container" onclick="openImageModal('{{ site.baseurl }}/assets/images/module2-app-running.png')" style="cursor: zoom-in;">
+  <img src="{{ site.baseurl }}/assets/images/module2-app-running.png" alt="CORA application running in browser" class="screenshot-image">
+  <p class="zoom-hint"><i class="fas fa-search-plus"></i> Click to enlarge</p>
 </div>
 
 ### 3. Verify Resources in Azure Portal
@@ -398,9 +398,9 @@ Expected resources:
 - ✅ Storage Account (`stcora...`)
 - ✅ Log Analytics Workspace (`log-cora-dev`)
 
-<div class="screenshot-container" onclick="openModal(this)">
-  <img src="../assets/images/module2-azure-resources.png" alt="Azure Portal showing all deployed resources" />
-  <p class="screenshot-caption">☁️ All Azure resources successfully deployed in your resource group</p>
+<div class="screenshot-container" onclick="openImageModal('{{ site.baseurl }}/assets/images/module2-azure-resources.png')" style="cursor: zoom-in;">
+  <img src="{{ site.baseurl }}/assets/images/module2-azure-resources.png" alt="Azure Portal showing all deployed resources" class="screenshot-image">
+  <p class="zoom-hint"><i class="fas fa-search-plus"></i> Click to enlarge</p>
 </div>
 
 ---
