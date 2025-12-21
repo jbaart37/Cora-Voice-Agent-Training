@@ -905,15 +905,19 @@ body {
 
 .score-item {
     display: grid;
-    grid-template-columns: 1fr 200px 50px;
+    grid-template-columns: minmax(0, 1fr) minmax(120px, 200px) 60px;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
+    min-width: 0; /* Prevent grid overflow */
 }
 
 .score-name {
     font-size: 0.9rem;
     color: var(--text-color);
     font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .score-bar {
@@ -922,6 +926,7 @@ body {
     border-radius: 10px;
     overflow: hidden;
     position: relative;
+    min-width: 0; /* Allow shrinking */
 }
 
 .score-fill {
@@ -929,6 +934,29 @@ body {
     background: linear-gradient(90deg, var(--success-color), #0e8a0e);
     transition: width 0.5s ease;
     border-radius: 10px;
+    position: relative;
+}
+
+/* Score-specific styling for better visual distinction */
+.score-fill.score-1 {
+    background: linear-gradient(90deg, #dc3545, #c82333);
+}
+
+.score-fill.score-2 {
+    background: linear-gradient(90deg, #fd7e14, #e8590c);
+}
+
+.score-fill.score-3 {
+    background: linear-gradient(90deg, #ffc107, #e0a800);
+}
+
+.score-fill.score-4 {
+    background: linear-gradient(90deg, #28a745, #218838);
+}
+
+.score-fill.score-5 {
+    background: linear-gradient(90deg, var(--success-color), #0e8a0e);
+    box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);
 }
 
 .score-value {
@@ -936,6 +964,7 @@ body {
     font-weight: bold;
     color: var(--text-color);
     font-size: 0.9rem;
+    white-space: nowrap;
 }
 
 .analysis-score {

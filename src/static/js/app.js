@@ -880,6 +880,12 @@ class VoiceAgentSimulator {
         const scores = analysis.scores || {};
         const totalScore = analysis.total_score || 0;
         
+        // Helper function to get score width
+        const getScoreWidth = (score) => {
+            const widthMap = { 0: 0, 1: 20, 2: 40, 3: 60, 4: 80, 5: 100 };
+            return widthMap[score] || 0;
+        };
+        
         analysisContent.innerHTML = `
             <div class="analysis-header">
                 <div class="total-score-card">
@@ -894,35 +900,35 @@ class VoiceAgentSimulator {
                     <div class="score-item">
                         <span class="score-name">👔 Professionalism & Courtesy</span>
                         <span class="score-bar">
-                            <span class="score-fill" style="width: ${(scores.professionalism || 0) * 20}%"></span>
+                            <span class="score-fill score-${scores.professionalism || 0}" style="width: ${getScoreWidth(scores.professionalism || 0)}%"></span>
                         </span>
                         <span class="score-value">${scores.professionalism || 0}/5</span>
                     </div>
                     <div class="score-item">
                         <span class="score-name">💬 Communication Clarity</span>
                         <span class="score-bar">
-                            <span class="score-fill" style="width: ${(scores.communication || 0) * 20}%"></span>
+                            <span class="score-fill score-${scores.communication || 0}" style="width: ${getScoreWidth(scores.communication || 0)}%"></span>
                         </span>
                         <span class="score-value">${scores.communication || 0}/5</span>
                     </div>
                     <div class="score-item">
                         <span class="score-name">✅ Problem Resolution</span>
                         <span class="score-bar">
-                            <span class="score-fill" style="width: ${(scores.problem_resolution || 0) * 20}%"></span>
+                            <span class="score-fill score-${scores.problem_resolution || 0}" style="width: ${getScoreWidth(scores.problem_resolution || 0)}%"></span>
                         </span>
                         <span class="score-value">${scores.problem_resolution || 0}/5</span>
                     </div>
                     <div class="score-item">
                         <span class="score-name">❤️ Empathy & Active Listening</span>
                         <span class="score-bar">
-                            <span class="score-fill" style="width: ${(scores.empathy || 0) * 20}%"></span>
+                            <span class="score-fill score-${scores.empathy || 0}" style="width: ${getScoreWidth(scores.empathy || 0)}%"></span>
                         </span>
                         <span class="score-value">${scores.empathy || 0}/5</span>
                     </div>
                     <div class="score-item">
                         <span class="score-name">⚡ Efficiency & Responsiveness</span>
                         <span class="score-bar">
-                            <span class="score-fill" style="width: ${(scores.efficiency || 0) * 20}%"></span>
+                            <span class="score-fill score-${scores.efficiency || 0}" style="width: ${getScoreWidth(scores.efficiency || 0)}%"></span>
                         </span>
                         <span class="score-value">${scores.efficiency || 0}/5</span>
                     </div>
