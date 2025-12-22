@@ -132,8 +132,6 @@ If you don't have Git installed or prefer not to use it:
 
 **Note:** If you download as ZIP, you won't be able to use Git commands, but all the code will work fine!
 
-> 📸 **Screenshot placeholder**: GitHub showing Code → Download ZIP button
-
 <div class="screenshot-container" onclick="openImageModal('{{ site.baseurl }}/assets/images/module1-github-zip-download.png')" style="cursor: zoom-in;">
   <img src="{{ site.baseurl }}/assets/images/module1-github-zip-download.png" alt="GitHub Download ZIP" class="screenshot-image">
   <p class="zoom-hint"><i class="fas fa-search-plus"></i> Click to enlarge</p>
@@ -220,8 +218,6 @@ This will:
 2. Prompt you to sign in with your Azure account
 3. Return to the terminal when complete
 
-> 📸 **Screenshot placeholder**: Azure CLI login success message
-
 <div class="screenshot-container" onclick="openImageModal('{{ site.baseurl }}/assets/images/module1-az-login.png')" style="cursor: zoom-in;">
   <img src="{{ site.baseurl }}/assets/images/module1-az-login.png" alt="Azure CLI Login Success" class="screenshot-image">
   <p class="zoom-hint"><i class="fas fa-search-plus"></i> Click to enlarge</p>
@@ -304,14 +300,10 @@ If your organization provided a project, you need to get:
    - The name you gave your GPT deployment (e.g., `gpt-4o`, `gpt-4o-mini`)
    - Found in: AI Foundry Studio → Deployments
 
-> 📸 **Screenshot placeholder**: Azure Portal showing AI Foundry endpoint
-
 <div class="screenshot-container" onclick="openImageModal('{{ site.baseurl }}/assets/images/module1-ai-foundry-endpoint.png')" style="cursor: zoom-in;">
   <img src="{{ site.baseurl }}/assets/images/module1-ai-foundry-endpoint.png" alt="Azure AI Foundry Endpoint" class="screenshot-image">
   <p class="zoom-hint"><i class="fas fa-search-plus"></i> Click to enlarge</p>
 </div>
-
-> 📸 **Screenshot placeholder**: AI Foundry Studio showing deployment name
 
 <div class="screenshot-container" onclick="openImageModal('{{ site.baseurl }}/assets/images/module1-model-deployment.png')" style="cursor: zoom-in;">
   <img src="{{ site.baseurl }}/assets/images/module1-model-deployment.png" alt="AI Foundry Model Deployment" class="screenshot-image">
@@ -372,8 +364,6 @@ Azure AI Foundry has two portal experiences:
    - Go to project **Overview** page
    - Find the **Endpoint** field (format: `https://your-project.openai.azure.com/`)
    - **Copy this URL** and save it in a text file or note
-   
-   > 📸 **Screenshot placeholder**: Azure AI Foundry project Overview page with endpoint highlighted
 
    <div class="screenshot-container" onclick="openImageModal('{{ site.baseurl }}/assets/images/module1-ai-foundry-endpoint.png')" style="cursor: zoom-in;">
      <img src="{{ site.baseurl }}/assets/images/module1-ai-foundry-endpoint.png" alt="Azure AI Foundry Project Overview" class="screenshot-image">
@@ -397,8 +387,6 @@ Azure AI Foundry has two portal experiences:
    - Wait for deployment to complete (~1-2 minutes)
    - **Save the deployment name** - you'll need it in Module 2!
 
-   > 📸 **Screenshot placeholder**: Deployments page showing deployed GPT model
-
    <div class="screenshot-container" onclick="openImageModal('{{ site.baseurl }}/assets/images/module1-model-deployment.png')" style="cursor: zoom-in;">
      <img src="{{ site.baseurl }}/assets/images/module1-model-deployment.png" alt="GPT Model Deployment" class="screenshot-image">
      <p class="zoom-hint"><i class="fas fa-search-plus"></i> Click to enlarge</p>
@@ -417,6 +405,8 @@ You'll notice Azure AI Foundry provides API keys after deployment. **You won't n
 - Accessing the model from outside Azure (e.g., local development)
 - Quick testing with REST API clients
 - Legacy applications not using managed identity
+
+> ⚠️ **Security Best Practice:** If you ever need to use API keys, always store them in **Azure Key Vault**, never in code or configuration files. Azure Key Vault provides secure storage, access control, and audit logging for secrets.
 
 **For CORA:** Managed Identity handles everything automatically in Module 2! 🎉
 

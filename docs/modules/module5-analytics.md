@@ -85,8 +85,6 @@ By the end of this module, you will:
 2. **Click "Analyze Conversation"** to get scored
 3. **Click "📈 My Analytics"** in the top-right header
 
-> 📸 **Screenshot placeholder**: Analytics button in header
-
 <div class="screenshot-container" onclick="openImageModal('{{ site.baseurl }}/assets/images/module5-analytics-button.png')" style="cursor: zoom-in;">
   <img src="{{ site.baseurl }}/assets/images/module5-analytics-button.png" alt="Analytics Button" class="screenshot-image">
   <p class="zoom-hint"><i class="fas fa-search-plus"></i> Click to enlarge</p>
@@ -107,8 +105,6 @@ The analytics dashboard shows:
 - List of all your scored conversations
 - Date/time, total score, and individual criteria scores
 - Message count per conversation
-
-> 📸 **Screenshot placeholder**: Analytics dashboard with chart and table
 
 <div class="screenshot-container" onclick="openImageModal('{{ site.baseurl }}/assets/images/module5-dashboard.png')" style="cursor: zoom-in;">
   <img src="{{ site.baseurl }}/assets/images/module5-dashboard.png" alt="Analytics Dashboard" class="screenshot-image">

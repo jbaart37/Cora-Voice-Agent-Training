@@ -131,8 +131,6 @@ az containerapp logs show \
 3. Click **"Monitoring"** → **"Log stream"** (left sidebar)
 4. View live logs in browser (no CLI needed!)
 
-> 📸 **Screenshot placeholder**: Container Apps log stream in Azure Portal
-
 <div class="screenshot-container" onclick="openImageModal('{{ site.baseurl }}/assets/images/module6-log-stream.png')" style="cursor: zoom-in;">
   <img src="{{ site.baseurl }}/assets/images/module6-log-stream.png" alt="Container Apps Log Stream" class="screenshot-image">
   <p class="zoom-hint"><i class="fas fa-search-plus"></i> Click to enlarge</p>
@@ -273,8 +271,6 @@ Response returned to user
    - Event type (Requests, Dependencies, Traces)
    - Result code (200, 500, etc.)
 
-> 📸 **Screenshot placeholder**: Application Insights transaction search
-
 <div class="screenshot-container" onclick="openImageModal('{{ site.baseurl }}/assets/images/module6-app-insights-traces.png')" style="cursor: zoom-in;">
   <img src="{{ site.baseurl }}/assets/images/module6-app-insights-traces.png" alt="Application Insights Traces" class="screenshot-image">
   <p class="zoom-hint"><i class="fas fa-search-plus"></i> Click to enlarge</p>
@@ -290,8 +286,6 @@ Response returned to user
    - Slowest operations
    - Failed requests
    - Dependency calls (Azure OpenAI, Storage)
-
-> 📸 **Screenshot placeholder**: Application Insights performance dashboard
 
 <div class="screenshot-container" onclick="openImageModal('{{ site.baseurl }}/assets/images/module6-performance.png')" style="cursor: zoom-in;">
   <img src="{{ site.baseurl }}/assets/images/module6-performance.png" alt="Performance Dashboard" class="screenshot-image">
@@ -361,8 +355,6 @@ Custom Attributes:
 1. Go to [ai.azure.com](https://ai.azure.com) or [oai.azure.com](https://oai.azure.com)
 2. Navigate to your **AI Foundry project** (created in Module 1)
 3. Click **"Evaluation"** (left sidebar)
-
-> 📸 **Screenshot placeholder**: AI Foundry evaluation page
 
 <div class="screenshot-container" onclick="openImageModal('{{ site.baseurl }}/assets/images/module6-evaluation.png')" style="cursor: zoom-in;">
   <img src="{{ site.baseurl }}/assets/images/module6-evaluation.png" alt="AI Foundry Evaluation" class="screenshot-image">
@@ -502,8 +494,6 @@ AvgTokens: 450
    - Total requests (conversations)
    - Token usage over time
    - Estimated costs
-
-> 📸 **Screenshot placeholder**: AI Foundry monitoring dashboard showing application analytics and resource usage
 
 <div class="screenshot-container" onclick="openImageModal('{{ site.baseurl }}/assets/images/module6-metrics.png')" style="cursor: zoom-in;">
   <img src="{{ site.baseurl }}/assets/images/module6-metrics.png" alt="AI Foundry Metrics" class="screenshot-image">

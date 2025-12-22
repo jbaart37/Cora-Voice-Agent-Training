@@ -128,8 +128,6 @@ You should see:
 
 **Look for the toggle at the top of the screen:**
 
-> 📸 **Screenshot placeholder**: Portal toggle showing Legacy/New experience switcher
-
 <div class="screenshot-container" onclick="openImageModal('{{ site.baseurl }}/assets/images/module4-portal-toggle.png')" style="cursor: zoom-in;">
   <img src="{{ site.baseurl }}/assets/images/module4-portal-toggle.png" alt="Foundry Portal Toggle" class="screenshot-image">
   <p class="zoom-hint"><i class="fas fa-search-plus"></i> Click to enlarge</p>
@@ -169,8 +167,6 @@ Tokens per minute: 150,000
 Status: Running ✅
 ```
 
-> 📸 **Screenshot placeholder**: Foundry Deployments page showing gpt-4o deployment
-
 <div class="screenshot-container" onclick="openImageModal('{{ site.baseurl }}/assets/images/module4-deployments.png')" style="cursor: zoom-in;">
   <img src="{{ site.baseurl }}/assets/images/module4-deployments.png" alt="Foundry Deployments" class="screenshot-image">
   <p class="zoom-hint"><i class="fas fa-search-plus"></i> Click to enlarge</p>
@@ -194,8 +190,6 @@ Status: Running ✅
    - **System message** (left) - Instructions for the AI
    - **Chat session** (center) - Conversation area
    - **Configuration** (right) - Parameters
-
-> 📸 **Screenshot placeholder**: Playground interface showing three-panel layout
 
 <div class="screenshot-container" onclick="openImageModal('{{ site.baseurl }}/assets/images/module4-playground.png')" style="cursor: zoom-in;">
   <img src="{{ site.baseurl }}/assets/images/module4-playground.png" alt="Foundry Playground" class="screenshot-image">
@@ -821,8 +815,6 @@ async def process_message(self, user_message, mood):
 1. Go to [Azure Portal](https://portal.azure.com)
 2. Navigate to your Application Insights resource
 3. Click **"Transaction search"** or **"Performance"**
-
-> 📸 **Screenshot placeholder**: Application Insights showing CORA traces with custom attributes
 
 <div class="screenshot-container" onclick="openImageModal('{{ site.baseurl }}/assets/images/module4-app-insights-traces.png')" style="cursor: zoom-in;">
   <img src="{{ site.baseurl }}/assets/images/module4-app-insights-traces.png" alt="Application Insights Traces" class="screenshot-image">
