@@ -113,6 +113,45 @@ function resetProgress() {
     }
 }
 
+// Update progress panel display
+function updateProgressPanel(progress) {
+    // Update circular progress indicator
+    const progressText = document.getElementById('progress-text');
+    if (progressText) {
+        progressText.textContent = `${progress.overall}%`;
+    }
+    
+    // Update progress circle fill
+    const progressCircleFill = document.getElementById('progress-circle-fill');
+    if (progressCircleFill) {
+        const circumference = 2 * Math.PI * 54; // radius = 54
+        const offset = circumference - (progress.overall / 100) * circumference;
+        progressCircleFill.style.strokeDasharray = circumference;
+        progressCircleFill.style.strokeDashoffset = offset;
+    }
+    
+    // Update module progress list
+    MODULES.forEach((moduleId, index) => {
+        const moduleItem = document.querySelector(`.module-item[data-module="${moduleId}"]`);
+        if (moduleItem && progress.modules[moduleId]) {
+            const percentage = progress.modules[moduleId].percentage;
+            const completed = progress.modules[moduleId].completed;
+            
+            const percentSpan = moduleItem.querySelector('.module-percent');
+            if (percentSpan) {
+                percentSpan.textContent = `${percentage}%`;
+            }
+            
+            // Update completed status
+            if (completed || percentage === 100) {
+                moduleItem.classList.add('completed');
+            } else {
+                moduleItem.classList.remove('completed');
+            }
+        }
+    });
+}
+
 // Update all progress displays on page
 function updateAllProgressDisplays() {
     const progress = getProgress();
