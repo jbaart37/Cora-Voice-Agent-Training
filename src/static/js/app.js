@@ -11,6 +11,9 @@ class VoiceAgentSimulator {
         this.recognition = null;
         this.synthesis = window.speechSynthesis;
         this.conversationVoice = null; // Lock voice for entire conversation
+        this.speechRetryCount = 0; // Track synthesis retry attempts
+        this.MAX_SPEECH_RETRIES = 2; // Maximum retry attempts for failed synthesis
+        this.isCurrentlySpeaking = false;
         this.init();
     }
 
@@ -408,6 +411,7 @@ class VoiceAgentSimulator {
         utterance.onstart = () => {
             this.updateVoiceUI('speaking');
             this.isCurrentlySpeaking = true;
+            this.speechRetryCount = 0; // Reset retry counter on successful start
         };
 
         utterance.onend = () => {
@@ -445,6 +449,31 @@ class VoiceAgentSimulator {
                 console.error('Speech synthesis error:', event.error);
             }
             this.isCurrentlySpeaking = false;
+            
+            // Handle synthesis-failed errors with retry logic
+            if (event.error === 'synthesis-failed' && this.speechRetryCount < this.MAX_SPEECH_RETRIES) {
+                this.speechRetryCount++;
+                console.log(`Retrying speech synthesis (attempt ${this.speechRetryCount}/${this.MAX_SPEECH_RETRIES})...`);
+                
+                // Reset speech synthesis and try again with a different voice
+                this.synthesis.cancel();
+                
+                setTimeout(() => {
+                    // Clear conversation voice to force selection of different voice
+                    this.conversationVoice = null;
+                    this.speak(text); // Retry with new voice
+                }, 500);
+                return;
+            }
+            
+            // Reset retry counter on non-synthesis-failed errors or max retries reached
+            if (event.error !== 'synthesis-failed' || this.speechRetryCount >= this.MAX_SPEECH_RETRIES) {
+                this.speechRetryCount = 0;
+                if (event.error === 'synthesis-failed') {
+                    console.warn('Speech synthesis failed after retries. Continuing without voice output.');
+                }
+            }
+            
             this.updateVoiceUI('listening');
             
             // Add delay even on error to prevent feedback loop
