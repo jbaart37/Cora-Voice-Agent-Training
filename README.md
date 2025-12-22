@@ -1,10 +1,12 @@
-# Cora Voice Agent Workshop
+# Cora Voice Agent Training
 
 **Building an AI-Powered Voice Agent Simulator with Azure AI Foundry**
 
-## 🎯 Workshop Overview
+## 🎯 Training Overview
 
-This hands-on workshop teaches you how to build, deploy, and optimize an intelligent voice agent simulator using Azure AI Foundry, Azure Container Apps, and Azure OpenAI. By the end of this training, you'll have a fully functional AI agent that can simulate customer service conversations and provide real-time performance analytics.
+This comprehensive hands-on training teaches you how to build, deploy, and optimize an intelligent voice agent simulator using Azure AI Foundry, Azure Container Apps, and Azure OpenAI. By the end of this training, you'll have a fully functional AI agent that can simulate customer service conversations and provide real-time performance analytics.
+
+**📺 [Visit the Interactive Training Site](https://jbaart37.github.io/Cora-Voice-Agent-Training/)** - Complete modules, track progress, and earn your certificate!
 
 ## 🏗️ What You'll Build
 
@@ -18,9 +20,10 @@ This hands-on workshop teaches you how to build, deploy, and optimize an intelli
 - Azure developers and solution architects
 - AI/ML practitioners interested in practical AI applications
 - DevOps engineers working with containerized applications
+- Customer service trainers looking to leverage AI
 - Anyone interested in building production-ready AI solutions
 
-## 📚 Workshop Modules
+## 📚 Training Modules
 
 ### Module 1: Solution Overview & AI Foundry Integration (30 mins)
 - Architecture walkthrough
@@ -62,9 +65,10 @@ This hands-on workshop teaches you how to build, deploy, and optimize an intelli
 
 ## ⏱️ Duration
 
-- **Self-Paced**: 4-6 hours
+- **Self-Paced**: 4-6 hours (complete all 6 modules)
+- **Interactive Online**: Learn at your own pace with progress tracking
 - **Instructor-Led**: Full day (8 hours with breaks)
-- **Capacity**: 10-20 participants
+- **Certificate**: Earn upon completing all modules
 
 ## 🔧 Prerequisites
 
@@ -98,16 +102,22 @@ Running this workshop will incur minimal Azure costs:
 
 Choose your learning path:
 
-### Option A: Self-Paced Learning
+### Option A: Interactive Training Site (Recommended)
+1. Visit [https://jbaart37.github.io/Cora-Voice-Agent-Training/](https://jbaart37.github.io/Cora-Voice-Agent-Training/)
+2. Complete all 6 modules with guided instructions
+3. Track your progress through the training
+4. Earn your completion certificate
+
+### Option B: GitHub Repository
 1. Clone this repository
 2. Start with [Module 1: Overview](./docs/modules/module1-overview.md)
-3. Follow each module in sequence
-4. Complete hands-on labs in the `labs/` folder
+3. Follow each module in sequence with hands-on exercises
+4. All code and infrastructure files are included
 
-### Option B: Instructor-Led Training
-1. Instructor will provide access to workshop materials
+### Option C: Instructor-Led Training
+1. Instructor will provide access to training materials
 2. Follow along with live demonstrations
-3. Complete labs during designated hands-on sessions
+3. Complete exercises during designated hands-on sessions
 4. Ask questions in real-time
 
 ## 📂 Repository Structure
@@ -115,28 +125,36 @@ Choose your learning path:
 ```
 Cora-Voice-Agent-Training/
 ├── README.md                    # This file
-├── docs/                        # Workshop documentation (GitHub Pages)
-│   ├── index.md                # Workshop landing page
-│   ├── modules/                # Module-by-module content
-│   ├── assets/                 # Images and diagrams
-│   └── instructor-guide.md     # Guidance for instructors
-├── src/                        # Application source code
+├── docs/                        # Training site (GitHub Pages)
+│   ├── index.html              # Training landing page
+│   ├── modules/                # 6 training modules with hands-on exercises
+│   │   ├── module1-overview.md
+│   │   ├── module2-infrastructure.md
+│   │   ├── module3-deployment.md
+│   │   ├── module4-ai-foundry.md
+│   │   ├── module5-analytics.md
+│   │   └── module6-advanced.md
+│   ├── assets/                 # Images, screenshots, and diagrams
+│   ├── certificate.html        # Training certificate generator
+│   └── js/                     # Interactive features and progress tracking
+├── src/                        # Complete application source code
 │   ├── app.py                  # Flask application
-│   ├── agent.py               # AI agent logic
-│   ├── storage_service.py     # Azure Storage integration
-│   ├── static/                # Frontend assets
-│   └── templates/             # HTML templates
-├── infra/                      # Azure infrastructure as code
-│   ├── main.bicep             # Bicep templates
-│   └── azure.yaml             # AZD configuration
-└── labs/                       # Hands-on lab exercises
-    ├── lab1-setup/
-    ├── lab2-infrastructure/
-    ├── lab3-deployment/
-    ├── lab4-ai-foundry/
-    ├── lab5-analytics/
-    ├── lab6-advanced/
-    └── solutions/             # Lab solution code
+│   ├── agent.py                # AI agent logic
+│   ├── auth.py                 # Azure AD authentication
+│   ├── config.py               # Configuration management
+│   ├── static/                 # Frontend assets (CSS, JS)
+│   │   ├── css/style.css       # Application styles
+│   │   └── js/app.js           # Frontend logic
+│   └── templates/              # HTML templates
+│       ├── index.html          # Main application
+│       └── landing.html        # Landing page
+├── infra/                      # Azure infrastructure as code (Bicep)
+│   ├── main.bicep              # Main infrastructure template
+│   ├── main.parameters.json    # Deployment parameters
+│   └── core/                   # Reusable Bicep modules
+├── azure.yaml                  # Azure Developer CLI configuration
+├── Dockerfile                  # Container image definition
+└── requirements.txt            # Python dependencies
 ```
 
 ## 🎓 Learning Objectives
@@ -174,4 +192,7 @@ This workshop is provided for educational purposes.
 
 ---
 
-**Ready to get started?** Head over to [Module 1: Solution Overview](./docs/modules/module1-overview.md) 🚀
+**Ready to get started?** 
+
+🌐 [Launch Interactive Training Site](https://jbaart37.github.io/Cora-Voice-Agent-Training/)  
+📖 Or start with [Module 1: Solution Overview](./docs/modules/module1-overview.md) 🚀
