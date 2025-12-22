@@ -145,18 +145,6 @@ function updateAllProgressDisplays() {
 
     // Update Continue Learning button
     updateContinueLearningButton(progress);
-            if (percentSpan) {
-                percentSpan.textContent = `${percentage}%`;
-            }
-            
-            // Update completed status
-            if (completed || percentage === 100) {
-                moduleItem.classList.add('completed');
-            } else {
-                moduleItem.classList.remove('completed');
-            }
-        }
-    });
 }
 
 // Toggle progress panel
