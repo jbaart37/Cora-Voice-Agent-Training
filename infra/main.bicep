@@ -44,6 +44,17 @@ resource rg 'Microsoft.Resources/resourceGroups@2021-04-01' = if (empty(resource
   tags: tags
 }
 
+// Virtual Network for Container Apps and Private Endpoints
+module virtualNetwork 'core/network/virtual-network.bicep' = {
+  name: 'virtual-network'
+  scope: resourceGroup(rgName)
+  params: {
+    name: 'vnet-${resourceToken}'
+    location: location
+    tags: tags
+  }
+}
+
 // Container Apps Environment
 module containerAppsEnvironment 'core/host/container-apps-environment.bicep' = {
   name: 'container-apps-environment'
@@ -53,6 +64,7 @@ module containerAppsEnvironment 'core/host/container-apps-environment.bicep' = {
     location: location
     tags: tags
     logAnalyticsWorkspaceName: monitoring.outputs.logAnalyticsWorkspaceName
+    infrastructureSubnetId: virtualNetwork.outputs.containerAppsSubnetId
   }
 }
 
@@ -109,6 +121,10 @@ module web 'core/host/container-app.bicep' = {
         value: 'production'
       }
       {
+        name: 'AZURE_STORAGE_ACCOUNT_NAME'
+        value: storage.outputs.name
+      }
+      {
         name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
         value: monitoring.outputs.applicationInsightsConnectionString
       }
@@ -123,10 +139,61 @@ module web 'core/host/container-app.bicep' = {
   }
 }
 
+// Storage Account for conversation scores (audit-proof with private endpoint)
+module storage 'core/storage/storage-account.bicep' = {
+  name: 'storage'
+  scope: resourceGroup(rgName)
+  params: {
+    name: 'voiceagent${resourceToken}'
+    location: location
+    tags: tags
+    publicNetworkAccess: 'Disabled'
+  }
+}
+
+// Private Endpoint for Storage Account (Table)
+module storagePrivateEndpoint 'core/network/private-endpoint.bicep' = {
+  name: 'storage-private-endpoint'
+  scope: resourceGroup(rgName)
+  params: {
+    name: 'pe-storage-table-${resourceToken}'
+    location: location
+    tags: tags
+    subnetId: virtualNetwork.outputs.privateEndpointsSubnetId
+    storageAccountId: storage.outputs.id
+    groupId: 'table'
+    privateDnsZoneName: 'privatelink.table.${environment().suffixes.storage}'
+    virtualNetworkId: virtualNetwork.outputs.id
+  }
+}
+
+// Role assignment: Storage Blob Data Contributor
+module storageBlobRoleAssignment 'core/security/role-assignment.bicep' = {
+  name: 'storage-blob-role-assignment'
+  scope: resourceGroup(rgName)
+  params: {
+    principalId: web.outputs.identityPrincipalId
+    roleDefinitionId: 'ba92f5b4-2d11-453d-a403-e96b0029c9fe' // Storage Blob Data Contributor
+    targetResourceId: storage.outputs.id
+  }
+}
+
+// Role assignment: Storage Table Data Contributor
+module storageTableRoleAssignment 'core/security/role-assignment.bicep' = {
+  name: 'storage-table-role-assignment'
+  scope: resourceGroup(rgName)
+  params: {
+    principalId: web.outputs.identityPrincipalId
+    roleDefinitionId: '0a9a7e1f-b9d0-4cc4-a60d-0319b160aaa3' // Storage Table Data Contributor
+    targetResourceId: storage.outputs.id
+  }
+}
+
 // Outputs
 output AZURE_LOCATION string = location
 output AZURE_RESOURCE_GROUP string = rgName
 output AZURE_CONTAINER_REGISTRY_ENDPOINT string = containerRegistry.outputs.loginServer
 output AZURE_CONTAINER_REGISTRY_NAME string = containerRegistry.outputs.name
+output AZURE_STORAGE_ACCOUNT_NAME string = storage.outputs.name
 output APPLICATIONINSIGHTS_CONNECTION_STRING string = monitoring.outputs.applicationInsightsConnectionString
 output WEB_URI string = web.outputs.uri

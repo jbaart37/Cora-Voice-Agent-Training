@@ -3,6 +3,9 @@ param location string = resourceGroup().location
 param tags object = {}
 param logAnalyticsWorkspaceName string
 
+@description('Resource ID of the subnet for Container Apps Environment (optional for VNet integration)')
+param infrastructureSubnetId string = ''
+
 resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2022-10-01' existing = {
   name: logAnalyticsWorkspaceName
 }
@@ -19,6 +22,10 @@ resource containerAppsEnvironment 'Microsoft.App/managedEnvironments@2023-05-01'
         sharedKey: logAnalyticsWorkspace.listKeys().primarySharedKey
       }
     }
+    vnetConfiguration: !empty(infrastructureSubnetId) ? {
+      infrastructureSubnetId: infrastructureSubnetId
+    } : null
+    zoneRedundant: false
   }
 }
 
