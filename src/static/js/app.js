@@ -400,6 +400,11 @@ class VoiceAgentSimulator {
             utterance.voice = preferredVoice;
         }
 
+        // Cancel any ongoing speech to prevent interruption errors
+        if (this.isCurrentlySpeaking) {
+            this.synthesis.cancel();
+        }
+
         utterance.onstart = () => {
             this.updateVoiceUI('speaking');
             this.isCurrentlySpeaking = true;
@@ -414,17 +419,31 @@ class VoiceAgentSimulator {
             setTimeout(() => {
                 if (this.voiceEnabled && !this.isListening && !this.isCurrentlySpeaking) {
                     try {
+                        // Stop any existing recognition before starting
+                        if (this.recognition) {
+                            try {
+                                this.recognition.stop();
+                            } catch (e) {
+                                // Already stopped, ignore
+                            }
+                        }
                         this.recognition.start();
                         this.isListening = true;
                     } catch (e) {
-                        console.error('Failed to restart recognition:', e);
+                        // Only log non-'already started' errors
+                        if (!e.message?.includes('already started')) {
+                            console.error('Failed to restart recognition:', e);
+                        }
                     }
                 }
             }, 1000);
         };
 
         utterance.onerror = (event) => {
-            console.error('Speech synthesis error:', event);
+            // Only log non-interrupted errors (interrupted is normal when user speaks)
+            if (event.error !== 'interrupted') {
+                console.error('Speech synthesis error:', event.error);
+            }
             this.isCurrentlySpeaking = false;
             this.updateVoiceUI('listening');
             
@@ -432,10 +451,21 @@ class VoiceAgentSimulator {
             setTimeout(() => {
                 if (this.voiceEnabled && !this.isListening && !this.isCurrentlySpeaking) {
                     try {
+                        // Stop any existing recognition before starting
+                        if (this.recognition) {
+                            try {
+                                this.recognition.stop();
+                            } catch (e) {
+                                // Already stopped, ignore
+                            }
+                        }
                         this.recognition.start();
                         this.isListening = true;
                     } catch (e) {
-                        console.error('Failed to restart recognition:', e);
+                        // Only log non-'already started' errors
+                        if (!e.message?.includes('already started')) {
+                            console.error('Failed to restart recognition:', e);
+                        }
                     }
                 }
             }, 1000);

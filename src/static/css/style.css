@@ -905,7 +905,7 @@ body {
 
 .score-item {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(120px, 200px) 60px;
+    grid-template-columns: minmax(180px, 1fr) minmax(120px, 200px) 60px;
     align-items: center;
     gap: 12px;
     min-width: 0; /* Prevent grid overflow */
@@ -931,11 +931,12 @@ body {
 }
 
 .score-fill {
-    display: block;
+    display: inline-block;
     height: 100%;
     background: linear-gradient(90deg, var(--success-color), #0e8a0e);
     transition: width 0.5s ease;
     border-radius: 10px;
+    vertical-align: top;
 }
 
 /* Score-specific styling for better visual distinction */
