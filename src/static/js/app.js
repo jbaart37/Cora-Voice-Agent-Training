@@ -458,10 +458,12 @@ class VoiceAgentSimulator {
                 // Reset speech synthesis and try again with a different voice
                 this.synthesis.cancel();
                 
+                // Store text in closure for retry
+                const textToRetry = text;
                 setTimeout(() => {
                     // Clear conversation voice to force selection of different voice
                     this.conversationVoice = null;
-                    this.speak(text); // Retry with new voice
+                    this.speak(textToRetry); // Retry with new voice
                 }, 500);
                 return;
             }
