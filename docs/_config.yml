@@ -10,6 +10,10 @@ baseurl: /Cora-Voice-Agent-Training
 
 # Build settings
 markdown: kramdown
+kramdown:
+  input: GFM
+  hard_wrap: false
+  parse_block_html: true
 plugins:
   - jekyll-seo-tag
 
