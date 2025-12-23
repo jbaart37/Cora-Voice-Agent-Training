@@ -24,11 +24,11 @@ description: "Deploy Azure infrastructure using Azure Developer CLI (azd)"
 
 By the end of this module, you will:
 
-- [ ] Understand what Azure Developer CLI (azd) is and why it's used
-- [ ] Deploy Azure infrastructure from templates using `azd up`
-- [ ] Configure Azure Container Apps environment
-- [ ] Set up Azure Storage Account for analytics data
-- [ ] Verify successful resource deployment
+- Understand what Azure Developer CLI (azd) is and why it's used
+- Deploy Azure infrastructure from templates using `azd up`
+- Configure Azure Container Apps environment
+- Set up Azure Storage Account for analytics data
+- Verify successful resource deployment
 
 ---
 

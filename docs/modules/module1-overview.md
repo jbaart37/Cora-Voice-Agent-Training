@@ -86,12 +86,12 @@ By the end, you'll have a fully functional AI training application running in Az
 
 By the end of this module, you will:
 
-- [ ] Clone the training repository from GitHub
-- [ ] Understand the repository structure (src/, infra/, docs/)
-- [ ] Identify the key files needed for deployment
-- [ ] Log in to Azure CLI and verify subscription access
-- [ ] Locate your Azure AI Foundry project endpoint
-- [ ] Prepare environment configuration for deployment
+- Clone the training repository from GitHub
+- Understand the repository structure (src/, infra/, docs/)
+- Identify the key files needed for deployment
+- Log in to Azure CLI and verify subscription access
+- Locate your Azure AI Foundry project endpoint
+- Prepare environment configuration for deployment
 
 ---
 

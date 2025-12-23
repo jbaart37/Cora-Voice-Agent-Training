@@ -24,11 +24,11 @@ description: "Deploy the Flask application to Azure Container Apps"
 
 By the end of this module, you will:
 
-- [ ] Understand the Flask application structure and key files
-- [ ] Explore the frontend HTML/CSS/JavaScript implementation
-- [ ] Learn how Docker containerization works (without needing Docker Desktop!)
-- [ ] Deploy the application using azd cloud builds
-- [ ] Access and test the deployed web application
+- Understand the Flask application structure and key files
+- Explore the frontend HTML/CSS/JavaScript implementation
+- Learn how Docker containerization works (without needing Docker Desktop!)
+- Deploy the application using azd cloud builds
+- Access and test the deployed web application
 
 ---
 

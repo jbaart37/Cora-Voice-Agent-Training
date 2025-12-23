@@ -308,8 +308,15 @@ function attachCheckboxListeners(moduleId) {
         label.appendChild(labelText);
         checkboxContainer.appendChild(label);
         
-        // Insert checkpoint after the step heading
-        step.heading.insertAdjacentElement('afterend', checkboxContainer);
+        // Insert checkpoint at the END of the step (before next step or end of content)
+        if (index < stepCheckboxes.length - 1) {
+            // Insert before the next step heading
+            const nextStepHeading = stepCheckboxes[index + 1].heading;
+            nextStepHeading.insertAdjacentElement('beforebegin', checkboxContainer);
+        } else {
+            // Last step - insert at the end of content
+            content.appendChild(checkboxContainer);
+        }
     });
     
     saveProgress(progress);

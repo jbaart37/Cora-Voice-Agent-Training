@@ -24,12 +24,12 @@ description: "Monitor system health, debug issues, and validate AI quality"
 
 By the end of this module, you will:
 
-- [ ] Understand the difference between Module 5 (agent metrics) and Module 6 (system metrics)
-- [ ] View application logs in Container Apps CLI
-- [ ] Understand OpenTelemetry traces in Application Insights
-- [ ] Use AI Foundry evaluation tools to assess model quality
-- [ ] Monitor costs and performance
-- [ ] **Earn your "Low-Code to Pro-Code Architect Navigator" certificate!** 🏆
+- Understand the difference between Module 5 (agent metrics) and Module 6 (system metrics)
+- View application logs in Container Apps CLI
+- Understand OpenTelemetry traces in Application Insights
+- Use AI Foundry evaluation tools to assess model quality
+- Monitor costs and performance
+- **Earn your "Low-Code to Pro-Code Architect Navigator" certificate!** 🏆
 
 ---
 

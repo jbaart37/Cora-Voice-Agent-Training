@@ -24,13 +24,13 @@ description: "Configure AI Foundry project and deploy GPT-4 model"
 
 By the end of this module, you will:
 
-- [ ] Understand the difference between Azure OpenAI and Azure AI Foundry
-- [ ] Validate your Foundry project and model deployment from Module 1
-- [ ] Navigate the Foundry portal (Playground, Evaluation, Metrics, Tracing)
-- [ ] Understand how CORA's agent uses your deployed model
-- [ ] Learn the 5-criteria conversation scoring system
-- [ ] Explore OpenTelemetry integration and traces
-- [ ] Test and troubleshoot AI-powered conversation analysis
+- Understand the difference between Azure OpenAI and Azure AI Foundry
+- Validate your Foundry project and model deployment from Module 1
+- Navigate the Foundry portal (Playground, Evaluation, Metrics, Tracing)
+- Understand how CORA's agent uses your deployed model
+- Learn the 5-criteria conversation scoring system
+- Explore OpenTelemetry integration and traces
+- Test and troubleshoot AI-powered conversation analysis
 
 ---
 

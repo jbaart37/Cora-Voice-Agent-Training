@@ -24,11 +24,11 @@ description: "Track human agent performance with conversation analytics"
 
 By the end of this module, you will:
 
-- [ ] Understand the difference between **human agent metrics** (this module) and **IT/system metrics** (Module 6)
-- [ ] View conversation scores from the analytics dashboard
-- [ ] Interpret the 5-criteria scoring system
-- [ ] Track performance trends over time
-- [ ] Understand Azure Table Storage for score persistence
+- Understand the difference between **human agent metrics** (this module) and **IT/system metrics** (Module 6)
+- View conversation scores from the analytics dashboard
+- Interpret the 5-criteria scoring system
+- Track performance trends over time
+- Understand Azure Table Storage for score persistence
 
 ---
 
