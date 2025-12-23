@@ -38,9 +38,13 @@ function getProgress() {
 // Save progress
 function saveProgress(progress) {
     progress.lastUpdated = new Date().toISOString();
+    console.log('[Progress Tracker] Saving progress:', progress);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
     // Force update all displays with fresh data from storage
-    setTimeout(() => updateAllProgressDisplays(), 0);
+    setTimeout(() => {
+        console.log('[Progress Tracker] Updating all displays');
+        updateAllProgressDisplays();
+    }, 0);
 }
 
 // Mark section as complete
@@ -116,10 +120,15 @@ function resetProgress() {
 
 // Update progress panel display
 function updateProgressPanel(progress) {
+    console.log('[Progress Tracker] updateProgressPanel called with:', progress);
+    
     // Update circular progress indicator
     const progressText = document.getElementById('progress-text');
     if (progressText) {
         progressText.textContent = `${progress.overall}%`;
+        console.log('[Progress Tracker] Updated progress text to:', progress.overall + '%');
+    } else {
+        console.warn('[Progress Tracker] Progress text element not found');
     }
     
     // Update progress circle fill
@@ -129,6 +138,9 @@ function updateProgressPanel(progress) {
         const offset = circumference - (progress.overall / 100) * circumference;
         progressCircleFill.style.strokeDasharray = circumference;
         progressCircleFill.style.strokeDashoffset = offset;
+        console.log('[Progress Tracker] Updated progress circle, offset:', offset);
+    } else {
+        console.warn('[Progress Tracker] Progress circle element not found');
     }
     
     // Update module progress list
@@ -141,6 +153,9 @@ function updateProgressPanel(progress) {
             const percentSpan = moduleItem.querySelector('.module-percent');
             if (percentSpan) {
                 percentSpan.textContent = `${percentage}%`;
+                console.log(`[Progress Tracker] Updated ${moduleId} to ${percentage}%`);
+            } else {
+                console.warn(`[Progress Tracker] Percent span not found for ${moduleId}`);
             }
             
             // Update completed status
@@ -148,6 +163,10 @@ function updateProgressPanel(progress) {
                 moduleItem.classList.add('completed');
             } else {
                 moduleItem.classList.remove('completed');
+            }
+        } else {
+            if (!moduleItem) {
+                console.warn(`[Progress Tracker] Module item not found for ${moduleId}`);
             }
         }
     });
@@ -157,11 +176,15 @@ function updateProgressPanel(progress) {
 function updateAllProgressDisplays() {
     // Always get fresh progress data from storage
     const progress = getProgress();
+    console.log('[Progress Tracker] Updating displays with progress:', progress);
     
     // Update header badge
     const headerBadge = document.getElementById('overall-progress');
     if (headerBadge) {
         headerBadge.textContent = `${progress.overall}%`;
+        console.log('[Progress Tracker] Updated header badge to:', progress.overall + '%');
+    } else {
+        console.warn('[Progress Tracker] Header badge element not found');
     }
     
     // Update progress panel with fresh data
