@@ -39,7 +39,8 @@ function getProgress() {
 function saveProgress(progress) {
     progress.lastUpdated = new Date().toISOString();
     localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
-    updateAllProgressDisplays();
+    // Force update all displays with fresh data from storage
+    setTimeout(() => updateAllProgressDisplays(), 0);
 }
 
 // Mark section as complete
@@ -154,6 +155,7 @@ function updateProgressPanel(progress) {
 
 // Update all progress displays on page
 function updateAllProgressDisplays() {
+    // Always get fresh progress data from storage
     const progress = getProgress();
     
     // Update header badge
@@ -162,7 +164,7 @@ function updateAllProgressDisplays() {
         headerBadge.textContent = `${progress.overall}%`;
     }
     
-    // Update progress panel
+    // Update progress panel with fresh data
     updateProgressPanel(progress);
     
     // Update module progress bar if on module page
