@@ -1,6 +1,7 @@
 ---
 layout: module
 title: "Module 3: Application Deployment"
+module_id: module3
 module_number: 3
 duration: "60 minutes"
 description: "Deploy the Flask application to Azure Container Apps"

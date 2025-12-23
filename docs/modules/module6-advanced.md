@@ -1,6 +1,7 @@
 ---
 layout: module
 title: "Module 6: IT Operations & System Metrics"
+module_id: module6
 module_number: 6
 duration: "40 minutes"
 description: "Monitor system health, debug issues, and validate AI quality"

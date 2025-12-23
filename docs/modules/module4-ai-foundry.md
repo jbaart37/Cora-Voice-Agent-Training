@@ -1,6 +1,7 @@
 ---
 layout: module
 title: "Module 4: Azure OpenAI & AI Foundry"
+module_id: module4
 module_number: 4
 duration: "45 minutes"
 description: "Configure AI Foundry project and deploy GPT-4 model"

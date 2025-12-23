@@ -1,6 +1,7 @@
 ---
 layout: module
 title: "Module 5: Analytics Dashboard"
+module_id: module5
 module_number: 5
 duration: "30 minutes"
 description: "Track human agent performance with conversation analytics"

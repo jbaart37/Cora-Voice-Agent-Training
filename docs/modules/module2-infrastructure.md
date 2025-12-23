@@ -1,6 +1,7 @@
 ---
 layout: module
 title: "Module 2: Infrastructure Setup"
+module_id: module2
 module_number: 2
 duration: "45 minutes"
 description: "Deploy Azure infrastructure using Azure Developer CLI (azd)"

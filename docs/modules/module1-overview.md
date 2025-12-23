@@ -1,6 +1,7 @@
 ---
 layout: module
 title: "Module 1: Getting Started - Repository & Azure Setup"
+module_id: module1
 module_number: 1
 duration: "30 minutes"
 description: "Clone the repository, understand the structure, and prepare your Azure environment for deployment"
