@@ -293,6 +293,7 @@ function injectSectionCheckboxes() {
 
 // Handle checkpoint change
 function handleCheckpointChange(moduleId, sectionId, checked) {
+    console.log(`[Progress Tracker] Checkpoint changed: ${moduleId} - ${sectionId} - ${checked}`);
     markSectionComplete(moduleId, sectionId, checked);
     
     // Update UI
@@ -303,6 +304,13 @@ function handleCheckpointChange(moduleId, sectionId, checked) {
         checkpointItem.classList.remove('completed');
     }
 }
+
+// Make sure functions are globally accessible
+window.handleCheckpointChange = handleCheckpointChange;
+window.toggleProgressPanel = toggleProgressPanel;
+window.markModuleComplete = markModuleComplete;
+window.resetProgress = resetProgress;
+window.continueToLastSection = continueToLastSection;
 
 // Update module progress bar
 function updateModuleProgressBar(moduleId) {
@@ -373,8 +381,21 @@ function showModuleCompleteNotification(moduleId) {
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('[Progress Tracker] DOM Content Loaded');
     initializeProgress();
     updateAllProgressDisplays();
+    
+    // Initialize module-specific features if on a module page
+    const moduleProgressBar = document.getElementById('module-progress-bar');
+    if (moduleProgressBar) {
+        const moduleId = moduleProgressBar.dataset.module;
+        console.log('[Progress Tracker] Module page detected:', moduleId);
+        initializeModuleProgress(moduleId);
+        injectSectionCheckboxes();
+        updateModuleProgressBar(moduleId);
+    } else {
+        console.log('[Progress Tracker] Not on a module page');
+    }
 });
 
 // Update module status badges on homepage
