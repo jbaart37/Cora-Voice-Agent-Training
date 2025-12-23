@@ -258,6 +258,9 @@ function attachCheckboxListeners(moduleId) {
     checkboxes.forEach((checkbox, index) => {
         const sectionId = `section-${index}`;
         
+        // Enable checkbox (GFM renders them as disabled by default)
+        checkbox.disabled = false;
+        
         // Initialize section if not exists
         if (progress.modules[moduleId] && progress.modules[moduleId].sections[sectionId] === undefined) {
             progress.modules[moduleId].sections[sectionId] = false;
