@@ -496,6 +496,5 @@ window.resetProgress = resetProgress;
 window.markModuleComplete = markModuleComplete;
 window.handleCheckpointChange = handleCheckpointChange;
 window.initializeModuleProgress = initializeModuleProgress;
-window.injectSectionCheckboxes = injectSectionCheckboxes;
 window.updateModuleProgressBar = updateModuleProgressBar;
 window.continueToLastSection = continueToLastSection;
