@@ -91,6 +91,12 @@ function markModuleComplete(moduleId) {
         sections[key] = true;
     });
     
+    // Update visual checkboxes on the page
+    const checkboxes = document.querySelectorAll(`input[id^="checkpoint-${moduleId}-"]`);
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = true;
+    });
+    
     calculateOverallProgress(progress);
     saveProgress(progress);
     

@@ -592,12 +592,12 @@ Key information to note:
 
 Before moving to Module 3, verify:
 
-- [ ] ✅ Azure Developer CLI installed (`azd version` works)
-- [ ] ✅ azd initialized (`azd init` completed successfully)
-- [ ] ✅ Environment variables configured (Foundry endpoint, model name)
-- [ ] ✅ Deployment completed successfully (`azd up` finished without errors)
-- [ ] ✅ Application accessible in browser (URL returns CORA landing page)
-- [ ] ✅ All Azure resources visible in Portal (6 resources in resource group)
+- ✅ Azure Developer CLI installed (`azd version` works)
+- ✅ azd initialized (`azd init` completed successfully)
+- ✅ Environment variables configured (Foundry endpoint, model name)
+- ✅ Deployment completed successfully (`azd up` finished without errors)
+- ✅ Application accessible in browser (URL returns CORA landing page)
+- ✅ All Azure resources visible in Portal (6 resources in resource group)
 
 ---
 

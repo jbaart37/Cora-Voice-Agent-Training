@@ -513,14 +513,14 @@ RESOURCE_GROUP=rg-cora-dev
 
 Before moving to Module 2 (deployment), confirm you have:
 
-- [ ] ✅ Repository code on your local machine (Git clone or ZIP download)
-- [ ] ✅ Azure CLI installed and logged in (`az login` successful)
-- [ ] ✅ Subscription ID identified
-- [ ] ✅ Resource group naming pattern decided (e.g., `rg-cora-dev`)
-- [ ] ✅ Azure AI Foundry project created with GPT model deployed (in your resource group!)
-- [ ] ✅ AI Foundry endpoint URL copied
-- [ ] ✅ Model deployment name noted
-- [ ] ✅ (Optional but recommended) .env file created with your configuration values
+- ✅ Repository code on your local machine (Git clone or ZIP download)
+- ✅ Azure CLI installed and logged in (`az login` successful)
+- ✅ Subscription ID identified
+- ✅ Resource group naming pattern decided (e.g., `rg-cora-dev`)
+- ✅ Azure AI Foundry project created with GPT model deployed (in your resource group!)
+- ✅ AI Foundry endpoint URL copied
+- ✅ Model deployment name noted
+- ✅ (Optional but recommended) .env file created with your configuration values
 
 ---
 
