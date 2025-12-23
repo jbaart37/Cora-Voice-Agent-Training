@@ -251,31 +251,65 @@ function attachCheckboxListeners(moduleId) {
     const progress = getProgress();
     console.log('[Progress Tracker] Attaching checkbox listeners for:', moduleId);
     
-    // Find all task list checkboxes (rendered from markdown `- [ ]`)
-    const checkboxes = content.querySelectorAll('input[type="checkbox"]');
-    console.log('[Progress Tracker] Found', checkboxes.length, 'checkboxes');
+    // Find all step headings (h2 elements containing "Step X:")
+    const stepHeadings = content.querySelectorAll('h2');
+    const stepCheckboxes = [];
     
-    checkboxes.forEach((checkbox, index) => {
+    stepHeadings.forEach((heading) => {
+        const headingText = heading.textContent;
+        // Match "Step 1:", "Step 2:", etc.
+        const stepMatch = headingText.match(/Step\s+(\d+):/i);
+        if (stepMatch) {
+            stepCheckboxes.push({
+                heading: heading,
+                stepNumber: parseInt(stepMatch[1])
+            });
+        }
+    });
+    
+    console.log('[Progress Tracker] Found', stepCheckboxes.length, 'steps');
+    
+    // Create checkboxes for each step
+    stepCheckboxes.forEach((step, index) => {
         const sectionId = `section-${index}`;
-        
-        // Enable checkbox (GFM renders them as disabled by default)
-        checkbox.disabled = false;
         
         // Initialize section if not exists
         if (progress.modules[moduleId] && progress.modules[moduleId].sections[sectionId] === undefined) {
             progress.modules[moduleId].sections[sectionId] = false;
         }
         
+        // Create checkbox container
+        const checkboxContainer = document.createElement('div');
+        checkboxContainer.className = 'step-checkpoint';
+        checkboxContainer.style.cssText = 'margin: 1rem 0; padding: 1rem; background: var(--bg-secondary, #f8f9fa); border-left: 4px solid var(--primary-color, #0078d4); border-radius: 4px;';
+        
+        const label = document.createElement('label');
+        label.style.cssText = 'display: flex; align-items: center; cursor: pointer; font-weight: 500;';
+        
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.id = `checkpoint-${moduleId}-${sectionId}`;
+        checkbox.style.cssText = 'margin-right: 0.75rem; transform: scale(1.3); cursor: pointer;';
+        
         // Set checkbox state from saved progress
         const isCompleted = progress.modules[moduleId]?.sections[sectionId] || false;
         checkbox.checked = isCompleted;
-        console.log(`[Progress Tracker] Checkbox ${index} (${sectionId}): ${isCompleted}`);
+        console.log(`[Progress Tracker] Step ${step.stepNumber} (${sectionId}): ${isCompleted}`);
         
         // Add change listener
         checkbox.addEventListener('change', function() {
-            console.log(`[Progress Tracker] Checkbox ${index} changed to:`, this.checked);
+            console.log(`[Progress Tracker] Step ${step.stepNumber} changed to:`, this.checked);
             markSectionComplete(moduleId, sectionId, this.checked);
         });
+        
+        const labelText = document.createTextNode(`Mark Step ${step.stepNumber} as complete`);
+        
+        label.appendChild(checkbox);
+        label.appendChild(labelText);
+        checkboxContainer.appendChild(label);
+        
+        // Insert checkpoint after the step heading
+        step.heading.insertAdjacentElement('afterend', checkboxContainer);
     });
     
     saveProgress(progress);
