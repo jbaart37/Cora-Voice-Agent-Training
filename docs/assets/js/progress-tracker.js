@@ -240,55 +240,42 @@ function initializeModuleProgress(moduleId) {
     saveProgress(progress);
 }
 
-// Inject section checkboxes after headers
-function injectSectionCheckboxes() {
+// Attach listeners to existing markdown checkboxes
+function attachCheckboxListeners(moduleId) {
     const content = document.getElementById('module-content');
-    if (!content) return;
+    if (!content) {
+        console.warn('[Progress Tracker] Module content not found');
+        return;
+    }
     
-    const moduleProgressBar = document.getElementById('module-progress-bar');
-    if (!moduleProgressBar) return;
-    
-    const moduleId = moduleProgressBar.dataset.module;
     const progress = getProgress();
+    console.log('[Progress Tracker] Attaching checkbox listeners for:', moduleId);
     
-    const headers = content.querySelectorAll('h2');
-    headers.forEach((header, index) => {
+    // Find all task list checkboxes (rendered from markdown `- [ ]`)
+    const checkboxes = content.querySelectorAll('input[type="checkbox"]');
+    console.log('[Progress Tracker] Found', checkboxes.length, 'checkboxes');
+    
+    checkboxes.forEach((checkbox, index) => {
         const sectionId = `section-${index}`;
-        const isCompleted = progress.modules[moduleId]?.sections[sectionId] || false;
         
-        // Create checkpoint
-        const checkpoint = document.createElement('div');
-        checkpoint.className = 'section-checkpoint';
-        checkpoint.innerHTML = `
-            <div class="checkpoint-item ${isCompleted ? 'completed' : ''}">
-                <input 
-                    type="checkbox" 
-                    class="checkpoint-checkbox" 
-                    id="${sectionId}" 
-                    ${isCompleted ? 'checked' : ''}
-                    onchange="handleCheckpointChange('${moduleId}', '${sectionId}', this.checked)"
-                >
-                <label for="${sectionId}" class="checkpoint-label">
-                    <i class="fas fa-check-circle"></i> Mark "${header.textContent}" complete
-                </label>
-            </div>
-        `;
-        
-        // Insert after the next paragraph or list
-        let nextElement = header.nextElementSibling;
-        let insertAfter = header;
-        
-        // Find a good place to insert (after first paragraph or list)
-        while (nextElement && (nextElement.tagName === 'P' || nextElement.tagName === 'UL' || nextElement.tagName === 'OL')) {
-            insertAfter = nextElement;
-            nextElement = nextElement.nextElementSibling;
-            if (insertAfter.tagName !== 'H2' && insertAfter.tagName !== 'H3') {
-                break;
-            }
+        // Initialize section if not exists
+        if (progress.modules[moduleId] && progress.modules[moduleId].sections[sectionId] === undefined) {
+            progress.modules[moduleId].sections[sectionId] = false;
         }
         
-        insertAfter.after(checkpoint);
+        // Set checkbox state from saved progress
+        const isCompleted = progress.modules[moduleId]?.sections[sectionId] || false;
+        checkbox.checked = isCompleted;
+        console.log(`[Progress Tracker] Checkbox ${index} (${sectionId}): ${isCompleted}`);
+        
+        // Add change listener
+        checkbox.addEventListener('change', function() {
+            console.log(`[Progress Tracker] Checkbox ${index} changed to:`, this.checked);
+            markSectionComplete(moduleId, sectionId, this.checked);
+        });
     });
+    
+    saveProgress(progress);
 }
 
 // Handle checkpoint change
@@ -391,7 +378,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const moduleId = moduleProgressBar.dataset.module;
         console.log('[Progress Tracker] Module page detected:', moduleId);
         initializeModuleProgress(moduleId);
-        injectSectionCheckboxes();
+        attachCheckboxListeners(moduleId); // Use existing checkboxes instead of injecting new ones
         updateModuleProgressBar(moduleId);
     } else {
         console.log('[Progress Tracker] Not on a module page');
