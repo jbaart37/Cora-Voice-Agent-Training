@@ -241,9 +241,9 @@ az account show --output table
 
 ---
 
-## 📦 Step 4: Plan Your Resource Group
+## � Step 4: Create Your .env File (Recommended!)
 
-**Critical Planning Step:** Before creating any Azure resources, let's plan where everything will live.
+**Do this now** so you can fill it in as you go through the next steps!
 
 ### Why Resource Groups Matter
 
@@ -283,11 +283,142 @@ In Module 2, these will all be created in **one resource group**:
 
 ---
 
-## 🤖 Step 5: Azure AI Foundry Project Setup
+## 📝 Step 4: Create Your .env File
+
+**Do this now** so you can fill it in as you go through the next steps!
+
+**Why create this file now?**
+- 📝 **Document as you go** - Fill in values while fresh in your mind
+- 🔄 **Easy redeployment** - One file with everything you need
+- 👥 **Team reference** - Share the template (without secrets!)
+- 🧪 **Local testing** - Run the app locally later
+
+Create a file named `.env` in the project root folder (`c:\Local Dev\Cora-Voice-Agent-Training\.env`):
+
+```env
+# =================================================================
+# CORA Voice Agent - Configuration Template
+# =================================================================
+# Fill in YOUR values as you complete the steps below
+# This file is for local development and as reference
+# =================================================================
+
+# ─────────────────────────────────────────────────────────────────
+# Step 3: Azure Account Information
+# ─────────────────────────────────────────────────────────────────
+# Your Azure subscription ID (from Step 3: az account show)
+AZURE_SUBSCRIPTION_ID=
+
+# Your preferred Azure region (we recommend eastus)
+AZURE_LOCATION=eastus
+
+# Your environment name - used by azd for tracking
+# Keep it simple: dev, test, prod (or cora-dev, cora-test, etc.)
+# This is NOT the resource group name, but they should align!
+AZURE_ENV_NAME=dev
+
+# ─────────────────────────────────────────────────────────────────
+# Step 5: Resource Group Planning
+# ─────────────────────────────────────────────────────────────────
+# Your resource group name (will be created in Module 2)
+# Should align with your environment name above
+# Pattern: rg-cora-{AZURE_ENV_NAME}
+# Example: if AZURE_ENV_NAME=dev, then use rg-cora-dev
+RESOURCE_GROUP=rg-cora-dev
+
+# ─────────────────────────────────────────────────────────────────
+# Step 6: Azure AI Foundry Configuration  
+# ─────────────────────────────────────────────────────────────────
+# Paste your Foundry endpoint URL here (from Step 6)
+AZURE_AI_FOUNDRY_ENDPOINT=
+
+# Your GPT model deployment name (from Step 6)
+AZURE_AI_MODEL_NAME=gpt-4o
+
+# Optional: API Key (only needed for local development)
+# If deploying to Azure, Managed Identity is used automatically
+# AZURE_AI_FOUNDRY_API_KEY=
+
+# ─────────────────────────────────────────────────────────────────
+# Auto-populated by azd (leave empty for now)
+# ─────────────────────────────────────────────────────────────────
+# APPLICATIONINSIGHTS_CONNECTION_STRING=
+```
+
+**📋 How to Use This Template:**
+
+1. **Create the file now** - Copy the template above into `.env`
+2. **Fill in Step 3 values** - Add your subscription ID from `az account show`
+3. **Skip to Step 6** - Leave AI Foundry fields empty for now
+4. **Come back and fill them** - After creating your Foundry project in Step 6
+
+**⚠️ Security Notes:** 
+- ✅ `.env` is in `.gitignore` (won't be committed to Git)
+- ❌ Never share API keys in screenshots
+- 🔒 Azure deployment uses Managed Identity (no API keys!)
+- 💡 For team sharing, remove any API key values before sharing
+
+---
+
+## 📦 Step 5: Plan Your Resource Group
+
+**Critical Planning Step:** Before creating any Azure resources, let's plan where everything will live.
+
+### Why Resource Groups Matter
+
+Think of a resource group as a **folder for your Azure resources**. Everything for this project should go in the **same resource group**:
+
+✅ **Benefits of keeping everything together:**
+- 🧹 **Easy cleanup**: Delete the resource group = delete everything (no orphaned resources!)
+- 💰 **Cost tracking**: See total cost for the entire project in one place
+- 🔐 **Security management**: Grant access to the whole project with one permission assignment
+- 📊 **Organization**: All related resources grouped logically
+
+### Resource Group Naming
+
+**Recommended naming convention:**
+```
+rg-cora-{environment}
+
+Examples:
+  AZURE_ENV_NAME=dev    →  RESOURCE_GROUP=rg-cora-dev
+  AZURE_ENV_NAME=test   →  RESOURCE_GROUP=rg-cora-test
+  AZURE_ENV_NAME=prod   →  RESOURCE_GROUP=rg-cora-prod
+```
+
+**💡 Keep them aligned:** Your `AZURE_ENV_NAME` and `RESOURCE_GROUP` should match conceptually:
+- Environment name (`AZURE_ENV_NAME`): Simple name for azd tracking (e.g., `dev`, `test`)
+- Resource group (`RESOURCE_GROUP`): Azure resource container following naming conventions (e.g., `rg-cora-dev`)
+
+**Recommended pattern:** Use `dev` for env name and `rg-cora-dev` for resource group.
+
+**💡 Fill this in:** Go back to your `.env` file and make sure both values align:
+```env
+AZURE_ENV_NAME=dev
+RESOURCE_GROUP=rg-cora-dev
+```
+
+**Good news:** When you run `azd up` in Module 2, it will automatically create the resource group for you! But it's important to understand why we use this pattern.
+
+### Resources That Will Live Together
+
+In Module 2, these will all be created in **one resource group**:
+- Container Apps Environment
+- Container App (your web application)
+- Container Registry (stores Docker images)
+- Storage Account (conversation scores)
+- Log Analytics Workspace (logs)
+- Application Insights (monitoring)
+
+**💡 Pro Tip:** Some organizations have policies requiring separate resource groups for different resource types (compute vs storage vs networking). If your organization has such policies, discuss with your cloud governance team before deploying!
+
+---
+
+## 🤖 Step 6: Azure AI Foundry Project Setup
 
 You need an **Azure AI Foundry project** with a deployed GPT model.
 
-**Important:** When creating your AI Foundry project, use the **same resource group** you planned in Step 4, or be ready to specify an existing one.
+**Important:** When creating your AI Foundry project, use the **same resource group** you planned in Step 5, or be ready to specify an existing one.
 
 ### Option A: You Already Have a Project
 
@@ -359,12 +490,12 @@ Azure AI Foundry has two portal experiences:
 
 6. **Copy Your Endpoint** 📋
    
-   **Critical step - you'll need this for Module 2!**
+   **Critical step - add this to your .env file!**
    
    After project creation:
    - Go to project **Overview** page
    - Find the **Endpoint** field (format: `https://your-project.openai.azure.com/`)
-   - **Copy this URL** and save it in a text file or note
+   - **Copy this URL** and paste it into your `.env` file as `AZURE_AI_FOUNDRY_ENDPOINT`
 
    <div class="screenshot-container" onclick="openImageModal('{{ site.baseurl }}/assets/images/module1-ai-foundry-endpoint.png')" style="cursor: zoom-in;">
      <img src="{{ site.baseurl }}/assets/images/module1-ai-foundry-endpoint.png" alt="Azure AI Foundry Project Overview" class="screenshot-image">
@@ -386,7 +517,7 @@ Azure AI Foundry has two portal experiences:
    
    - Click **Deploy**
    - Wait for deployment to complete (~1-2 minutes)
-   - **Save the deployment name** - you'll need it in Module 2!
+   - **Add the deployment name to your .env file** as `AZURE_AI_MODEL_NAME`
 
    <div class="screenshot-container" onclick="openImageModal('{{ site.baseurl }}/assets/images/module1-model-deployment.png')" style="cursor: zoom-in;">
      <img src="{{ site.baseurl }}/assets/images/module1-model-deployment.png" alt="GPT Model Deployment" class="screenshot-image">
@@ -423,104 +554,18 @@ You'll notice Azure AI Foundry provides API keys after deployment. **You won't n
 
 ---
 
-## 📝 Step 5: Prepare Your Environment Variables
-
-The deployment needs a few key pieces of information. You have two options:
-
-### Option A: Interactive Deployment (Recommended for First Time)
-
-When you run `azd up` in Module 2, it will prompt you for:
-- Environment name (e.g., `cora-dev`)
-- Azure subscription
-- Azure region
-- AI Foundry endpoint
-
-**No file creation needed** - just have your AI Foundry endpoint ready!
-
-### Option B: Pre-configure with .env File (Recommended!)
-
-**Why use a .env file?**
-- 📝 **Documentation** - Keep all your endpoints and IDs in one place
-- 🔄 **Reusability** - Easily redeploy if something goes wrong
-- 👥 **Team sharing** - Template for others (without secrets!)
-- 🧪 **Local testing** - Run the app locally during development
-
-**What to capture:** As you complete the steps above, document these values in `.env`:
-
-Create a file named `.env` in the project root folder (`c:\Local Dev\Cora-Voice-Agent-Training\.env`):
-
-```env
-# =================================================================
-# CORA Voice Agent - Configuration Template
-# =================================================================
-# Copy this template and fill in YOUR values from the steps above
-# This file is used for local development and as reference
-# =================================================================
-
-# ─────────────────────────────────────────────────────────────────
-# Step 4: Azure AI Foundry Configuration
-# ─────────────────────────────────────────────────────────────────
-# Paste your Foundry endpoint URL here (from Step 4.3)
-AZURE_AI_FOUNDRY_ENDPOINT=https://your-project-name.cognitiveservices.azure.com/
-
-# Your GPT model deployment name (from Step 4.5)
-AZURE_AI_MODEL_NAME=gpt-4o
-
-# Optional: API Key (only needed for local development)
-# If deploying to Azure, Managed Identity is used automatically
-# AZURE_AI_FOUNDRY_API_KEY=your-api-key-here
-
-# ─────────────────────────────────────────────────────────────────
-# Step 2 & 3: Azure Deployment Configuration
-# ─────────────────────────────────────────────────────────────────
-# Your Azure subscription ID (from Step 2)
-AZURE_SUBSCRIPTION_ID=12345678-1234-1234-1234-123456789012
-
-# Your preferred Azure region (from Step 3)
-AZURE_LOCATION=eastus
-
-# Your environment name (e.g., dev, test, prod)
-AZURE_ENV_NAME=cora-dev
-
-# Your resource group name pattern (from Step 3)
-# Example: rg-cora-dev
-RESOURCE_GROUP=rg-cora-dev
-
-# ─────────────────────────────────────────────────────────────────
-# Optional: Application Insights (added automatically by azd)
-# ─────────────────────────────────────────────────────────────────
-# APPLICATIONINSIGHTS_CONNECTION_STRING=InstrumentationKey=...;
-```
-
-**📋 How to Use This Template:**
-
-1. **Copy the template above** into a new file named `.env`
-2. **Fill in your values** as you complete Steps 2-5
-3. **Leave API key commented** unless testing locally
-4. **Keep this file safe** - it's your deployment reference!
-
-**⚠️ Security Warning:** 
-- ✅ `.env` is already in `.gitignore` (won't be committed to Git)
-- ❌ Never share API keys in screenshots or documentation
-- 🔒 In production, Azure uses Managed Identity (no API keys stored!)
-- 💡 For team sharing, remove API key line before sharing template
-
-> 📸 **Screenshot placeholder**: VS Code showing .env file example
-
----
-
-## ✅ Step 6: Verify You're Ready
+## ✅ Step 7: Verify You're Ready
 
 Before moving to Module 2 (deployment), confirm you have:
 
 - ✅ Repository code on your local machine (Git clone or ZIP download)
 - ✅ Azure CLI installed and logged in (`az login` successful)
-- ✅ Subscription ID identified
+- ✅ Subscription ID identified and added to `.env`
 - ✅ Resource group naming pattern decided (e.g., `rg-cora-dev`)
-- ✅ Azure AI Foundry project created with GPT model deployed (in your resource group!)
-- ✅ AI Foundry endpoint URL copied
-- ✅ Model deployment name noted
-- ✅ (Optional but recommended) .env file created with your configuration values
+- ✅ `.env` file created with Steps 3 and 5 completed
+- ✅ Azure AI Foundry project created with GPT model deployed
+- ✅ AI Foundry endpoint URL added to `.env` file
+- ✅ Model deployment name added to `.env` file
 
 ---
 
