@@ -213,6 +213,8 @@ Initialize azd (this creates a local environment configuration):
 azd init
 ```
 
+**📝 Note:** If you already have a `.env` file from Module 1, `azd init` may detect and use those values automatically, reducing the number of prompts you see. This is expected behavior!
+
 You'll be prompted for:
 
 ### 1. Environment Name
@@ -223,7 +225,7 @@ Enter a new environment name: cora-dev
 
 **What is this?** A label for this deployment (e.g., `dev`, `test`, `prod`). This keeps multiple deployments separate.
 
-**Recommendation:** Use `cora-dev` for this training.
+**Recommendation:** Use `cora-dev` for this training. Or if you used `dev` in your Module 1 .env file, use `dev` here to keep them aligned.
 
 ### 2. Subscription Selection
 
@@ -247,6 +249,16 @@ Select an Azure location to use:
 **Recommendation:** Choose `East US` or `East US 2` for best Azure OpenAI availability.
 
 **💡 Pro Tip:** Azure AI Foundry and Container Apps must be in regions that support both services. East US/East US 2 are safe bets!
+
+### ✅ Verify Your azd Configuration
+
+After `azd init`, verify your environment was created:
+
+```bash
+azd env list
+```
+
+You should see your environment name (e.g., `cora-dev`) listed as the default.
 
 ---
 
