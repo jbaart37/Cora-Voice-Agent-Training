@@ -3,6 +3,11 @@ name: voice-agent-simulator
 metadata:
   template: voice-agent-simulator@1.1.0
 
+infra:
+  provider: bicep
+  path: infra
+  module: main
+
 services:
   web:
     language: python
@@ -11,3 +16,16 @@ services:
     docker:
       path: ./src/Dockerfile
       context: ./src
+
+# Environment variable mappings for Bicep parameters
+# These map azd environment variables to Bicep template parameters
+hooks:
+  postprovision:
+    posix:
+      shell: sh
+      run: |
+        echo "Deployment complete!"
+    windows:
+      shell: pwsh
+      run: |
+        Write-Host "Deployment complete!"

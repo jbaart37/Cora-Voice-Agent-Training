@@ -277,21 +277,30 @@ AZURE_AI_MODEL_NAME=gpt-4o
 Now set these values for azd using the values from your .env file:
 
 ```bash
-azd env set AZURE_OPENAI_ENDPOINT "https://your-foundry-project.openai.azure.com/"
-azd env set AZURE_OPENAI_DEPLOYMENT_NAME "gpt-4o"
-azd env set AZURE_OPENAI_API_VERSION "2024-08-01-preview"
+# CRITICAL: These parameters are passed to Bicep during deployment
+azd env set azureOpenAIEndpoint "https://your-foundry-project.openai.azure.com/"
+azd env set modelName "gpt-4o"
 ```
 
 **Replace:**
 - `https://your-foundry-project.openai.azure.com/` with the value from `AZURE_AI_FOUNDRY_ENDPOINT` in your .env file
 - `gpt-4o` with the value from `AZURE_AI_MODEL_NAME` in your .env file
 
-**💡 Why different variable names?**
-- Module 1's `.env`: Used for local development (`AZURE_AI_FOUNDRY_ENDPOINT`)
-- azd environment: Used for Azure deployment (`AZURE_OPENAI_ENDPOINT`)
-- Same values, different naming conventions for different purposes!
+**⚠️ IMPORTANT:** The parameter names must match exactly:
+- Use `azureOpenAIEndpoint` (NOT `AZURE_OPENAI_ENDPOINT`)
+- Use `modelName` (NOT `AZURE_AI_MODEL_NAME`)
 
-**🔒 Security Note:** These values are stored in azd's environment configuration (`.azure/[env-name]/.env`), separate from your root `.env` file.
+These names match the Bicep template parameters and will be injected into your Container App during deployment.
+
+**💡 Verify your settings:**
+
+```bash
+azd env get-values
+```
+
+You should see your endpoint and model name listed.
+
+**🔒 Security Note:** These values are stored in azd's environment configuration (`.azure/[env-name]/.env`) and will be passed as parameters to the Bicep deployment.
 
 ---
 
