@@ -6,8 +6,8 @@ metadata:
 services:
   web:
     language: python
-    project: .
+    project: ./src
     host: containerapp
     docker:
-      path: ./Dockerfile
-      context: .
+      path: ./src/Dockerfile
+      context: ./src
