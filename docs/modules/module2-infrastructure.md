@@ -48,7 +48,9 @@ Before starting this module, ensure you completed Module 1:
 az account show
 
 # Verify you're in the correct directory
-cd c:\Local Dev\Cora-Voice-Agent-Training
+cd C:\[your-install-directory]\Cora-Voice-Agent-Training
+
+# Or if you cloned elsewhere, navigate to where you cloned the repo
 ```
 
 ---

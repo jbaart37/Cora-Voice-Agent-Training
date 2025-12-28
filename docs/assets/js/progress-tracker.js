@@ -536,8 +536,22 @@ function getModuleUrl(moduleId) {
         'module6': 'module6-advanced.html'
     };
 
-    const baseUrl = window.location.origin + window.location.pathname.split('/').slice(0, -1).join('/');
-    return `${baseUrl}/modules/${moduleFiles[moduleId]}`;
+    // Get base URL, removing any trailing filename
+    const pathParts = window.location.pathname.split('/').filter(p => p);
+    
+    // Check if we're already in a modules directory
+    const modulesIndex = pathParts.indexOf('modules');
+    let basePath;
+    
+    if (modulesIndex !== -1) {
+        // We're in modules directory, go up to parent
+        basePath = '/' + pathParts.slice(0, modulesIndex).join('/');
+    } else {
+        // We're not in modules directory, use current path
+        basePath = '/' + pathParts.slice(0, -1).join('/');
+    }
+    
+    return `${window.location.origin}${basePath}/modules/${moduleFiles[moduleId]}`;
 }
 
 // Export functions for inline use
