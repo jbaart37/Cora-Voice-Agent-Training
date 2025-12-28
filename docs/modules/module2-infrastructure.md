@@ -37,8 +37,7 @@ By the end of this module, you will:
 Before starting this module, ensure you completed Module 1:
 
 - ✅ Repository cloned or downloaded
-- ✅ Azure CLI installed and logged in
-- ✅ Azure AI Foundry project created with GPT model deployed
+- ✅ Azure CLI installed and logged in- ✅ Docker Desktop installed and running- ✅ Azure AI Foundry project created with GPT model deployed
 - ✅ Foundry endpoint URL and model deployment name ready
 
 **Quick verification:**
@@ -205,7 +204,7 @@ azd version
 Navigate to your project directory:
 
 ```bash
-cd c:\Local Dev\Cora-Voice-Agent-Training
+cd C:\[your-install-directory]\Cora-Voice-Agent-Training
 ```
 
 Initialize azd (this creates a local environment configuration):
@@ -253,9 +252,17 @@ Select an Azure location to use:
 
 ## 🔐 Step 3: Configure Environment Variables
 
-azd needs to know about your Azure AI Foundry endpoint and model. You have two options:
+Remember the `.env` file you created in Module 1? We'll use it now! azd needs to know about your Azure AI Foundry endpoint and model.
 
-### Option A: Set Environment Variables via azd (Recommended)
+**If you created your .env file in Module 1**, verify it has these values:
+
+```bash
+# From Module 1 - these should already be filled in
+AZURE_AI_FOUNDRY_ENDPOINT=https://your-foundry-project.openai.azure.com/
+AZURE_AI_MODEL_NAME=gpt-4o
+```
+
+Now set these values for azd using the values from your .env file:
 
 ```bash
 azd env set AZURE_OPENAI_ENDPOINT "https://your-foundry-project.openai.azure.com/"
@@ -264,31 +271,51 @@ azd env set AZURE_OPENAI_API_VERSION "2024-08-01-preview"
 ```
 
 **Replace:**
-- `https://your-foundry-project.openai.azure.com/` with your actual Foundry endpoint (from Module 1)
-- `gpt-4o` with your model deployment name
+- `https://your-foundry-project.openai.azure.com/` with the value from `AZURE_AI_FOUNDRY_ENDPOINT` in your .env file
+- `gpt-4o` with the value from `AZURE_AI_MODEL_NAME` in your .env file
 
-### Option B: Create .env File
+**💡 Why different variable names?**
+- Module 1's `.env`: Used for local development (`AZURE_AI_FOUNDRY_ENDPOINT`)
+- azd environment: Used for Azure deployment (`AZURE_OPENAI_ENDPOINT`)
+- Same values, different naming conventions for different purposes!
 
-Create a `.env` file in the project root:
-
-```bash
-# .env file
-AZURE_OPENAI_ENDPOINT=https://your-foundry-project.openai.azure.com/
-AZURE_OPENAI_DEPLOYMENT_NAME=gpt-4o
-AZURE_OPENAI_API_VERSION=2024-08-01-preview
-```
-
-Then load it:
-
-```bash
-azd env refresh
-```
-
-**🔒 Security Note:** The `.env` file is already in `.gitignore`, so your credentials won't be committed to source control.
+**🔒 Security Note:** These values are stored in azd's environment configuration (`.azure/[env-name]/.env`), separate from your root `.env` file.
 
 ---
 
-## 🚀 Step 4: Deploy Everything with `azd up`
+## � Before You Deploy: Docker Desktop Required
+
+**IMPORTANT:** `azd up` builds a Docker container image locally before pushing to Azure. You need Docker Desktop installed and running.
+
+### Install Docker Desktop (if not already installed)
+
+**Windows:**
+- Download: [Docker Desktop for Windows](https://docs.docker.com/desktop/install/windows-install/)
+- Requires: Windows 10/11 64-bit with WSL 2
+- After install: Launch Docker Desktop and wait for it to start
+
+**Mac:**
+- Download: [Docker Desktop for Mac](https://docs.docker.com/desktop/install/mac-install/)
+- Supports: Apple Silicon (M1/M2) and Intel chips
+- After install: Launch Docker Desktop from Applications
+
+**Linux:**
+- Install: [Docker Engine for Linux](https://docs.docker.com/engine/install/)
+- No Desktop version needed - just Docker Engine
+
+### Verify Docker is Running
+
+```bash
+docker --version
+```
+
+You should see output like: `Docker version 24.0.x`
+
+**💡 Pro Tip:** Make sure Docker Desktop shows "Engine running" in the bottom-left corner before proceeding!
+
+---
+
+## �🚀 Step 4: Deploy Everything with `azd up`
 
 This is the moment you've been waiting for. One command deploys everything:
 
