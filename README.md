@@ -110,9 +110,10 @@ Choose your learning path:
 
 ### Option B: GitHub Repository
 1. Clone this repository
-2. Start with [Module 1: Overview](./docs/modules/module1-overview.md)
-3. Follow each module in sequence with hands-on exercises
-4. All code and infrastructure files are included
+2. Copy `.env.example` to `.env` and fill in your Azure credentials
+3. Start with [Module 1: Overview](./docs/modules/module1-overview.md)
+4. Follow each module in sequence with hands-on exercises
+5. All code and infrastructure files are included
 
 ### Option C: Instructor-Led Training
 1. Instructor will provide access to training materials
@@ -125,6 +126,7 @@ Choose your learning path:
 ```
 Cora-Voice-Agent-Training/
 ├── README.md                    # This file
+├── .env.example                # Configuration template (copy to .env)
 ├── docs/                        # Training site (GitHub Pages)
 │   ├── index.html              # Training landing page
 │   ├── modules/                # 6 training modules with hands-on exercises

@@ -266,7 +266,17 @@ You should see your environment name (e.g., `cora-dev`) listed as the default.
 
 Remember the `.env` file you created in Module 1? We'll use it now! azd needs to know about your Azure AI Foundry endpoint and model.
 
-**If you created your .env file in Module 1**, verify it has these values:
+**If you didn't create a .env file yet**, copy the example:
+
+```bash
+# Windows
+copy .env.example .env
+
+# Mac/Linux
+cp .env.example .env
+```
+
+**Verify your .env file has these values filled in:**
 
 ```bash
 # From Module 1 - these should already be filled in

@@ -293,7 +293,17 @@ In Module 2, these will all be created in **one resource group**:
 - 👥 **Team reference** - Share the template (without secrets!)
 - 🧪 **Local testing** - Run the app locally later
 
-Create a file named `.env` in the project root folder (`c:\Local Dev\Cora-Voice-Agent-Training\.env`):
+**Quick start:** Copy the example file and edit it:
+
+```bash
+# Copy the example file to .env
+copy .env.example .env
+
+# Or on Mac/Linux:
+cp .env.example .env
+```
+
+Then open `.env` and fill in your actual values. Here's what the file contains:
 
 ```env
 # =================================================================
