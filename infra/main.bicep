@@ -103,7 +103,7 @@ module web 'core/host/container-app.bicep' = {
     containerRegistryName: containerRegistry.outputs.name
     containerCpuCoreCount: '1.0'
     containerMemory: '2.0Gi'
-    env: [
+    env: !empty(azureOpenAIApiKey) ? [
       {
         name: 'AZURE_AI_FOUNDRY_ENDPOINT'
         value: azureOpenAIEndpoint
@@ -128,13 +128,34 @@ module web 'core/host/container-app.bicep' = {
         name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
         value: monitoring.outputs.applicationInsightsConnectionString
       }
+    ] : [
+      {
+        name: 'AZURE_AI_FOUNDRY_ENDPOINT'
+        value: azureOpenAIEndpoint
+      }
+      {
+        name: 'AZURE_AI_MODEL_NAME'
+        value: modelName
+      }
+      {
+        name: 'FLASK_ENV'
+        value: 'production'
+      }
+      {
+        name: 'AZURE_STORAGE_ACCOUNT_NAME'
+        value: storage.outputs.name
+      }
+      {
+        name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
+        value: monitoring.outputs.applicationInsightsConnectionString
+      }
     ]
-    secrets: [
+    secrets: !empty(azureOpenAIApiKey) ? [
       {
         name: 'azure-ai-api-key'
         value: azureOpenAIApiKey
       }
-    ]
+    ] : []
     targetPort: 5000
   }
 }
