@@ -314,6 +314,43 @@ You should see your endpoint and model name listed.
 
 ---
 
+## 📋 Step 3.5: Register Azure Resource Providers
+
+**CRITICAL STEP:** Before running `azd up`, you must register the required Azure resource providers in your subscription.
+
+### Why Do I Need This?
+
+Azure subscriptions don't automatically have all resource types enabled. Container Apps and related services require specific providers to be registered.
+
+### Register the Required Providers
+
+Run these commands:
+
+```bash
+az provider register --namespace Microsoft.App
+az provider register --namespace Microsoft.ContainerService
+```
+
+### Wait for Registration to Complete
+
+Registration takes 2-5 minutes. Check the status:
+
+```bash
+az provider show --namespace Microsoft.App --query "registrationState"
+az provider show --namespace Microsoft.ContainerService --query "registrationState"
+```
+
+**Wait until BOTH show "Registered" before proceeding!**
+
+You'll see:
+```
+"Registered"
+```
+
+**⚠️ If you skip this step:** Your `azd provision` will fail with error `SubscriptionIsNotRegistered`.
+
+---
+
 ## � Before You Deploy: Docker Desktop Required
 
 **IMPORTANT:** `azd up` builds a Docker container image locally before pushing to Azure. You need Docker Desktop installed and running.
@@ -468,7 +505,32 @@ Expected resources:
 
 ## 🐛 Troubleshooting Common Issues
 
-### Issue 1: `azd up` Fails with "Subscription not found"
+### Issue 1: "SubscriptionIsNotRegistered" Error
+
+**Error message:**
+```
+SubscriptionIsNotRegistered: Subscription 'xxxxx' is not registered 
+with the required resource providers Microsoft.App and Microsoft.ContainerService
+```
+
+**Solution:** You skipped Step 3.5! Register the providers:
+
+```bash
+az provider register --namespace Microsoft.App
+az provider register --namespace Microsoft.ContainerService
+```
+
+Wait 2-5 minutes, then verify:
+```bash
+az provider show --namespace Microsoft.App --query "registrationState"
+```
+
+Once both show "Registered", retry:
+```bash
+azd provision --no-prompt
+```
+
+### Issue 2: `azd up` Fails with "Subscription not found"
 
 **Solution:** Make sure you're logged in to Azure CLI:
 
@@ -479,7 +541,7 @@ az account set --subscription "Your Subscription Name"
 
 Then retry `azd up`.
 
-### Issue 2: "Location does not support Container Apps"
+### Issue 3: "Location does not support Container Apps"
 
 **Solution:** Choose a different region during `azd init`:
 
@@ -490,7 +552,7 @@ azd provision
 
 Supported regions: East US, East US 2, West US 2, North Europe, West Europe
 
-### Issue 3: "Failed to build Docker image"
+### Issue 4: "Failed to build Docker image"
 
 **Solution:** Ensure Docker Desktop is running (if on Windows/Mac):
 
@@ -502,7 +564,7 @@ docker ps
 
 If Docker isn't running, start Docker Desktop and retry.
 
-### Issue 4: Container App Deployed but Returns 502/503
+### Issue 5: Container App Deployed but Returns 502/503
 
 **Likely cause:** Environment variables not set correctly.
 
