@@ -3,10 +3,10 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "resourceGroupName": {
-      "value": "rg-voice-agent-simulator"
+      "value": ""
     },
     "azureOpenAIEndpoint": {
-      "value": "https://voice-agent-openai.openai.azure.com/"
+      "value": ""
     },
     "modelName": {
       "value": "gpt-4o-deployment"
