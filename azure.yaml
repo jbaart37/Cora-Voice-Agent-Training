@@ -8,9 +8,8 @@ infra:
   path: infra
   module: main
   parameters:
-    environmentName: ${AZURE_ENV_NAME}
-    location: ${AZURE_LOCATION}
-    principalId: ${AZURE_PRINCIPAL_ID}
+    environmentName: ${environmentName}
+    location: ${location}
 
 services:
   web:
