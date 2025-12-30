@@ -48,6 +48,19 @@ Before starting the Cora Voice Agent Workshop, ensure you have the following req
   az login
   ```
 
+#### Register Azure Resource Providers
+After logging in with Azure CLI, register the required resource providers:
+```bash
+az provider register --namespace Microsoft.App
+az provider register --namespace Microsoft.ContainerService
+```
+
+These providers are needed for Container Apps deployment. Registration may take a few minutes. You can check the status with:
+```bash
+az provider show --namespace Microsoft.App --query "registrationState"
+az provider show --namespace Microsoft.ContainerService --query "registrationState"
+```
+
 #### Azure Developer CLI (azd)
 - **Azure Developer CLI** (for infrastructure deployment)
 - [Install azd](https://learn.microsoft.com/azure/developer/azure-developer-cli/install-azd)
@@ -102,6 +115,7 @@ Before the workshop begins, verify:
 - [ ] Azure subscription access confirmed
 - [ ] Azure AI Foundry access approved (GPT-4/GPT-4o deployed)
 - [ ] Azure CLI installed and logged in (`az login`)
+- [ ] Azure resource providers registered (`Microsoft.App` and `Microsoft.ContainerService`)
 - [ ] Azure Developer CLI (azd) installed
 - [ ] Docker Desktop installed and running
 - [ ] VS Code installed
