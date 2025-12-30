@@ -31,7 +31,7 @@ var abbrs = loadJsonContent('./abbreviations.json')
 var resourceToken = toLower(uniqueString(subscription().id, environmentName, location))
 var tags = {
   'azd-env-name': environmentName
-  'application': 'voice-agent-simulator'
+  application: 'voice-agent-simulator'
 }
 
 // Use existing resource group name or create new one based on environment
