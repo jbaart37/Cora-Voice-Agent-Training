@@ -22,8 +22,8 @@ infra:
   path: infra
   module: main
   parameters:
-    environmentName: ${AZURE_ENV_NAME}
-    location: ${AZURE_LOCATION}
+    environmentName: ${environmentName}
+    location: ${location}
     azureOpenAIEndpoint: ${azureOpenAIEndpoint}
     modelName: ${modelName}
     resourceGroupName: ${resourceGroupName}
