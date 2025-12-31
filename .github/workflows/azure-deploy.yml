@@ -44,6 +44,13 @@ jobs:
         with:
           creds: '{"clientId":"${{ secrets.AZURE_CLIENT_ID }}","clientSecret":"${{ secrets.AZURE_CLIENT_SECRET }}","subscriptionId":"${{ secrets.AZURE_SUBSCRIPTION_ID }}","tenantId":"${{ secrets.AZURE_TENANT_ID }}"}'
 
+      - name: Log in to azd
+        run: |
+          azd auth login --client-id "${{ secrets.AZURE_CLIENT_ID }}" \
+            --client-secret "${{ secrets.AZURE_CLIENT_SECRET }}" \
+            --tenant-id "${{ secrets.AZURE_TENANT_ID }}"
+        shell: bash
+
       - name: Set azd environment variables
         run: |
           azd env new ${{ github.event.inputs.environment_name }} --location ${{ github.event.inputs.location }} --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }}
