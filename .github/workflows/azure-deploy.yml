@@ -126,6 +126,7 @@ jobs:
           az group create --name "$RG_NAME" --location "${{ github.event.inputs.location }}"
           
           # Deploy Bicep template using Azure CLI
+          set +e  # Don't exit on error, capture it
           az deployment sub create \
             --name "$DEPLOYMENT_NAME" \
             --location "${{ github.event.inputs.location }}" \
@@ -136,7 +137,21 @@ jobs:
             --parameters modelName="${{ secrets.AZURE_OPENAI_MODEL_NAME }}" \
             --parameters resourceGroupName="$RG_NAME"
           
-          echo "Provisioning completed successfully!"
+          DEPLOY_EXIT_CODE=$?
+          set -e
+          
+          if [ $DEPLOY_EXIT_CODE -ne 0 ]; then
+            echo "❌ Deployment failed! Getting detailed error information..."
+            echo "=== Subscription-level deployment operations ==="
+            az deployment operation sub list --name "$DEPLOYMENT_NAME" --query '[].properties.{resource:targetResource.resourceName, status:provisioningState, error:statusMessage.error}' -o json || true
+            echo "=== Detailed resource group deployment operations ==="
+            az deployment operation group list --resource-group "$RG_NAME" --name "container-apps-environment" --query '[].properties.statusMessage' -o json || true
+            echo "=== All operations in resource group ==="
+            az deployment operation group list --resource-group "$RG_NAME" --query '[].{operation:properties.targetResource.resourceName, status:properties.provisioningState}' -o table || true
+            exit 1
+          fi
+          
+          echo "✅ Provisioning completed successfully!"
           
           # Store outputs for azd deploy
           OUTPUTS=$(az deployment sub show --name "$DEPLOYMENT_NAME" --query properties.outputs -o json)
