@@ -73,18 +73,17 @@ jobs:
 
       - name: Provision and Deploy
         run: |
-          azd provision --no-prompt \
-            --parameter environmentName=${{ github.event.inputs.environment_name }} \
-            --parameter location=${{ github.event.inputs.location }} \
-            --parameter azureOpenAIEndpoint=${{ secrets.AZURE_OPENAI_ENDPOINT }} \
-            --parameter modelName=${{ secrets.AZURE_OPENAI_MODEL_NAME }} \
-            ${{ github.event.inputs.resource_group_name != '' && format('--parameter resourceGroupName={0}', github.event.inputs.resource_group_name) || '' }}
-          
+          azd provision --no-prompt
           azd deploy --no-prompt
         env:
           AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           AZURE_ENV_NAME: ${{ github.event.inputs.environment_name }}
           AZURE_LOCATION: ${{ github.event.inputs.location }}
+          environmentName: ${{ github.event.inputs.environment_name }}
+          location: ${{ github.event.inputs.location }}
+          azureOpenAIEndpoint: ${{ secrets.AZURE_OPENAI_ENDPOINT }}
+          modelName: ${{ secrets.AZURE_OPENAI_MODEL_NAME }}
+          resourceGroupName: ${{ github.event.inputs.resource_group_name }}
 
       - name: Get deployment outputs
         id: outputs
