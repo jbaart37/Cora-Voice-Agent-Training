@@ -45,6 +45,47 @@ jobs:
         with:
           creds: '{"clientId":"${{ secrets.AZURE_CLIENT_ID }}","clientSecret":"${{ secrets.AZURE_CLIENT_SECRET }}","subscriptionId":"${{ secrets.AZURE_SUBSCRIPTION_ID }}","tenantId":"${{ secrets.AZURE_TENANT_ID }}"}'
 
+      - name: Verify Service Principal Permissions
+        run: |
+          echo "🔍 Checking if service principal has required permissions..."
+          
+          # Check if service principal has User Access Administrator role
+          ROLE_CHECK=$(az role assignment list \
+            --assignee ${{ secrets.AZURE_CLIENT_ID }} \
+            --scope /subscriptions/${{ secrets.AZURE_SUBSCRIPTION_ID }} \
+            --query "[?roleDefinitionName=='User Access Administrator']" \
+            --output tsv)
+          
+          if [ -z "$ROLE_CHECK" ]; then
+            echo "❌ ERROR: Service principal is missing 'User Access Administrator' role"
+            echo ""
+            echo "The deployment requires this role to assign Storage Data Contributor permissions"
+            echo "to the Container App's managed identity during infrastructure provisioning."
+            echo ""
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            echo "🔧 REQUIRED ONE-TIME SETUP:"
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            echo ""
+            echo "Run this command ONCE to grant the required permission:"
+            echo ""
+            echo "  az role assignment create \\"
+            echo "    --assignee ${{ secrets.AZURE_CLIENT_ID }} \\"
+            echo "    --role 'User Access Administrator' \\"
+            echo "    --scope /subscriptions/${{ secrets.AZURE_SUBSCRIPTION_ID }}"
+            echo ""
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            echo ""
+            echo "Note: This is a one-time setup. After granting this permission,"
+            echo "all future deployments will work automatically."
+            echo ""
+            exit 1
+          fi
+          
+          echo "✅ Service principal has required permissions"
+          echo "   Role: User Access Administrator"
+          echo "   Scope: Subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }}"
+        shell: bash
+
       - name: Log in to azd
         run: |
           azd auth login --client-id "${{ secrets.AZURE_CLIENT_ID }}" \
