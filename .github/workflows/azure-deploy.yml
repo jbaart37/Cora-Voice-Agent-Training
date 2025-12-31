@@ -111,17 +111,19 @@ jobs:
           
           DEPLOYMENT_NAME="voiceagent-$(date +%Y%m%d-%H%M%S)"
           
-          # Get resource group name from .env or generate it
+          # Determine resource group name - pass empty to let Bicep auto-generate and create it
           RG_NAME="${{ github.event.inputs.resource_group_name }}"
-          if [ -z "$RG_NAME" ]; then
-            RG_NAME="rg-${{ github.event.inputs.environment_name }}"
-          fi
           
           echo "Deploying to subscription: ${{ secrets.AZURE_SUBSCRIPTION_ID }}"
-          echo "Resource group: $RG_NAME"
+          if [ -n "$RG_NAME" ]; then
+            echo "Using existing resource group: $RG_NAME"
+          else
+            echo "Bicep will auto-generate resource group name: rg-${{ github.event.inputs.environment_name }}"
+          fi
           echo "Deployment name: $DEPLOYMENT_NAME"
           
           # Deploy Bicep template using Azure CLI
+          # Pass empty string for resourceGroupName to let Bicep create it
           az deployment sub create \
             --name "$DEPLOYMENT_NAME" \
             --location "${{ github.event.inputs.location }}" \
@@ -130,7 +132,7 @@ jobs:
             --parameters location="${{ github.event.inputs.location }}" \
             --parameters azureOpenAIEndpoint="${{ secrets.AZURE_OPENAI_ENDPOINT }}" \
             --parameters modelName="${{ secrets.AZURE_OPENAI_MODEL_NAME }}" \
-            --parameters resourceGroupName="$RG_NAME"
+            --parameters resourceGroupName=""
           
           echo "Provisioning completed successfully!"
           
