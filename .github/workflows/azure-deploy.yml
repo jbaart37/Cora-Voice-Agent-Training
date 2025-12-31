@@ -64,6 +64,9 @@ jobs:
           azd env set azureOpenAIEndpoint ${{ secrets.AZURE_OPENAI_ENDPOINT }}
           azd env set modelName ${{ secrets.AZURE_OPENAI_MODEL_NAME }}
           azd env set resourceGroupName "${{ github.event.inputs.resource_group_name }}"
+          
+          # Remove quotes from parameter values (azd env set adds them, but Bicep needs unquoted values)
+          sed -i 's/="\([^"]*\)"/=\1/g' .azure/${{ github.event.inputs.environment_name }}/.env
         shell: bash
 
       - name: Debug azd environment setup
