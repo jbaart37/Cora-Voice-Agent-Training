@@ -61,14 +61,14 @@ jobs:
           # Completely overwrite .env file with unquoted values for infrastructure parameters
           # This ensures no quotes interfere with Bicep parameter parsing
           cat > .azure/${{ github.event.inputs.environment_name }}/.env <<EOF
-          AZURE_ENV_NAME=${{ github.event.inputs.environment_name }}
-          AZURE_LOCATION=${{ github.event.inputs.location }}
-          AZURE_SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          environmentName=${{ github.event.inputs.environment_name }}
-          location=${{ github.event.inputs.location }}
-          azureOpenAIEndpoint=${{ secrets.AZURE_OPENAI_ENDPOINT }}
-          modelName=${{ secrets.AZURE_OPENAI_MODEL_NAME }}
-          EOF
+AZURE_ENV_NAME=${{ github.event.inputs.environment_name }}
+AZURE_LOCATION=${{ github.event.inputs.location }}
+AZURE_SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID }}
+environmentName=${{ github.event.inputs.environment_name }}
+location=${{ github.event.inputs.location }}
+azureOpenAIEndpoint=${{ secrets.AZURE_OPENAI_ENDPOINT }}
+modelName=${{ secrets.AZURE_OPENAI_MODEL_NAME }}
+EOF
           
           # Add optional resource group name if provided
           if [ -n "${{ github.event.inputs.resource_group_name }}" ]; then
