@@ -109,7 +109,11 @@ jobs:
           echo "Current directory: $(pwd)"
           echo "Using azd environment: $(azd env get-values | grep AZURE_ENV_NAME)"
           
-          echo "Running azd provision with debug logging..."
+          echo "Running azd provision with verbose debug logging..."
+          azd provision --no-prompt -v debug 2>&1 | head -n 50 || true
+          
+          echo ""
+          echo "=== Running actual provision (non-debug) ==="
           azd provision --no-prompt
           
           echo "Deploying application..."
