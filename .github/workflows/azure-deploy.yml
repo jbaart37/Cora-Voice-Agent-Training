@@ -72,7 +72,15 @@ jobs:
           cat .azure/${{ github.event.inputs.environment_name }}/.env
 
       - name: Provision and Deploy
-        run: azd up --no-prompt
+        run: |
+          azd provision --no-prompt \
+            --parameter environmentName=${{ github.event.inputs.environment_name }} \
+            --parameter location=${{ github.event.inputs.location }} \
+            --parameter azureOpenAIEndpoint=${{ secrets.AZURE_OPENAI_ENDPOINT }} \
+            --parameter modelName=${{ secrets.AZURE_OPENAI_MODEL_NAME }} \
+            ${{ github.event.inputs.resource_group_name != '' && format('--parameter resourceGroupName={0}', github.event.inputs.resource_group_name) || '' }}
+          
+          azd deploy --no-prompt
         env:
           AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           AZURE_ENV_NAME: ${{ github.event.inputs.environment_name }}
