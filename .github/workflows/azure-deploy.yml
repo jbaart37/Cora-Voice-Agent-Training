@@ -53,26 +53,41 @@ jobs:
         shell: bash
 
       - name: Set azd environment variables
+        working-directory: ${{ github.workspace }}
         run: |
+          # Create new azd environment
           azd env new ${{ github.event.inputs.environment_name }} --location ${{ github.event.inputs.location }} --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           
-          # Use azd env set to set parameters
-          azd env set environmentName ${{ github.event.inputs.environment_name }}
-          azd env set location ${{ github.event.inputs.location }}
-          azd env set azureOpenAIEndpoint ${{ secrets.AZURE_OPENAI_ENDPOINT }}
-          azd env set modelName ${{ secrets.AZURE_OPENAI_MODEL_NAME }}
+          # Verify .azure directory structure
+          echo "=== .azure directory structure ==="
+          ls -la .azure/
+          ls -la .azure/${{ github.event.inputs.environment_name }}/
           
+          # Write infrastructure parameters to .env file
+          # These variable names must match azure.yaml parameters section
+          cat >> .azure/${{ github.event.inputs.environment_name }}/.env << 'EOF'
+          environmentName=${{ github.event.inputs.environment_name }}
+          location=${{ github.event.inputs.location }}
+          azureOpenAIEndpoint=${{ secrets.AZURE_OPENAI_ENDPOINT }}
+          modelName=${{ secrets.AZURE_OPENAI_MODEL_NAME }}
+          EOF
+          
+          # Add optional resource group name if provided
           if [ -n "${{ github.event.inputs.resource_group_name }}" ]; then
-            azd env set resourceGroupName ${{ github.event.inputs.resource_group_name }}
+            echo "resourceGroupName=${{ github.event.inputs.resource_group_name }}" >> .azure/${{ github.event.inputs.environment_name }}/.env
           fi
           
-          # Display the env values for debugging
-          echo "=== azd environment values ==="
-          azd env get-values
+          # Display the final .env file for debugging
+          echo "=== Final .env file contents ==="
+          cat .azure/${{ github.event.inputs.environment_name }}/.env
+        shell: bash
 
       - name: Provision and Deploy
+        working-directory: ${{ github.workspace }}
         run: |
           echo "Starting provisioning with parameters from .env file..."
+          echo "Current directory: $(pwd)"
+          echo "Using azd environment: $(azd env get-values | grep AZURE_ENV_NAME)"
           azd provision --no-prompt
           
           echo "Deploying application..."
