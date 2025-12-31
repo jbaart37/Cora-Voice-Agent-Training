@@ -104,16 +104,45 @@ jobs:
           azd env select ${{ github.event.inputs.environment_name }}
         shell: bash
 
-      - name: Provision and Deploy
+      - name: Provision with Azure CLI (bypass azd bug)
         working-directory: ${{ github.workspace }}
         run: |
-          echo "Starting provisioning with parameters from .env file..."
-          echo "Current directory: $(pwd)"
-          echo "Using azd environment: $(azd env get-values | grep AZURE_ENV_NAME)"
+          echo "Provisioning Azure resources using Azure CLI directly (bypassing azd v1.22.5 bug)..."
           
-          echo "Running azd provision..."
-          azd provision --no-prompt
+          DEPLOYMENT_NAME="voiceagent-$(date +%Y%m%d-%H%M%S)"
           
+          # Get resource group name from .env or generate it
+          RG_NAME="${{ github.event.inputs.resource_group_name }}"
+          if [ -z "$RG_NAME" ]; then
+            RG_NAME="rg-${{ github.event.inputs.environment_name }}"
+          fi
+          
+          echo "Deploying to subscription: ${{ secrets.AZURE_SUBSCRIPTION_ID }}"
+          echo "Resource group: $RG_NAME"
+          echo "Deployment name: $DEPLOYMENT_NAME"
+          
+          # Deploy Bicep template using Azure CLI
+          az deployment sub create \
+            --name "$DEPLOYMENT_NAME" \
+            --location "${{ github.event.inputs.location }}" \
+            --template-file infra/main.bicep \
+            --parameters environmentName="${{ github.event.inputs.environment_name }}" \
+            --parameters location="${{ github.event.inputs.location }}" \
+            --parameters azureOpenAIEndpoint="${{ secrets.AZURE_OPENAI_ENDPOINT }}" \
+            --parameters modelName="${{ secrets.AZURE_OPENAI_MODEL_NAME }}" \
+            --parameters resourceGroupName="$RG_NAME"
+          
+          echo "Provisioning completed successfully!"
+          
+          # Store outputs for azd deploy
+          OUTPUTS=$(az deployment sub show --name "$DEPLOYMENT_NAME" --query properties.outputs -o json)
+          echo "Deployment outputs: $OUTPUTS"
+        env:
+          AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Deploy application with azd
+        working-directory: ${{ github.workspace }}
+        run: |
           echo "Deploying application..."
           azd deploy --no-prompt
         env:
