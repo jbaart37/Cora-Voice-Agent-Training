@@ -121,6 +121,44 @@ Choose your learning path:
 3. Complete exercises during designated hands-on sessions
 4. Ask questions in real-time
 
+---
+
+## ⚡ Quick Deployment Options
+
+Choose how you want to deploy the application:
+
+### 🔵 Option 1: GitHub Actions Deployment (No Local Setup Required)
+
+**Best for:** Quick deployments without installing local tools
+
+[![Deploy to Azure](https://img.shields.io/badge/Deploy%20to-Azure-blue?style=for-the-badge&logo=microsoftazure)](docs/GITHUB_ACTIONS_DEPLOYMENT.md)
+
+**Steps:**
+1. Fork this repository
+2. Configure GitHub Secrets with Azure credentials
+3. Click "Run workflow" to deploy
+4. ✅ No Docker Desktop, no local azd needed!
+
+📖 **[Full GitHub Actions Setup Guide](docs/GITHUB_ACTIONS_DEPLOYMENT.md)**
+
+### 🟢 Option 2: Local Deployment with azd
+
+**Best for:** Workshop participants and developers who want to customize
+
+**Requirements:** Docker Desktop, Azure CLI, azd
+
+**Steps:**
+```bash
+# Clone the repository
+git clone https://github.com/YOUR_USERNAME/Cora-Voice-Agent-Training.git
+cd Cora-Voice-Agent-Training
+
+# Deploy with Azure Developer CLI
+azd up
+```
+
+📖 **Follow the workshop modules for detailed local deployment instructions**
+
 ## 📂 Repository Structure
 
 ```
