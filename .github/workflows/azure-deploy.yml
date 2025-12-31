@@ -34,9 +34,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install azd
+      - name: Install azd (pinned to known stable v1.19.0)
         run: |
-          curl -fsSL https://aka.ms/install-azd.sh | bash
+          curl -fsSL https://aka.ms/install-azd.sh | bash -s -- --version v1.19.0
           azd version
         shell: bash
 
@@ -58,15 +58,14 @@ jobs:
           # Create new azd environment
           azd env new ${{ github.event.inputs.environment_name }} --location ${{ github.event.inputs.location }} --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           
-          # Set infrastructure parameters using azd env set (official method)
-          azd env set environmentName ${{ github.event.inputs.environment_name }}
-          azd env set location ${{ github.event.inputs.location }}
-          azd env set azureOpenAIEndpoint ${{ secrets.AZURE_OPENAI_ENDPOINT }}
-          azd env set modelName ${{ secrets.AZURE_OPENAI_MODEL_NAME }}
-          azd env set resourceGroupName "${{ github.event.inputs.resource_group_name }}"
-          
-          # Remove quotes from parameter values (azd env set adds them, but Bicep needs unquoted values)
-          sed -i 's/="\([^"]*\)"/=\1/g' .azure/${{ github.event.inputs.environment_name }}/.env
+          # Manually write minimal .env with only infrastructure parameters (no azd metadata)
+          cat > .azure/${{ github.event.inputs.environment_name }}/.env <<'EOF'
+environmentName=${{ github.event.inputs.environment_name }}
+location=${{ github.event.inputs.location }}
+azureOpenAIEndpoint=${{ secrets.AZURE_OPENAI_ENDPOINT }}
+modelName=${{ secrets.AZURE_OPENAI_MODEL_NAME }}
+resourceGroupName=${{ github.event.inputs.resource_group_name }}
+EOF
         shell: bash
 
       - name: Debug azd environment setup
