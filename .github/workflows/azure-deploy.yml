@@ -37,6 +37,7 @@ jobs:
       - name: Install azd
         run: |
           curl -fsSL https://aka.ms/install-azd.sh | bash
+          azd version
         shell: bash
 
       - name: Log in to Azure
@@ -73,13 +74,10 @@ jobs:
 
       - name: Provision and Deploy
         run: |
-          azd provision --no-prompt \
-            --infra-parameter environmentName=${{ github.event.inputs.environment_name }} \
-            --infra-parameter location=${{ github.event.inputs.location }} \
-            --infra-parameter azureOpenAIEndpoint=${{ secrets.AZURE_OPENAI_ENDPOINT }} \
-            --infra-parameter modelName=${{ secrets.AZURE_OPENAI_MODEL_NAME }} \
-            ${{ github.event.inputs.resource_group_name != '' && format('--infra-parameter resourceGroupName={0}', github.event.inputs.resource_group_name) || '' }}
+          echo "Starting provisioning with parameters from .env file..."
+          azd provision --no-prompt
           
+          echo "Deploying application..."
           azd deploy --no-prompt
         env:
           AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
