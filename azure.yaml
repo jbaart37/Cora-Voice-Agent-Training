@@ -21,6 +21,12 @@ infra:
   provider: bicep
   path: infra
   module: main
+  parameters:
+    environmentName: ${AZURE_ENV_NAME}
+    location: ${AZURE_LOCATION}
+    azureOpenAIEndpoint: ${azureOpenAIEndpoint}
+    modelName: ${modelName}
+    resourceGroupName: ${resourceGroupName}
 
 services:
   web:
