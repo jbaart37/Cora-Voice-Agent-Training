@@ -141,6 +141,20 @@ docs/
 2. Check that _config.yml references the correct theme
 3. Clear browser cache
 
+### Deployment Error: Subnet Delegation Conflict
+
+**Error**: `ManagedEnvironmentSubnetIsDelegated` - subnet cannot be used as it's already delegated
+
+**Cause**: Occurs when redeploying to a resource group that has a failed Container Apps Environment from a previous deployment.
+
+**Solution**: Delete the resource group and redeploy:
+```bash
+az group delete --name rg-dev --yes
+# Wait for deletion to complete, then run the workflow again
+```
+
+Alternatively, use a different environment name in the workflow to create a fresh resource group.
+
 ## 🎯 Next Steps
 
 After deployment:
