@@ -86,11 +86,20 @@ jobs:
           ls -lah .azure/
           ls -lah .azure/${{ github.event.inputs.environment_name }}/
           
-          echo "=== Contents of .env file ==="
-          cat .azure/${{ github.event.inputs.environment_name }}/.env
+          echo "=== Contents of .env file (with hidden characters) ==="
+          cat .azure/${{ github.event.inputs.environment_name }}/.env | cat -A
           
           echo "=== azd env get-values output ==="
           azd env get-values
+          
+          echo "=== azure.yaml parameters section ==="
+          awk '/parameters:/,/^infra:/' azure.yaml
+          
+          echo "=== First 10 lines of main.bicep ==="
+          head -n 10 infra/main.bicep
+          
+          echo "=== Selecting azd environment explicitly ==="
+          azd env select ${{ github.event.inputs.environment_name }}
         shell: bash
 
       - name: Provision and Deploy
@@ -99,6 +108,8 @@ jobs:
           echo "Starting provisioning with parameters from .env file..."
           echo "Current directory: $(pwd)"
           echo "Using azd environment: $(azd env get-values | grep AZURE_ENV_NAME)"
+          
+          echo "Running azd provision with debug logging..."
           azd provision --no-prompt
           
           echo "Deploying application..."
