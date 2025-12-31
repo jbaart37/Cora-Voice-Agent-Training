@@ -19,7 +19,8 @@ parameters:
 
 infra:
   provider: bicep
-  path: infra/main.bicep
+  path: infra
+  module: main
   parameters:
     environmentName: ${environmentName}
     location: ${location}
