@@ -195,19 +195,46 @@ jobs:
           
           echo "✅ Provisioning completed successfully!"
           
-          # Get outputs from deployment
+          # Get outputs from deployment - with detailed debugging
+          echo "=== Fetching deployment outputs ==="
           OUTPUTS=$(az deployment sub show --name "$DEPLOYMENT_NAME" --query properties.outputs -o json)
+          echo "Raw outputs: $OUTPUTS"
           
-          CONTAINER_REGISTRY=$(echo $OUTPUTS | jq -r '.AZURE_CONTAINER_REGISTRY_NAME.value')
-          RESOURCE_GROUP=$(echo $OUTPUTS | jq -r '.AZURE_RESOURCE_GROUP.value')
-          WEB_URI=$(echo $OUTPUTS | jq -r '.WEB_URI.value')
+          # Extract values with error handling
+          CONTAINER_REGISTRY=$(echo "$OUTPUTS" | jq -r '.AZURE_CONTAINER_REGISTRY_NAME.value // empty')
+          RESOURCE_GROUP=$(echo "$OUTPUTS" | jq -r '.AZURE_RESOURCE_GROUP.value // empty')
+          WEB_URI=$(echo "$OUTPUTS" | jq -r '.WEB_URI.value // empty')
+          
+          # Fallback to resource group name if not in outputs
+          if [ -z "$RESOURCE_GROUP" ]; then
+            RESOURCE_GROUP="$RG_NAME"
+          fi
           
           echo "Deployment outputs:"
           echo "  Container Registry: $CONTAINER_REGISTRY"
           echo "  Resource Group: $RESOURCE_GROUP"
           echo "  Web URI: $WEB_URI"
           
-          # Export for next steps
+          # Validate we have required outputs
+          if [ -z "$CONTAINER_REGISTRY" ] || [ "$CONTAINER_REGISTRY" == "null" ]; then
+            echo "❌ ERROR: Failed to get Container Registry name from deployment outputs"
+            echo "Attempting to find registry in resource group..."
+            CONTAINER_REGISTRY=$(az acr list --resource-group "$RG_NAME" --query '[0].name' -o tsv)
+            echo "  Found registry: $CONTAINER_REGISTRY"
+          fi
+          
+          if [ -z "$WEB_URI" ] || [ "$WEB_URI" == "null" ]; then
+            echo "⚠️  WARNING: Failed to get Web URI from deployment outputs"
+            echo "Attempting to find Container App in resource group..."
+            WEB_URI=$(az containerapp list --resource-group "$RG_NAME" --query '[0].properties.configuration.ingress.fqdn' -o tsv)
+            if [ -n "$WEB_URI" ]; then
+              WEB_URI="https://$WEB_URI"
+              echo "  Found Web URI: $WEB_URI"
+            fi
+          fi
+          
+          # Export for next steps (must be non-empty)
+
           echo "CONTAINER_REGISTRY=$CONTAINER_REGISTRY" >> $GITHUB_OUTPUT
           echo "RESOURCE_GROUP=$RESOURCE_GROUP" >> $GITHUB_OUTPUT
           echo "WEB_URI=$WEB_URI" >> $GITHUB_OUTPUT
