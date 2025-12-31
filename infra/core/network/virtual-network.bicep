@@ -32,14 +32,7 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2023-05-01' = {
         name: containerAppsSubnetName
         properties: {
           addressPrefix: containerAppsSubnetPrefix
-          delegations: [
-            {
-              name: 'Microsoft.App.environments'
-              properties: {
-                serviceName: 'Microsoft.App/environments'
-              }
-            }
-          ]
+          // Delegation removed - Container Apps Environment will add it automatically
         }
       }
       {
