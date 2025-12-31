@@ -18,6 +18,10 @@ on:
           - westus2
           - westeurope
           - northeurope
+      resource_group_name:
+        description: 'Resource group name (leave empty to auto-generate based on environment name)'
+        required: false
+        default: ''
 
 permissions:
   id-token: write
@@ -46,6 +50,9 @@ jobs:
           azd env new ${{ github.event.inputs.environment_name }} --location ${{ github.event.inputs.location }} --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           azd env set azureOpenAIEndpoint "${{ secrets.AZURE_OPENAI_ENDPOINT }}"
           azd env set modelName "${{ secrets.AZURE_OPENAI_MODEL_NAME }}"
+          if [ -n "${{ github.event.inputs.resource_group_name }}" ]; then
+            azd env set resourceGroupName "${{ github.event.inputs.resource_group_name }}"
+          fi
 
       - name: Provision and Deploy
         run: azd up --no-prompt
