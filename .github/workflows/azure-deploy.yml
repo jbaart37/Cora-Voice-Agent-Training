@@ -54,13 +54,22 @@ jobs:
       - name: Set azd environment variables
         run: |
           azd env new ${{ github.event.inputs.environment_name }} --location ${{ github.event.inputs.location }} --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          azd env set environmentName "${{ github.event.inputs.environment_name }}"
-          azd env set location "${{ github.event.inputs.location }}"
-          azd env set azureOpenAIEndpoint "${{ secrets.AZURE_OPENAI_ENDPOINT }}"
-          azd env set modelName "${{ secrets.AZURE_OPENAI_MODEL_NAME }}"
+          
+          # Write parameters to azd environment .env file
+          cat >> .azure/${{ github.event.inputs.environment_name }}/.env << EOF
+          environmentName="${{ github.event.inputs.environment_name }}"
+          location="${{ github.event.inputs.location }}"
+          azureOpenAIEndpoint="${{ secrets.AZURE_OPENAI_ENDPOINT }}"
+          modelName="${{ secrets.AZURE_OPENAI_MODEL_NAME }}"
+          EOF
+          
           if [ -n "${{ github.event.inputs.resource_group_name }}" ]; then
-            azd env set resourceGroupName "${{ github.event.inputs.resource_group_name }}"
+            echo 'resourceGroupName="${{ github.event.inputs.resource_group_name }}"' >> .azure/${{ github.event.inputs.environment_name }}/.env
           fi
+          
+          # Display the env file for debugging
+          echo "=== azd environment .env file ==="
+          cat .azure/${{ github.event.inputs.environment_name }}/.env
 
       - name: Provision and Deploy
         run: azd up --no-prompt
