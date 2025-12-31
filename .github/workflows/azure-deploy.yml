@@ -58,20 +58,12 @@ jobs:
           # Create new azd environment
           azd env new ${{ github.event.inputs.environment_name }} --location ${{ github.event.inputs.location }} --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           
-          # Completely overwrite .env file with unquoted values for infrastructure parameters
-          ENV_FILE=".azure/${{ github.event.inputs.environment_name }}/.env"
-          echo "AZURE_ENV_NAME=${{ github.event.inputs.environment_name }}" > $ENV_FILE
-          echo "AZURE_LOCATION=${{ github.event.inputs.location }}" >> $ENV_FILE
-          echo "AZURE_SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID }}" >> $ENV_FILE
-          echo "environmentName=${{ github.event.inputs.environment_name }}" >> $ENV_FILE
-          echo "location=${{ github.event.inputs.location }}" >> $ENV_FILE
-          echo "azureOpenAIEndpoint=${{ secrets.AZURE_OPENAI_ENDPOINT }}" >> $ENV_FILE
-          echo "modelName=${{ secrets.AZURE_OPENAI_MODEL_NAME }}" >> $ENV_FILE
-          
-          # Add optional resource group name if provided
-          if [ -n "${{ github.event.inputs.resource_group_name }}" ]; then
-            echo "resourceGroupName=${{ github.event.inputs.resource_group_name }}" >> $ENV_FILE
-          fi
+          # Set infrastructure parameters using azd env set (official method)
+          azd env set environmentName ${{ github.event.inputs.environment_name }}
+          azd env set location ${{ github.event.inputs.location }}
+          azd env set azureOpenAIEndpoint ${{ secrets.AZURE_OPENAI_ENDPOINT }}
+          azd env set modelName ${{ secrets.AZURE_OPENAI_MODEL_NAME }}
+          azd env set resourceGroupName "${{ github.event.inputs.resource_group_name }}"
         shell: bash
 
       - name: Debug azd environment setup
