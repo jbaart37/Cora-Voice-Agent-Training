@@ -3,6 +3,20 @@ name: voice-agent-simulator
 metadata:
   template: voice-agent-simulator@1.1.0
 
+# Parameter definitions - these tell azd what parameters can be set in .env
+parameters:
+  environmentName:
+    type: string
+  location:
+    type: string
+  azureOpenAIEndpoint:
+    type: string
+  modelName:
+    type: string
+  resourceGroupName:
+    type: string
+    default: ""
+
 infra:
   provider: bicep
   path: infra
