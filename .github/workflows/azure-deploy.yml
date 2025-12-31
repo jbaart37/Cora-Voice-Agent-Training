@@ -146,6 +146,7 @@ jobs:
         shell: bash
 
       - name: Provision with Azure CLI (bypass azd bug)
+        id: provision
         working-directory: ${{ github.workspace }}
         run: |
           echo "Provisioning Azure resources using Azure CLI directly (bypassing azd v1.22.5 bug)..."
@@ -194,29 +195,80 @@ jobs:
           
           echo "✅ Provisioning completed successfully!"
           
-          # Store outputs for azd deploy
+          # Get outputs from deployment
           OUTPUTS=$(az deployment sub show --name "$DEPLOYMENT_NAME" --query properties.outputs -o json)
-          echo "Deployment outputs: $OUTPUTS"
+          
+          CONTAINER_REGISTRY=$(echo $OUTPUTS | jq -r '.AZURE_CONTAINER_REGISTRY_NAME.value')
+          RESOURCE_GROUP=$(echo $OUTPUTS | jq -r '.AZURE_RESOURCE_GROUP.value')
+          WEB_URI=$(echo $OUTPUTS | jq -r '.WEB_URI.value')
+          
+          echo "Deployment outputs:"
+          echo "  Container Registry: $CONTAINER_REGISTRY"
+          echo "  Resource Group: $RESOURCE_GROUP"
+          echo "  Web URI: $WEB_URI"
+          
+          # Export for next steps
+          echo "CONTAINER_REGISTRY=$CONTAINER_REGISTRY" >> $GITHUB_OUTPUT
+          echo "RESOURCE_GROUP=$RESOURCE_GROUP" >> $GITHUB_OUTPUT
+          echo "WEB_URI=$WEB_URI" >> $GITHUB_OUTPUT
         env:
           AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Deploy application with azd
+      - name: Build and deploy container application
         working-directory: ${{ github.workspace }}
         run: |
-          echo "Deploying application..."
-          azd deploy --no-prompt
+          echo "Building and deploying container application..."
+          
+          CONTAINER_REGISTRY="${{ steps.provision.outputs.CONTAINER_REGISTRY }}"
+          RESOURCE_GROUP="${{ steps.provision.outputs.RESOURCE_GROUP }}"
+          WEB_URI="${{ steps.provision.outputs.WEB_URI }}"
+          
+          echo "Container Registry: $CONTAINER_REGISTRY"
+          echo "Resource Group: $RESOURCE_GROUP"
+          
+          # Login to Azure Container Registry
+          echo "Logging in to ACR..."
+          az acr login --name "$CONTAINER_REGISTRY"
+          
+          # Build and push container image
+          echo "Building container image..."
+          IMAGE_TAG="$CONTAINER_REGISTRY.azurecr.io/voice-agent:${{ github.sha }}"
+          
+          docker build -t "$IMAGE_TAG" ./src
+          
+          echo "Pushing image to ACR..."
+          docker push "$IMAGE_TAG"
+          
+          # Find the Container App name (it's based on resource token from Bicep)
+          CONTAINER_APP=$(az containerapp list --resource-group "$RESOURCE_GROUP" --query '[0].name' -o tsv)
+          
+          echo "Container App name: $CONTAINER_APP"
+          
+          # Update Container App with new image
+          echo "Updating Container App..."
+          az containerapp update \
+            --name "$CONTAINER_APP" \
+            --resource-group "$RESOURCE_GROUP" \
+            --image "$IMAGE_TAG"
+          
+          echo "✅ Application deployed successfully!"
+          echo "🌐 Application URL: $WEB_URI"
         env:
           AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          AZURE_ENV_NAME: ${{ github.event.inputs.environment_name }}
-          AZURE_LOCATION: ${{ github.event.inputs.location }}
 
-      - name: Get deployment outputs
-        id: outputs
+      - name: Display deployment summary
         run: |
-          WEB_URI=$(azd env get-values | grep WEB_URI | cut -d '=' -f2 | tr -d '"')
-          echo "web_uri=$WEB_URI" >> $GITHUB_OUTPUT
-
-      - name: Display deployment URL
-        run: |
-          echo "🎉 Deployment complete!"
-          echo "🌐 Application URL: ${{ steps.outputs.outputs.web_uri }}"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "🎉 Deployment Complete!"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo ""
+          echo "📦 Application URL:"
+          echo "   ${{ steps.provision.outputs.WEB_URI }}"
+          echo ""
+          echo "📊 Resource Group:"
+          echo "   ${{ steps.provision.outputs.RESOURCE_GROUP }}"
+          echo ""
+          echo "🐳 Container Registry:"
+          echo "   ${{ steps.provision.outputs.CONTAINER_REGISTRY }}.azurecr.io"
+          echo ""
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
