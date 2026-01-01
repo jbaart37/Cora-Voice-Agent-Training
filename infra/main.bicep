@@ -211,7 +211,7 @@ module storageTableRoleAssignment 'core/security/role-assignment.bicep' = {
 }
 
 // Role assignment: Cognitive Services OpenAI User (for Azure OpenAI access)
-module openAIRoleAssignment 'core/security/role-assignment.bicep' = if (!empty(azureOpenAIResourceId)) {
+module openAIRoleAssignment 'core/security/cognitive-services-role-assignment.bicep' = if (!empty(azureOpenAIResourceId)) {
   name: 'openai-role-assignment'
   scope: resourceGroup(split(azureOpenAIResourceId, '/')[2], split(azureOpenAIResourceId, '/')[4])
   params: {
