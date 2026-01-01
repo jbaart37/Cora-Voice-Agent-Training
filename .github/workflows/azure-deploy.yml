@@ -204,6 +204,8 @@ jobs:
           CONTAINER_REGISTRY=$(echo "$OUTPUTS" | jq -r '.AZURE_CONTAINER_REGISTRY_NAME.value // empty')
           RESOURCE_GROUP=$(echo "$OUTPUTS" | jq -r '.AZURE_RESOURCE_GROUP.value // empty')
           WEB_URI=$(echo "$OUTPUTS" | jq -r '.WEB_URI.value // empty')
+          STORAGE_ACCOUNT=$(echo "$OUTPUTS" | jq -r '.AZURE_STORAGE_ACCOUNT_NAME.value // empty')
+          APP_INSIGHTS_CONN_STRING=$(echo "$OUTPUTS" | jq -r '.APPLICATIONINSIGHTS_CONNECTION_STRING.value // empty')
           
           # Fallback to resource group name if not in outputs
           if [ -z "$RESOURCE_GROUP" ]; then
@@ -214,6 +216,8 @@ jobs:
           echo "  Container Registry: $CONTAINER_REGISTRY"
           echo "  Resource Group: $RESOURCE_GROUP"
           echo "  Web URI: $WEB_URI"
+          echo "  Storage Account: $STORAGE_ACCOUNT"
+          echo "  App Insights: ${APP_INSIGHTS_CONN_STRING:0:50}..." # Truncate for security
           
           # Validate we have required outputs
           if [ -z "$CONTAINER_REGISTRY" ] || [ "$CONTAINER_REGISTRY" == "null" ]; then
@@ -221,6 +225,20 @@ jobs:
             echo "Attempting to find registry in resource group..."
             CONTAINER_REGISTRY=$(az acr list --resource-group "$RG_NAME" --query '[0].name' -o tsv)
             echo "  Found registry: $CONTAINER_REGISTRY"
+          fi
+          
+          if [ -z "$STORAGE_ACCOUNT" ] || [ "$STORAGE_ACCOUNT" == "null" ]; then
+            echo "⚠️  WARNING: Failed to get Storage Account from deployment outputs"
+            echo "Attempting to find storage account in resource group..."
+            STORAGE_ACCOUNT=$(az storage account list --resource-group "$RG_NAME" --query '[0].name' -o tsv)
+            echo "  Found storage account: $STORAGE_ACCOUNT"
+          fi
+          
+          if [ -z "$APP_INSIGHTS_CONN_STRING" ] || [ "$APP_INSIGHTS_CONN_STRING" == "null" ]; then
+            echo "⚠️  WARNING: Failed to get App Insights connection string from deployment outputs"
+            echo "Attempting to find App Insights in resource group..."
+            APP_INSIGHTS_CONN_STRING=$(az monitor app-insights component show --resource-group "$RG_NAME" --query '[0].connectionString' -o tsv)
+            echo "  Found App Insights connection string"
           fi
           
           if [ -z "$WEB_URI" ] || [ "$WEB_URI" == "null" ]; then
@@ -238,6 +256,8 @@ jobs:
           echo "CONTAINER_REGISTRY=$CONTAINER_REGISTRY" >> $GITHUB_OUTPUT
           echo "RESOURCE_GROUP=$RESOURCE_GROUP" >> $GITHUB_OUTPUT
           echo "WEB_URI=$WEB_URI" >> $GITHUB_OUTPUT
+          echo "STORAGE_ACCOUNT=$STORAGE_ACCOUNT" >> $GITHUB_OUTPUT
+          echo "APP_INSIGHTS_CONN_STRING=$APP_INSIGHTS_CONN_STRING" >> $GITHUB_OUTPUT
         env:
           AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
@@ -249,9 +269,12 @@ jobs:
           CONTAINER_REGISTRY="${{ steps.provision.outputs.CONTAINER_REGISTRY }}"
           RESOURCE_GROUP="${{ steps.provision.outputs.RESOURCE_GROUP }}"
           WEB_URI="${{ steps.provision.outputs.WEB_URI }}"
+          STORAGE_ACCOUNT="${{ steps.provision.outputs.STORAGE_ACCOUNT }}"
+          APP_INSIGHTS_CONN_STRING="${{ steps.provision.outputs.APP_INSIGHTS_CONN_STRING }}"
           
           echo "Container Registry: $CONTAINER_REGISTRY"
           echo "Resource Group: $RESOURCE_GROUP"
+          echo "Storage Account: $STORAGE_ACCOUNT"
           
           # Login to Azure Container Registry
           echo "Logging in to ACR..."
@@ -271,12 +294,18 @@ jobs:
           
           echo "Container App name: $CONTAINER_APP"
           
-          # Update Container App with new image
-          echo "Updating Container App..."
+          # Update Container App with new image and environment variables
+          echo "Updating Container App with new image and configuration..."
           az containerapp update \
             --name "$CONTAINER_APP" \
             --resource-group "$RESOURCE_GROUP" \
-            --image "$IMAGE_TAG"
+            --image "$IMAGE_TAG" \
+            --set-env-vars \
+              "AZURE_AI_FOUNDRY_ENDPOINT=${{ secrets.OPENAI_ENDPOINT }}" \
+              "AZURE_AI_MODEL_NAME=${{ secrets.MODEL_NAME }}" \
+              "FLASK_ENV=production" \
+              "AZURE_STORAGE_ACCOUNT_NAME=$STORAGE_ACCOUNT" \
+              "APPLICATIONINSIGHTS_CONNECTION_STRING=$APP_INSIGHTS_CONN_STRING"
           
           echo "✅ Application deployed successfully!"
           echo "🌐 Application URL: $WEB_URI"
