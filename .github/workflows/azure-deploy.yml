@@ -34,12 +34,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install latest stable azd
-        run: |
-          curl -fsSL https://aka.ms/install-azd.sh | bash
-          azd version
-        shell: bash
-
       - name: Log in to Azure
         uses: azure/login@v2
         with:
@@ -84,65 +78,6 @@ jobs:
           echo "✅ Service principal has required permissions"
           echo "   Role: User Access Administrator"
           echo "   Scope: Subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }}"
-        shell: bash
-
-      - name: Log in to azd
-        run: |
-          azd auth login --client-id "${{ secrets.AZURE_CLIENT_ID }}" \
-            --client-secret "${{ secrets.AZURE_CLIENT_SECRET }}" \
-            --tenant-id "${{ secrets.AZURE_TENANT_ID }}"
-        shell: bash
-
-      - name: Set azd environment variables
-        working-directory: ${{ github.workspace }}
-        run: |
-          # Create new azd environment
-          azd env new ${{ github.event.inputs.environment_name }} --location ${{ github.event.inputs.location }} --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          
-          # Forcibly overwrite .env with only infra keys (no azd metadata)
-          cat > .azure/${{ github.event.inputs.environment_name }}/.env <<EOF
-          environmentName=${{ github.event.inputs.environment_name }}
-          location=${{ github.event.inputs.location }}
-          azureOpenAIEndpoint=${{ secrets.AZURE_OPENAI_ENDPOINT }}
-          modelName=${{ secrets.AZURE_OPENAI_MODEL_NAME }}
-          resourceGroupName=${{ github.event.inputs.resource_group_name }}
-          EOF
-          
-          echo "=== Contents of .env file (with hidden chars) ==="
-          cat -A .azure/${{ github.event.inputs.environment_name }}/.env
-        shell: bash
-
-      - name: Debug azd environment setup
-        working-directory: ${{ github.workspace }}
-        run: |
-          echo "=== Current directory ==="
-          pwd
-          ls -lh
-          
-          echo "=== azd version ==="
-          azd version
-          
-          echo "=== azure.yaml location ==="
-          find . -name azure.yaml -type f
-          
-          echo "=== .azure directory structure ==="
-          ls -lah .azure/
-          ls -lah .azure/${{ github.event.inputs.environment_name }}/
-          
-          echo "=== Contents of .env file (with hidden characters) ==="
-          cat .azure/${{ github.event.inputs.environment_name }}/.env | cat -A
-          
-          echo "=== azd env get-values output ==="
-          azd env get-values
-          
-          echo "=== azure.yaml parameters section ==="
-          awk '/parameters:/,/^infra:/' azure.yaml
-          
-          echo "=== First 10 lines of main.bicep ==="
-          head -n 10 infra/main.bicep
-          
-          echo "=== Selecting azd environment explicitly ==="
-          azd env select ${{ github.event.inputs.environment_name }}
         shell: bash
 
       - name: Provision with Azure CLI (bypass azd bug)
@@ -200,12 +135,12 @@ jobs:
           OUTPUTS=$(az deployment sub show --name "$DEPLOYMENT_NAME" --query properties.outputs -o json)
           echo "Raw outputs: $OUTPUTS"
           
-          # Extract values with error handling
-          CONTAINER_REGISTRY=$(echo "$OUTPUTS" | jq -r '.AZURE_CONTAINER_REGISTRY_NAME.value // empty')
-          RESOURCE_GROUP=$(echo "$OUTPUTS" | jq -r '.AZURE_RESOURCE_GROUP.value // empty')
-          WEB_URI=$(echo "$OUTPUTS" | jq -r '.WEB_URI.value // empty')
-          STORAGE_ACCOUNT=$(echo "$OUTPUTS" | jq -r '.AZURE_STORAGE_ACCOUNT_NAME.value // empty')
-          APP_INSIGHTS_CONN_STRING=$(echo "$OUTPUTS" | jq -r '.APPLICATIONINSIGHTS_CONNECTION_STRING.value // empty')
+          # Extract values with case-insensitive jq queries (Azure ARM changes output casing)
+          CONTAINER_REGISTRY=$(echo "$OUTPUTS" | jq -r 'to_entries | map(select(.key | ascii_downcase == "azure_container_registry_name")) | .[0].value.value // empty')
+          RESOURCE_GROUP=$(echo "$OUTPUTS" | jq -r 'to_entries | map(select(.key | ascii_downcase == "azure_resource_group")) | .[0].value.value // empty')
+          WEB_URI=$(echo "$OUTPUTS" | jq -r 'to_entries | map(select(.key | ascii_downcase == "web_uri")) | .[0].value.value // empty')
+          STORAGE_ACCOUNT=$(echo "$OUTPUTS" | jq -r 'to_entries | map(select(.key | ascii_downcase == "azure_storage_account_name")) | .[0].value.value // empty')
+          APP_INSIGHTS_CONN_STRING=$(echo "$OUTPUTS" | jq -r 'to_entries | map(select(.key | ascii_downcase == "applicationinsights_connection_string")) | .[0].value.value // empty')
           
           # Fallback to resource group name if not in outputs
           if [ -z "$RESOURCE_GROUP" ]; then
@@ -301,8 +236,8 @@ jobs:
             --resource-group "$RESOURCE_GROUP" \
             --image "$IMAGE_TAG" \
             --set-env-vars \
-              "AZURE_AI_FOUNDRY_ENDPOINT=${{ secrets.OPENAI_ENDPOINT }}" \
-              "AZURE_AI_MODEL_NAME=${{ secrets.MODEL_NAME }}" \
+              "AZURE_AI_FOUNDRY_ENDPOINT=${{ secrets.AZURE_OPENAI_ENDPOINT }}" \
+              "AZURE_AI_MODEL_NAME=${{ secrets.AZURE_OPENAI_MODEL_NAME }}" \
               "FLASK_ENV=production" \
               "AZURE_STORAGE_ACCOUNT_NAME=$STORAGE_ACCOUNT" \
               "APPLICATIONINSIGHTS_CONNECTION_STRING=$APP_INSIGHTS_CONN_STRING"
