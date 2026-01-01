@@ -23,6 +23,9 @@ param azureOpenAIApiKey string = ''
 @description('Model name to use for the agent')
 param modelName string = 'gpt-4o-deployment'
 
+@description('Azure OpenAI resource ID for RBAC assignment')
+param azureOpenAIResourceId string = ''
+
 // Variables
 var abbrs = loadJsonContent('./abbreviations.json')
 var resourceToken = toLower(uniqueString(subscription().id, environmentName, location))
@@ -204,6 +207,17 @@ module storageTableRoleAssignment 'core/security/role-assignment.bicep' = {
     principalId: web.outputs.identityPrincipalId
     roleDefinitionId: '0a9a7e1f-b9d0-4cc4-a60d-0319b160aaa3' // Storage Table Data Contributor
     targetResourceId: storage.outputs.id
+  }
+}
+
+// Role assignment: Cognitive Services OpenAI User (for Azure OpenAI access)
+module openAIRoleAssignment 'core/security/role-assignment.bicep' = if (!empty(azureOpenAIResourceId)) {
+  name: 'openai-role-assignment'
+  scope: resourceGroup(split(azureOpenAIResourceId, '/')[2], split(azureOpenAIResourceId, '/')[4])
+  params: {
+    principalId: web.outputs.identityPrincipalId
+    roleDefinitionId: '5e0bd9bd-7b93-4f28-af87-19fc36ad61bd' // Cognitive Services OpenAI User
+    targetResourceId: azureOpenAIResourceId
   }
 }
 
