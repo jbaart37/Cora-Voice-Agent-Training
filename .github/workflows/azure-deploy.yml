@@ -101,7 +101,8 @@ jobs:
           # Auto-derive Azure OpenAI resource ID from endpoint URL
           echo "Deriving Azure OpenAI resource ID from endpoint..."
           OPENAI_ENDPOINT="${{ secrets.AZURE_OPENAI_ENDPOINT }}"
-          OPENAI_ACCOUNT_NAME=$(echo "$OPENAI_ENDPOINT" | sed 's|https://||' | sed 's|\.openai\.azure\.com.*||')
+          # Extract account name (everything before first dot after https://)
+          OPENAI_ACCOUNT_NAME=$(echo "$OPENAI_ENDPOINT" | sed 's|https://||' | cut -d'.' -f1)
           echo "Azure OpenAI account name: $OPENAI_ACCOUNT_NAME"
           
           OPENAI_RESOURCE_ID=$(az cognitiveservices account list \
